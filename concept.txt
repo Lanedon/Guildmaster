@@ -1,0 +1,64 @@
+User :
+-pseudo
+-email
+-mdp
+
+Guilde :
+-Nom
+-Rang
+-Prestige
+-Argent
+
+Personnel :
+-Nom
+-Prénom
+-Level
+-Talent
+-Paye
+	-> 	Héros :
+		-Classe
+		-Prestige
+		-Force
+		-Dex
+		-Endurance
+		-Intelligence
+		-Luck
+		-Main Droite
+		-Main gauche
+		-Torse
+		-Tête
+		-Jambes
+		-Pieds
+	-> 	Ouvrier :
+		-Métier
+		-Compétence dans les métier
+
+Quete : 
+-description
+-difficulte
+-récompense
+-combat
+-tempsDebut
+-tempsFin
+
+Equipement:
+-nom
+-prix
+-rareté
+-description
+-restrictionFor
+-restrictionDex
+-restrictionEnd
+-restrictionInt
+-restrictionLuk
+-bonusFor
+-bonusDex
+-bonusEnd
+-bonusInt
+-bonusLuk
+	->	Arme :
+		-degats
+		-distance
+	->	Armure :
+		-protection
+
