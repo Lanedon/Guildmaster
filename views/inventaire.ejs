@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+	<link rel="stylesheet" href="/styles.css" type="text/css">
+        <title>Inventaire</title>
+    </head>
+
+    <body>
+     <% include ./header.ejs %>
+
+<br>
+    
+    <br><br><br>
+    
+    <div class="CSSTableGenerator" >
+	<table>
+	 <tr>
+	  <th width="50px">id</th>
+	  <th>nom</th>
+	  <th>force</th>
+	  <th>intelligence</th>
+	  <th>vitalite</th>
+	  <th>dexterite</th>
+	  <th>niveau requis</th>
+	  <th>classe requise</th>
+	</tr>
+	<% if(data.length){ 
+	for(var i = 0;i < data.length;i++) { %>
+	<tr>
+	 <td><%=(i+1)%></td>
+	 <td><%=data[i].nomObjet%></td>
+	 <td><%=data[i].strength%></td>
+ 	 <td><%=data[i].intelligence%></td>
+	 <td><%=data[i].vitalite%></td>
+	 <td><%=data[i].dexterite%></td>
+	 <td><%=data[i].niveauRequis%></td>
+	 <td><%=data[i].classeRequise%></td>
+	 </tr>
+	<% }
+	} %>
+	
+	</table>
+    </div>
+    
+    </body>
+</html>

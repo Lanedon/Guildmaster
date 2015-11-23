@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+	<link rel="stylesheet" href="/styles.css" type="text/css">
+	<link rel="stylesheet" href="/jquery-ui-1.11.4/jquery-ui.css">
+	<script src="/jquery-1.11.2.min.js"></script>
+	<script src="/jquery-ui-1.11.4/jquery-ui.js"></script>
+        <title>Inscription</title>
+    </head>
+
+    <body>
+     <% include ./header.ejs %>
+
+	 <form id="send" action="/guildmaster/inscription/validation" method="post">
+	    <p>
+			<label for="register">pseudo </label>
+		        <input type="text" name="pseudo" id="pseudo" required/><br>
+ 	    </p>
+	    <p>
+			<label for="register">Mot de passe </label>
+		        <input type="password" name="mdp" id="mdp" required/><br>
+ 	    </p>
+	    <p>
+			<label for="register">adresse mail </label>
+		        <input type="email" name="email" id="email" required/><br>
+ 	    </p>
+	    <p>
+		        <input type="submit" />
+	    </p>
+	</form>
+    </body>
+</html>
+
+

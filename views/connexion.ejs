@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Connexion</title>
+	<link rel="stylesheet" href="/styles.css" type="text/css">
+    </head>
+
+    <body>
+     <% include ./header.ejs %>
+
+  
+       <form action="/guildmaster/connexion/validation" method="post">
+            <p>
+                <label for="connect">pseudo </label>
+                <input type="text" name="pseudo" id="pseudo" autofocus /><br> 	   
+	    </p>
+	    <p>
+		<label for="connect">mot de passe </label>
+                <input type="password" name="MdP" id="MdP" /><br>
+ 	    </p>
+	    <p>
+		<input type="submit" />
+            </p>
+        </form>
+     </body>
+
+</html>
