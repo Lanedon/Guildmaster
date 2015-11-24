@@ -37,7 +37,6 @@ on en crée une vide sous forme d'array avant la suite */
 })
 
 
-
 /* accueil */
 .get('/guildmaster', function(req, res) { 
     res.render('accueil.ejs', {role: req.session.user});
@@ -55,11 +54,11 @@ on en crée une vide sous forme d'array avant la suite */
 /* Inscription validation*/
 .post('/guildmaster/inscription/validation', urlencodedParser, function(req, res) { 
 	//console.log(req.body);
-        var post={pseudo:req.body.pseudo,
-                  MdP:req.body.mdp,
-                  mail:req.body.email,
+        var post={login:req.body.pseudo,
+                  pass:req.body.mdp,
+                  email:req.body.email,
                   role:'utilisateur'};
-        connection.query("INSERT INTO User set ?", post, function(error){
+        connection.query("INSERT INTO user set ?", post, function(error){
                 if(error){
                  // console.log(error.message);
                 }else{
@@ -78,7 +77,7 @@ on en crée une vide sous forme d'array avant la suite */
 .post('/guildmaster/connexion/validation', urlencodedParser, function(req, res) { 
        //console.log('pseudo',req.body.pseudo);
        //console.log('MdP',req.body.MdP);
-       connection.query("SELECT idUser, role FROM User WHERE pseudo = '"+ req.body.pseudo +"' and MdP = '"+ req.body.MdP +"'", function(err, rows, fields) {
+       connection.query("SELECT id, role FROM user WHERE login = '"+ req.body.pseudo +"' and pass = '"+ req.body.MdP +"'", function(err, rows, fields) {
 		//console.log(rows);	 
 		if (rows !== undefined && rows[0] !== undefined ){	
 			//if(rows[0]['etat']==1){
@@ -118,7 +117,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* inventaire */
 .get('/guildmaster/inventaire', function(req, res) { 
-     connection.query("SELECT objets.nomObjet ,objets.strength, objets.intelligence, objets.vitalite, objets.dexterite, objets.niveauRequis, objets.classeRequise FROM objets, inventaire WHERE inventaire.User_idUser = '"+ req.session.user['id'] +"'AND objets.idObjets = inventaire.objets_idObjets", function(err, rows, fields){
+     connection.query("SELECT objets.nomObjet ,objets.strength, objets.intelligence, objets.vitalite, objets.dexterite, objets.niveauRequis, objets.classeRequise FROM equipement, inventaire WHERE inventaire.User_idUser = '"+ req.session.user['id'] +"'AND objets.idObjets = inventaire.objets_idObjets", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('inventaire.ejs', {data:rows, role:req.session.user});
