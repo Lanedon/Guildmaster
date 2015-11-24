@@ -1,23 +1,28 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<div id=cssmenu>
-<ul>
- <li><a href="/guildmaster">accueil</a></li>
- <% if(role['role']=='anonyme'){ %>
- <li><a href="/guildmaster/inscription">inscription</a></li>
- <li><a href="/guildmaster/connexion">connexion</a>
- <%  } if(role['role']=='admin'){ %>
- <li><a href="/guildmaster/gestion">gestion utilisateurs</a></li>
- <%  } if(role['role']!='anonyme'){ %>
- <li><a href="/guildmaster/profil">profil</a></li>
-  <%  } if(role['role']!='anonyme'){ %>
- <li><a href="/guildmaster/inventaire">inventaire</a></li>
-   <%  } if(role['role']!='anonyme'){ %>
- <li><a href="/guildmaster/personnel">personnel</a></li>
-   <%  } if(role['role']!='anonyme'){ %>
- <li><a href="/guildmaster/quete">quete</a></li>
- <%  } if(role['role']!='anonyme'){ %>
- <li><a href="/guildmaster/deconnexion">deconnexion</a></li>
- <%  } %>
-</ul>
-</div>
-<br>
+<nav id="primary-bar" class="navbar navbar-default">
+  	<div class="container-fluid">
+  		<div class="navbar-header">
+  			<a class="navbar-brand" href="/guildmaster">Accueil</a>
+  		</div>
+  		<% if(role['role']=='anonyme'){ %>
+  		<form class="navbar-form navbar-left" role="search">
+  			<button type="submit" class="btn btn-default">Inscription</button>
+  			<button type="submit" class="btn btn-default">Connexion</button>
+  		</form>
+  		<% } %>
+  		<ul class="nav navbar-nav">
+			<% if(role['role']=='admin'){ %>
+			<li><a href="/guildmaster/gestion">Gestion utilisateurs</a></li>
+			<%  } if(role['role']!='anonyme'){ %>
+			<li><a href="/guildmaster/profil">Profil</a></li>
+			<%  } if(role['role']!='anonyme'){ %>
+			<li><a href="/guildmaster/inventaire">Inventaire</a></li>
+			<%  } if(role['role']!='anonyme'){ %>
+			<li><a href="/guildmaster/personnel">Personnel</a></li>
+			<%  } if(role['role']!='anonyme'){ %>
+			<li><a href="/guildmaster/quete">Quête</a></li>
+			<%  } if(role['role']!='anonyme'){ %>
+			<li><a href="/guildmaster/deconnexion">Déconnexion</a></li>
+			<%  } %>
+  		</ul>
+	</div>
+</nav>
