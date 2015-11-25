@@ -3,16 +3,12 @@
 <nav id="primary-bar" class="navbar navbar-default">
   	<div class="container-fluid">
   		<div class="navbar-header">
-  			<a class="navbar-brand" href="/guildmaster">Accueil</a>
   		</div>
-  		<% if(role['role']=='anonyme'){ %>
-  		<form class="navbar-form navbar-left" role="search">
-  			<button type="submit" class="btn btn-default">Inscription</button>
-  			<button type="submit" class="btn btn-default">Connexion</button>
-  		</form>
-  		<% } %>
-  		<ul class="nav navbar-nav">
-			<% if(role['role']=='admin'){ %>
+  		<ul class="nav navbar-nav navbar-right">
+  			<% if(role['role']=='anonyme'){ %>
+  			<li><a href="/guildmaster/inscription" class="lien-actif">Inscription</a></li>
+  			<li><a href="/guildmaster/connexion">Connexion</a></li>
+			<%  } if(role['role']=='admin'){   %>
 			<li><a href="/guildmaster/gestion">Gestion utilisateurs</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/profil">Profil</a></li>

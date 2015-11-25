@@ -1,10 +1,25 @@
 #primary-bar {
-	padding: 10px;
-	.navbar-brand {
-		font-size: 25px;
+	background: black;
+	border: 0;
+	border-radius: 0;
+	padding: 0px;
+	height: 50px;
+	a {
+		color: #B7B9C6;
+		font-size: 16px;
+		&:hover {
+			color: white;
+			border-bottom: 1px solid white;
+		}
 	}
-	button {
-		font-size: 18px;
+}
 
+.lien-actif {
+	font-size: 18px !important;
+	color : #feb500 !important;
+	font-weight : bold;
+	text-shadow : 0px 0px 8px #fe7d00;
+	&:hover {
+		border-bottom-color: #feb500 !important;
 	}
 }
