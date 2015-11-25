@@ -2,13 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `guildmaster` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `guildmaster` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`equipment`
+-- Table `guildmaster`.`equipment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`equipment` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`equipment` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `price` INT(11) NULL DEFAULT NULL,
@@ -31,15 +31,15 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`armor`
+-- Table `guildmaster`.`armor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`armor` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`armor` (
   `protection` INT(11) NULL DEFAULT NULL,
   `idEquipment` INT(11) NOT NULL,
   PRIMARY KEY (`idEquipment`),
   CONSTRAINT `FK_Armor_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `mydb`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -47,9 +47,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user`
+-- Table `guildmaster`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`user` (
   `idUser` INT(11) NOT NULL AUTO_INCREMENT,
   `role` VARCHAR(255) NOT NULL,
   `login` VARCHAR(25) NULL DEFAULT NULL,
@@ -62,9 +62,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`guild`
+-- Table `guildmaster`.`guild`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`guild` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`guild` (
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `rank` INT(11) NULL DEFAULT NULL,
   `prestige` INT(11) NULL DEFAULT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`guild` (
   PRIMARY KEY (`idUser`),
   CONSTRAINT `fk_guild_user1`
     FOREIGN KEY (`idUser`)
-    REFERENCES `mydb`.`user` (`idUser`)
+    REFERENCES `guildmaster`.`user` (`idUser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -82,21 +82,21 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`crew`
+-- Table `guildmaster`.`crew`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`crew` (
-  `guildmaster` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `guildmaster`.`crew` (
+  `idCrew` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `surname` VARCHAR(25) NULL DEFAULT NULL,
   `level` INT(11) NULL DEFAULT NULL,
   `talent` VARCHAR(25) NULL DEFAULT NULL,
   `fee` INT(11) NULL DEFAULT NULL,
   `idUser` INT(11) NOT NULL,
-  PRIMARY KEY (`guildmaster`),
+  PRIMARY KEY (`idCrew`),
   INDEX `fk_crew_guild1_idx` (`idUser` ASC),
   CONSTRAINT `fk_crew_guild1`
     FOREIGN KEY (`idUser`)
-    REFERENCES `mydb`.`guild` (`idUser`)
+    REFERENCES `guildmaster`.`guild` (`idUser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -105,21 +105,21 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`equip`
+-- Table `guildmaster`.`equip`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`equip` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`equip` (
   `idEquipment` INT(11) NOT NULL,
-  `guildmaster` INT(11) NOT NULL,
-  PRIMARY KEY (`idEquipment`, `guildmaster`),
-  INDEX `FK_equip_id_Crew` (`guildmaster` ASC),
+  `idCrew` INT(11) NOT NULL,
+  PRIMARY KEY (`idEquipment`, `idCrew`),
+  INDEX `FK_equip_id_Crew` (`idCrew` ASC),
   CONSTRAINT `FK_equip_id_Crew`
-    FOREIGN KEY (`guildmaster`)
-    REFERENCES `mydb`.`crew` (`guildmaster`)
+    FOREIGN KEY (`idCrew`)
+    REFERENCES `guildmaster`.`crew` (`idCrew`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_equip_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `mydb`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -127,9 +127,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`squad`
+-- Table `guildmaster`.`squad`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`squad` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`squad` (
   `idsquad` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `experience` INT(11) NULL DEFAULT NULL,
@@ -140,9 +140,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`heroes`
+-- Table `guildmaster`.`heroes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`heroes` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`heroes` (
   `class` VARCHAR(25) NULL DEFAULT NULL,
   `prestige` INT(11) NULL DEFAULT NULL,
   `str` INT(11) NULL DEFAULT NULL,
@@ -152,22 +152,22 @@ CREATE TABLE IF NOT EXISTS `mydb`.`heroes` (
   `luk` INT(11) NULL DEFAULT NULL,
   `handRight` INT(11) NULL DEFAULT NULL,
   `handLeft` INT(11) NULL DEFAULT NULL,
-  `Torso` INT(11) NULL DEFAULT NULL,
-  `Head` INT(11) NULL DEFAULT NULL,
-  `Legs` INT(11) NULL DEFAULT NULL,
-  `Feet` INT(11) NULL DEFAULT NULL,
-  `guildmaster` INT(11) NOT NULL,
+  `torso` INT(11) NULL DEFAULT NULL,
+  `head` INT(11) NULL DEFAULT NULL,
+  `legs` INT(11) NULL DEFAULT NULL,
+  `feet` INT(11) NULL DEFAULT NULL,
+  `idCrew` INT(11) NOT NULL,
   `idSquad` INT(11) NULL,
-  PRIMARY KEY (`guildmaster`),
+  PRIMARY KEY (`idCrew`),
   INDEX `FK_Heros_id_Squad` (`idSquad` ASC),
   CONSTRAINT `FK_Heros_id_Squad`
     FOREIGN KEY (`idSquad`)
-    REFERENCES `mydb`.`squad` (`idsquad`)
+    REFERENCES `guildmaster`.`squad` (`idsquad`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_Heros_id`
-    FOREIGN KEY (`guildmaster`)
-    REFERENCES `mydb`.`crew` (`guildmaster`)
+    FOREIGN KEY (`idCrew`)
+    REFERENCES `guildmaster`.`crew` (`idCrew`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -175,9 +175,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`quest`
+-- Table `guildmaster`.`quest`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`quest` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`quest` (
   `idQuest` INT(11) NOT NULL,
   `summary` TEXT NULL DEFAULT NULL,
   `difficulty` INT(11) NULL DEFAULT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`quest` (
   INDEX `FK_Quest_id_Squad` (`idSquad` ASC),
   CONSTRAINT `FK_Quest_id_Squad`
     FOREIGN KEY (`idSquad`)
-    REFERENCES `mydb`.`squad` (`idsquad`)
+    REFERENCES `guildmaster`.`squad` (`idsquad`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -198,16 +198,16 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`weapon`
+-- Table `guildmaster`.`weapon`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`weapon` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`weapon` (
   `damage` INT(11) NULL DEFAULT NULL,
   `distance` TINYINT(1) NULL DEFAULT NULL,
   `idEquipment` INT(11) NOT NULL,
   PRIMARY KEY (`idEquipment`),
   CONSTRAINT `FK_Weapon_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `mydb`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -215,15 +215,15 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`worker`
+-- Table `guildmaster`.`worker`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`worker` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`worker` (
   `job` VARCHAR(25) NULL DEFAULT NULL,
-  `guildmaster` INT(11) NOT NULL,
-  PRIMARY KEY (`guildmaster`),
+  `idCrew` INT(11) NOT NULL,
+  PRIMARY KEY (`idCrew`),
   CONSTRAINT `FK_Worker_id`
-    FOREIGN KEY (`guildmaster`)
-    REFERENCES `mydb`.`crew` (`guildmaster`)
+    FOREIGN KEY (`idCrew`)
+    REFERENCES `guildmaster`.`crew` (`idCrew`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -231,9 +231,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`inventory`
+-- Table `guildmaster`.`inventory`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`inventory` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`inventory` (
   `idInventory` INT NOT NULL,
   `idEquipment` INT(11) NOT NULL,
   `quantity` VARCHAR(45) NULL,
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`inventory` (
   INDEX `fk_equipement_has_inventory_equipement1_idx` (`idEquipment` ASC),
   CONSTRAINT `fk_equipement_has_inventory_equipement1`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `mydb`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -250,9 +250,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`acceptedQuest`
+-- Table `guildmaster`.`acceptedQuest`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`acceptedQuest` (
+CREATE TABLE IF NOT EXISTS `guildmaster`.`acceptedQuest` (
   `idUser` INT(11) NOT NULL,
   `idQuest` INT(11) NOT NULL,
   PRIMARY KEY (`idUser`, `idQuest`),
@@ -260,12 +260,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`acceptedQuest` (
   INDEX `fk_guild_has_quest_guild1_idx` (`idUser` ASC),
   CONSTRAINT `fk_guild_has_quest_guild1`
     FOREIGN KEY (`idUser`)
-    REFERENCES `mydb`.`guild` (`idUser`)
+    REFERENCES `guildmaster`.`guild` (`idUser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_guild_has_quest_quest1`
     FOREIGN KEY (`idQuest`)
-    REFERENCES `mydb`.`quest` (`idQuest`)
+    REFERENCES `guildmaster`.`quest` (`idQuest`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
