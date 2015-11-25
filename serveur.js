@@ -96,7 +96,7 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/personnel', function(req, res) { 
      connection.query("SELECT name, surname, level, talent, fee FROM crew WHERE idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
 	if (!err){
-	   console.log(rows);
+	   //console.log(rows);
 	    res.render('personnel.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
       }
@@ -119,7 +119,7 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/inventaire', function(req, res) { 
      connection.query("SELECT objets.nomObjet ,objets.strength, objets.intelligence, objets.vitalite, objets.dexterite, objets.niveauRequis, objets.classeRequise FROM equipement, inventaire WHERE inventaire.User_idUser = '"+ req.session.user['id'] +"'AND objets.idObjets = inventaire.objets_idObjets", function(err, rows, fields){
 	if (!err){
-	   console.log(rows);
+	   //console.log(rows);
 	    res.render('inventaire.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
       }
