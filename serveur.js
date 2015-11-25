@@ -77,7 +77,7 @@ on en crée une vide sous forme d'array avant la suite */
 .post('/guildmaster/connexion/validation', urlencodedParser, function(req, res) { 
        //console.log('pseudo',req.body.pseudo);
        //console.log('MdP',req.body.MdP);
-       connection.query("SELECT id, role FROM user WHERE login = '"+ req.body.pseudo +"' and pass = '"+ req.body.MdP +"'", function(err, rows, fields) {
+       connection.query("SELECT idUser, role FROM user WHERE login = '"+ req.body.pseudo +"' and pass = '"+ req.body.MdP +"'", function(err, rows, fields) {
 		//console.log(rows);	 
 		if (rows !== undefined && rows[0] !== undefined ){	
 			//if(rows[0]['etat']==1){
@@ -94,9 +94,9 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* personnel */
 .get('/guildmaster/personnel', function(req, res) { 
-     connection.query("SELECT nom, prenom, classe, strength, intelligence, vitalite, dexterite, niveau FROM personnel WHERE User_idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
+     connection.query("SELECT name, surname, level, talent, fee FROM crew WHERE idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
 	if (!err){
-	   //console.log(rows);
+	   console.log(rows);
 	    res.render('personnel.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
       }
@@ -119,7 +119,7 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/inventaire', function(req, res) { 
      connection.query("SELECT objets.nomObjet ,objets.strength, objets.intelligence, objets.vitalite, objets.dexterite, objets.niveauRequis, objets.classeRequise FROM equipement, inventaire WHERE inventaire.User_idUser = '"+ req.session.user['id'] +"'AND objets.idObjets = inventaire.objets_idObjets", function(err, rows, fields){
 	if (!err){
-	   //console.log(rows);
+	   console.log(rows);
 	    res.render('inventaire.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
       }

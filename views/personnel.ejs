@@ -18,25 +18,19 @@
 	<table>
 	 <tr>
 	  <th width="50px">id</th>
-	  <th>nom prenom</th>
-	  <th>classe</th>
-	  <th>force</th>
-	  <th>intelligence</th>
-	  <th>vitalite</th>
-	  <th>dexterite</th>
+	  <th>nom</th>
 	  <th>niveau</th>
+	  <th>talent</th>
+	  <th>prix</th>
 	</tr>
 	<% if(data.length){ 
 	for(var i = 0;i < data.length;i++) { %>
 	<tr>
 	 <td><%=(i+1)%></td>
-	 <td><%=data[i].nom%> <%=data[i].prenom%></td>
-	 <td><%=data[i].classe%></td>
-	 <td><%=data[i].strength%></td>
- 	 <td><%=data[i].intelligence%></td>
-	 <td><%=data[i].vitalite%></td>
-	 <td><%=data[i].dexterite%></td>
-	 <td><%=data[i].niveau%></td>
+	 <td><%=data[i].surname%> <%=data[i].name%></td>
+	 <td><%=data[i].level%></td>
+	 <td><%=data[i].talent%></td>
+	 <td><%=data[i].fee%></td>
 	 </tr>
 	<% }
 	} %>
