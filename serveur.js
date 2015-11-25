@@ -93,8 +93,8 @@ on en crée une vide sous forme d'array avant la suite */
 
 
 /* personnel */
-.get('/guildmaster/personnel', function(req, res) { 
-     connection.query("SELECT name, surname, level, talent, fee FROM crew WHERE idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
+.get('/guildmaster/personnel',urlencodedParser, function(req, res) { 
+     connection.query("SELECT idCrew, name, surname, level, talent, fee FROM crew WHERE idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('personnel.ejs', {data:rows, role:req.session.user});
@@ -106,6 +106,38 @@ on en crée une vide sous forme d'array avant la suite */
         }
     })
 })
+
+/* detail personnel */
+.get('/guildmaster/personnel/detail/:id/:name/:surname', function(req, res) {
+  //console.log(req.params);
+      connection.query("SELECT idUser FROM crew WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+	if (!err){
+	//console.log(rows , req.session.user['id']);
+        //console.log(rows[0]['idUser'] === req.session.user['id']);
+          if (rows[0]['idUser'] === req.session.user['id'] ) {
+             connection.query("SELECT class, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+              if (!err){
+                //console.log(rows);
+                res.render('detail.ejs', {data:rows, role: req.session.user});
+                //console.log(data);
+              }
+              else{
+               // res.redirect('/guildmaster/personnel');
+               // console.log(err.message);
+              }
+             })
+            
+          }
+       
+      }
+      else{
+        res.render('personnel.ejs', {role:req.session.user});
+        // console.log(err.message);
+      }
+    })
+	//console.log(req.session.user);	
+})
+
 
 /* recruter personnel */
 .get('/guildmaster/personnel/recruter', function(req, res) { 
