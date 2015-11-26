@@ -8,30 +8,43 @@
 
 <br>
     
-    <br><br><br>
 
 	<table>
 	 <tr>
-	  <th width="50px">id</th>
 	  <th>nom</th>
-	  <th>force</th>
-	  <th>intelligence</th>
-	  <th>vitalite</th>
-	  <th>dexterite</th>
-	  <th>niveau requis</th>
-	  <th>classe requise</th>
+	  <th>quantite</th>
+	  <th>prix</th>
+	  <th>rarete</th>
+	  <th>description</th>
+	  <th>force min</th>
+	  <th>dexterite min</th>
+          <th>intelligence min</th>
+	  <th>chance min</th>
+	  <th>endurence min</th>
+	  <th>bonus en force</th>
+	  <th>bonus en dexterite</th>
+	  <th>bonus en intelligence</th>
+	  <th>bonus en chance</th>
+	  <th>bonus en endurence</th>
 	</tr>
 	<% if(data.length){ 
 	for(var i = 0;i < data.length;i++) { %>
 	<tr>
-	 <td><%=(i+1)%></td>
-	 <td><%=data[i].nomObjet%></td>
-	 <td><%=data[i].strength%></td>
- 	 <td><%=data[i].intelligence%></td>
-	 <td><%=data[i].vitalite%></td>
-	 <td><%=data[i].dexterite%></td>
-	 <td><%=data[i].niveauRequis%></td>
-	 <td><%=data[i].classeRequise%></td>
+	 <td><%=data[i].name%></td>
+	 <td><%=data[i].price%></td>
+ 	 <td><%=data[i].quantity%></td>
+	 <td><%=data[i].rarity%></td>
+	 <td><%=data[i].description%></td>
+	 <td><%=data[i].minStr%></td>
+	 <td><%=data[i].minDex%></td>
+	 <td><%=data[i].minInt%></td>
+	 <td><%=data[i].minLuk%></td>
+	 <td><%=data[i].minEnd%></td>
+	 <td><%=data[i].bonusStr%></td>
+ 	 <td><%=data[i].bonusDex%></td>
+	 <td><%=data[i].bonusInt%></td>
+	 <td><%=data[i].bonusLuk%></td>
+	 <td><%=data[i].bonusEnd%></td>
 	 </tr>
 	<% }
 	} %>

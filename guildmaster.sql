@@ -9,7 +9,7 @@ USE `guildmaster` ;
 -- Table `guildmaster`.`equipment`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `guildmaster`.`equipment` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `idEquipment` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `price` INT(11) NULL DEFAULT NULL,
   `rarity` INT(11) NULL DEFAULT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`equipment` (
   `bonusEnd` INT(11) NULL DEFAULT NULL,
   `bonusInt` INT(11) NULL DEFAULT NULL,
   `bonusLuk` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`idEquipment`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`armor` (
   PRIMARY KEY (`idEquipment`),
   CONSTRAINT `FK_Armor_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `guildmaster`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`idEquipment`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`equip` (
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_equip_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `guildmaster`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`idEquipment`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -201,13 +201,14 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `guildmaster`.`weapon`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `guildmaster`.`weapon` (
-  `damage` INT(11) NULL DEFAULT NULL,
+  `minDamage` INT(11) NULL DEFAULT NULL,
+  `maxDamage` VARCHAR(45) NULL,
   `distance` TINYINT(1) NULL DEFAULT NULL,
   `idEquipment` INT(11) NOT NULL,
   PRIMARY KEY (`idEquipment`),
   CONSTRAINT `FK_Weapon_id`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `guildmaster`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`idEquipment`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -234,7 +235,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `guildmaster`.`inventory`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `guildmaster`.`inventory` (
-  `idInventory` INT NOT NULL,
+  `idInventory` INT NOT NULL AUTO_INCREMENT,
   `idEquipment` INT(11) NOT NULL,
   `quantity` VARCHAR(45) NULL,
   `idUser` INT(11) NOT NULL,
@@ -243,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`inventory` (
   INDEX `fk_inventory_user1_idx` (`idUser` ASC),
   CONSTRAINT `fk_equipement_has_inventory_equipement1`
     FOREIGN KEY (`idEquipment`)
-    REFERENCES `guildmaster`.`equipment` (`id`)
+    REFERENCES `guildmaster`.`equipment` (`idEquipment`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_inventory_user1`

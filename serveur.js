@@ -150,7 +150,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* inventaire */
 .get('/guildmaster/inventaire', function(req, res) { 
-     connection.query("SELECT objets.nomObjet ,objets.strength, objets.intelligence, objets.vitalite, objets.dexterite, objets.niveauRequis, objets.classeRequise FROM equipement, inventaire WHERE inventaire.User_idUser = '"+ req.session.user['id'] +"'AND objets.idObjets = inventaire.objets_idObjets", function(err, rows, fields){
+     connection.query("SELECT idInventory, quantity, name, price, rarity, description, minStr, minDex, minInt, minLuk, minEnd, bonusStr, bonusDex, bonusInt, bonusLuk, bonusEnd FROM inventory,equipment WHERE idUser = '"+ req.session.user['id'] +"' and inventory.idEquipment = equipment.idEquipment ", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('inventaire.ejs', {data:rows, role:req.session.user});
