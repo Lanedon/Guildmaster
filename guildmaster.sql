@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`equipment` (
   `idEquipment` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(25) NULL DEFAULT NULL,
   `price` INT(11) NULL DEFAULT NULL,
-  `rarity` INT(11) NULL DEFAULT NULL,
+  `rarity`  VARCHAR(25) NULL DEFAULT NULL,
   `description` TEXT NULL DEFAULT NULL,
   `minStr` INT(11) NULL DEFAULT NULL,
   `minDex` INT(11) NULL DEFAULT NULL,
@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`heroes` (
   `idSquad` INT(11) NULL,
   PRIMARY KEY (`idCrew`),
   INDEX `FK_Heros_id_Squad` (`idSquad` ASC),
+  UNIQUE INDEX `idCrew_UNIQUE` (`idCrew` ASC),
   CONSTRAINT `FK_Heros_id_Squad`
     FOREIGN KEY (`idSquad`)
     REFERENCES `guildmaster`.`squad` (`idsquad`)
@@ -202,7 +203,7 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `guildmaster`.`weapon` (
   `minDamage` INT(11) NULL DEFAULT NULL,
-  `maxDamage` VARCHAR(45) NULL,
+  `maxDamage` INT(11) NULL DEFAULT NULL,
   `distance` TINYINT(1) NULL DEFAULT NULL,
   `idEquipment` INT(11) NOT NULL,
   PRIMARY KEY (`idEquipment`),
@@ -222,6 +223,7 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`worker` (
   `job` VARCHAR(25) NULL DEFAULT NULL,
   `idCrew` INT(11) NOT NULL,
   PRIMARY KEY (`idCrew`),
+  UNIQUE INDEX `idCrew_UNIQUE` (`idCrew` ASC),
   CONSTRAINT `fk_worker_crew1`
     FOREIGN KEY (`idCrew`)
     REFERENCES `guildmaster`.`crew` (`idCrew`)
