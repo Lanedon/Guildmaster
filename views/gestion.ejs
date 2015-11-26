@@ -17,6 +17,9 @@
 		  <th>guilde</th>
 		  <th>adresse email</th>
 		  <th>role</th>
+		  <th>rang</th>
+		  <th>prestige</th>
+		  <th>or</th>
 		  <th>modifier</th>
 		  <th>bannir</th>
 		  <th>supprimer</th>
@@ -25,13 +28,18 @@
 		for(var i = 0;i < data.length;i++) { %>
 		<tr>
 		 <td><%=data[i].idUser%></td>
-		 <td><%=data[i].pseudo%></td>
-		 <td><%=data[i].nomGuilde%></td>
-		 <td><%=data[i].mail%></td>
+		 <td><%=data[i].login%></td>
+		 <td><%=data[i].name%></td>
+		 <td><%=data[i].email%></td>
 		 <td><%=data[i].role%></td>
+		 <td><%=data[i].rank%></td>
+	         <td><%=data[i].prestige%></td>
+		 <td><%=data[i].gold%></td>
  		 <td><a href="/guildmaster/gestion/modifier<%=data[i].idUser%>">modifier</a></td>
  		 <td><a href="/guildmaster/gestion/bannir<%=data[i].idUser%>">bannir</a></td>
+		 <% if(data[i].role!='admin'){ %>
 		 <td><a href="/guildmaster/gestion/supprimer<%=data[i].idUser%>">supprimer</a></td>
+		 <% } %>
 		</tr>
 		 <% } } %>
 		 

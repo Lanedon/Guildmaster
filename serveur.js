@@ -93,9 +93,10 @@ on en crée une vide sous forme d'array avant la suite */
 
 
 /* personnel */
-.get('/guildmaster/personnel',urlencodedParser, function(req, res) { 
-     connection.query("SELECT idCrew, name, surname, level, talent, fee FROM crew WHERE idUser = '"+ req.session.user['id'] +"'", function(err, rows, fields){
-	if (!err){
+.get('/guildmaster/personnel',urlencodedParser, function(req, res) {
+  
+     connection.query("SELECT crew.idCrew, name, surname, level, talent, fee, job, 0 as hero FROM worker, crew WHERE idUser = '"+ req.session.user['id'] +"' and worker.idCrew = crew.idCrew UNION SELECT crew.idCrew, name, surname, level, talent, fee, class, 1 as hero FROM heroes, crew WHERE idUser = '"+ req.session.user['id'] +"' and heroes.idCrew = crew.idCrew" , function(err, rows, fields){
+	if (!err){  
 	   //console.log(rows);
 	    res.render('personnel.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
@@ -181,14 +182,14 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* gestion utilisateur */
 .get('/guildmaster/gestion', function(req, res) { 
-     connection.query("SELECT idUser, pseudo, nomGuilde ,mail ,role FROM User", function(err, rows, fields){
+     connection.query("SELECT user.idUser, login, email ,role, name, rank, prestige, gold FROM user, guild where user.idUser = guild.idUser", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('gestion.ejs', {data:rows, role:req.session.user});
 	   //console.log(data);
       }
 	else{
-         res.render('gestion.ejs', {role:req.session.user});
+         res.render('accueil.ejs', {role:req.session.user});
 	 // console.log(err.message);
         }
     })

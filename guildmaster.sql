@@ -221,10 +221,10 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`worker` (
   `job` VARCHAR(25) NULL DEFAULT NULL,
   `idCrew` INT(11) NOT NULL,
   PRIMARY KEY (`idCrew`),
-  CONSTRAINT `FK_Worker_id`
+  CONSTRAINT `fk_worker_crew1`
     FOREIGN KEY (`idCrew`)
     REFERENCES `guildmaster`.`crew` (`idCrew`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -237,12 +237,18 @@ CREATE TABLE IF NOT EXISTS `guildmaster`.`inventory` (
   `idInventory` INT NOT NULL,
   `idEquipment` INT(11) NOT NULL,
   `quantity` VARCHAR(45) NULL,
-  `guild_id` INT(11) NOT NULL,
+  `idUser` INT(11) NOT NULL,
   PRIMARY KEY (`idInventory`, `idEquipment`),
   INDEX `fk_equipement_has_inventory_equipement1_idx` (`idEquipment` ASC),
+  INDEX `fk_inventory_user1_idx` (`idUser` ASC),
   CONSTRAINT `fk_equipement_has_inventory_equipement1`
     FOREIGN KEY (`idEquipment`)
     REFERENCES `guildmaster`.`equipment` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_inventory_user1`
+    FOREIGN KEY (`idUser`)
+    REFERENCES `guildmaster`.`user` (`idUser`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
