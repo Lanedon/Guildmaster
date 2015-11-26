@@ -1,7 +1,7 @@
 var express     = require('express');
 var session     = require('cookie-session'); // Charge le middleware de sessions
 var bodyParser  = require('body-parser');    // Charge le middleware de gestion des paramètres  
-var mysql = require('mysql');
+var mysql       = require('mysql');
 
 var connection = mysql.createConnection({
   host     : "localhost",
@@ -10,8 +10,6 @@ var connection = mysql.createConnection({
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
@@ -36,7 +34,6 @@ on en crée une vide sous forme d'array avant la suite */
     next();
 })
 
-
 /* accueil */
 .get('/guildmaster', function(req, res) { 
     res.render('accueil.ejs', {role: req.session.user});
@@ -47,9 +44,7 @@ on en crée une vide sous forme d'array avant la suite */
 /* Inscription */
 .get('/guildmaster/inscription', function(req, res) {
     res.render('inscription.ejs', {role: req.session.user});
-  
 })
-
 
 /* Inscription validation*/
 .post('/guildmaster/inscription/validation', urlencodedParser, function(req, res) { 
@@ -90,7 +85,6 @@ on en crée une vide sous forme d'array avant la suite */
 		}
 	})
 })
-
 
 /* personnel */
 .get('/guildmaster/personnel',urlencodedParser, function(req, res) {
@@ -139,13 +133,10 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(req.session.user);	
 })
 
-
 /* recruter personnel */
 .get('/guildmaster/personnel/recruter', function(req, res) { 
     res.render('recruter.ejs', {role: req.session.user});
 	//console.log(req.session.user);
-        
-	
 })
 
 /* inventaire */
@@ -163,22 +154,17 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
-
 /* quete */
 .get('/guildmaster/quete', function(req, res) { 
     res.render('quete.ejs', {role: req.session.user});
 	//console.log(req.session.user);
-	
 })
-
 
 /* deconnexion */
 .get('/guildmaster/deconnexion', function(req, res) {
     req.session = null;
     res.redirect('/guildmaster/');
 })
- 
-
 
 /* gestion utilisateur */
 .get('/guildmaster/gestion', function(req, res) { 
@@ -193,10 +179,7 @@ on en crée une vide sous forme d'array avant la suite */
 	 // console.log(err.message);
         }
     })
-	
 })
-
-
 
 /* On redirige vers l'accueil si la page demandée n'est pas trouvée */
 .use(function(req, res, next){
