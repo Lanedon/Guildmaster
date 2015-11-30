@@ -1,25 +1,31 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Connexion</title>
-
-     <% include ./header.ejs %>
-
-  
-       <form action="/guildmaster/connexion/validation" method="post">
-            <p>
-                <label for="connect">pseudo </label>
-                <input type="text" name="pseudo" id="pseudo" autofocus /><br> 	   
-	    </p>
-	    <p>
-		<label for="connect">mot de passe </label>
-                <input type="password" name="MdP" id="MdP" /><br>
- 	    </p>
-	    <p>
-		<input type="submit" />
-            </p>
-        </form>
-     </body>
-
-</html>
+<div class="popup-wrapper">
+    <div class="popup-absolute">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Connexion
+                            <span class="close-popup">&#xf00d</span>
+                        </div>
+                        <div class="panel-body">
+                            <form action="/guildmaster/connexion/validation" method="post">
+                                <div class="col-sm-12 input-popup">
+                                    <label for="pseudo">Pseudo :</label>
+                                    <input type="text" name="pseudo" id="pseudo" class="form-control" autofocus >
+                                </div>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="MdP">Mot de passe :</label>
+                                    <input type="password" name="MdP" id="MdP" class="form-control" >
+                                </div>     
+                                <div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
