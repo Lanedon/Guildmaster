@@ -1,4 +1,3 @@
-<% include ./scriptGeneral.ejs %>
 </head>
 <body>
 <nav id="primary-bar" class="navbar navbar-default">
@@ -10,8 +9,8 @@
   		</ul>
   		<ul class="nav navbar-nav navbar-right">
   			<% if(role['role']=='anonyme'){ %>
-  			<li><a href="/guildmaster/inscription" class="lien-actif">Inscription</a></li>
-  			<li><a href="/guildmaster/connexion">Connexion</a></li>
+  			<li><a class="lien-actif">Inscription</a></li>
+  			<li><a id="buttonConnexion">Connexion</a></li>
 			<%  } if(role['role']=='admin'){   %>
 			<li><a href="/guildmaster/gestion">Gestion utilisateurs</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
