@@ -1,8 +1,13 @@
-$(document).ready(function() {
-	$('.popup-wrapper').hide();
-})
+$("#buttonConnexion").click(function() {
+	$(".popup-wrapper").show();
+});
 
-$('#buttonConnexion').on('click', function(){
-	alert('OOOOOOOOOOOOOOOOOOOOO');
-	$('.popup-wrapper').show();
-})
+$("#buttonInscription").click(function() {
+	$(".popup-wrapper").show();
+});
+
+$("#closePopup").click(function() {
+	alert('wololo');
+	
+	$(".popup-wrapper").hide();
+});
