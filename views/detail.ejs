@@ -5,46 +5,53 @@
         <title>detail</title>
 
      <% include ./header.ejs %>
-
-<br>
-	<table>
-	 <tr>
-	  <th>classe</th>
-	  <th>prestige</th>
-	  <th>force</th>
-	  <th>dexterite</th>
-	  <th>intelligence</th>
-          <th>chance</th>
-	  <th>endurence</th>
-	  <th>main droite</th>
-	  <th>main gauche</th>
-	  <th>torse</th>
-          <th>tete</th>
-	  <th>jambes</th>
-	  <th>pieds</th>
-	</tr>
-	<% if(data.length){ 
-	for(var i = 0;i < data.length;i++) { %>
-	<tr>
-	 <td><%=data[i].class%></td>
-	 <td><%=data[i].prestige%></td>
-	 <td><%=data[i].str%></td>
-         <td><%=data[i].dex%></td>
-	 <td><%=data[i].intel%></td>
-	 <td><%=data[i].luk%></td>
-         <td><%=data[i].end%></td>
-	 <td><%=data[i].handRight%></td>
-	 <td><%=data[i].handLeft%></td>
-         <td><%=data[i].torso%></td>
-	 <td><%=data[i].head%></td>
-	 <td><%=data[i].legs%></td>
-         <td><%=data[i].feet%></td>
-	 </tr>
-	<% }
-	} %>
-	
-	</table>
-
+   <div class="container-fluid">
+    <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                            <div class="panel panel-default" id="panelAccueil">
+                                <div class="panel-body">
+                                <table>
+                                 <tr>
+                                  <th>classe</th>
+                                  <th>prestige</th>
+                                  <th>force</th>
+                                  <th>dexterite</th>
+                                  <th>intelligence</th>
+                                  <th>chance</th>
+                                  <th>endurence</th>
+                                  <th>main droite</th>
+                                  <th>main gauche</th>
+                                  <th>torse</th>
+                                  <th>tete</th>
+                                  <th>jambes</th>
+                                  <th>pieds</th>
+                                </tr>
+                                <% if(data.length){ 
+                                for(var i = 0;i < data.length;i++) { %>
+                                <tr>
+                                 <td><%=data[i].class%></td>
+                                 <td><%=data[i].prestige%></td>
+                                 <td><%=data[i].str%></td>
+                                 <td><%=data[i].dex%></td>
+                                 <td><%=data[i].intel%></td>
+                                 <td><%=data[i].luk%></td>
+                                 <td><%=data[i].end%></td>
+                                 <td><%=data[i].handRight%></td>
+                                 <td><%=data[i].handLeft%></td>
+                                 <td><%=data[i].torso%></td>
+                                 <td><%=data[i].head%></td>
+                                 <td><%=data[i].legs%></td>
+                                 <td><%=data[i].feet%></td>
+                                 </tr>
+                                <% }
+                                } %>
+                                
+                                </table>
+			      </div>
+		       </div>
+     		</div>
+     	</div>
+    </div>
     
     </body>
 </html>
