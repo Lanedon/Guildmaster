@@ -6,8 +6,6 @@ $("#buttonInscription").click(function() {
 	$(".popup-wrapper").show();
 });
 
-$("#closePopup").click(function() {
-	alert('wololo');
-	
+$(".close-popup").click(function() {
 	$(".popup-wrapper").hide();
 });
