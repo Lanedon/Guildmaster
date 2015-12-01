@@ -5,51 +5,57 @@
         <title>Inventaire</title>
 
      <% include ./header.ejs %>
+   <div class="container-fluid">
+    <div class="row">
+		    <div class="col-sm-10 col-sm-offset-1">
+			    <div class="panel panel-default" id="panelAccueil">
+				<div class="panel-body">
 
-<br>
-    
-
-	<table>
-	 <tr>
-	  <th>nom</th>
-	  <th>quantite</th>
-	  <th>prix</th>
-	  <th>rarete</th>
-	  <th>description</th>
-	  <th>force min</th>
-	  <th>dexterite min</th>
-          <th>intelligence min</th>
-	  <th>chance min</th>
-	  <th>endurence min</th>
-	  <th>bonus en force</th>
-	  <th>bonus en dexterite</th>
-	  <th>bonus en intelligence</th>
-	  <th>bonus en chance</th>
-	  <th>bonus en endurence</th>
-	</tr>
-	<% if(data.length){ 
-	for(var i = 0;i < data.length;i++) { %>
-	<tr>
-	 <td><%=data[i].name%></td>
-	 <td><%=data[i].quantity%></td>
- 	 <td><%=data[i].price%></td>
-	 <td><%=data[i].rarity%></td>
-	 <td><%=data[i].description%></td>
-	 <td><%=data[i].minStr%></td>
-	 <td><%=data[i].minDex%></td>
-	 <td><%=data[i].minInt%></td>
-	 <td><%=data[i].minLuk%></td>
-	 <td><%=data[i].minEnd%></td>
-	 <td><%=data[i].bonusStr%></td>
- 	 <td><%=data[i].bonusDex%></td>
-	 <td><%=data[i].bonusInt%></td>
-	 <td><%=data[i].bonusLuk%></td>
-	 <td><%=data[i].bonusEnd%></td>
-	 </tr>
-	<% }
-	} %>
-	
-	</table>
-    
+				    <table>
+				     <tr>
+				      <th>nom</th>
+				      <th>quantite</th>
+				      <th>prix</th>
+				      <th>rarete</th>
+				      <th>description</th>
+				      <th>force min</th>
+				      <th>dexterite min</th>
+				      <th>intelligence min</th>
+				      <th>chance min</th>
+				      <th>endurence min</th>
+				      <th>bonus en force</th>
+				      <th>bonus en dexterite</th>
+				      <th>bonus en intelligence</th>
+				      <th>bonus en chance</th>
+				      <th>bonus en endurence</th>
+				    </tr>
+				    <% if(data.length){ 
+				    for(var i = 0;i < data.length;i++) { %>
+				    <tr>
+				     <td><%=data[i].name%></td>
+				     <td><%=data[i].quantity%></td>
+				     <td><%=data[i].price%></td>
+				     <td><%=data[i].rarity%></td>
+				     <td><%=data[i].description%></td>
+				     <td><%=data[i].minStr%></td>
+				     <td><%=data[i].minDex%></td>
+				     <td><%=data[i].minInt%></td>
+				     <td><%=data[i].minLuk%></td>
+				     <td><%=data[i].minEnd%></td>
+				     <td><%=data[i].bonusStr%></td>
+				     <td><%=data[i].bonusDex%></td>
+				     <td><%=data[i].bonusInt%></td>
+				     <td><%=data[i].bonusLuk%></td>
+				     <td><%=data[i].bonusEnd%></td>
+				     </tr>
+				    <% }
+				    } %>
+				    
+				    </table>
+    			      </div>
+		       </div>
+     		</div>
+     	</div>
+    </div>
     </body>
 </html>

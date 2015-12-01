@@ -82,7 +82,7 @@ on en crée une vide sous forme d'array avant la suite */
 			//}
 		}
 		else{
-	   	// res.redirect('/guildmaster/connexion');		
+	   		res.redirect('/guildmaster/');		
 		}
 	})
 })
