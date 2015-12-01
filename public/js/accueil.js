@@ -1,11 +1,18 @@
-$("#buttonConnexion").click(function() {
-	$(".popup-wrapper").show();
+/*var myModule = require('./module');*/
+
+$("#buttonConnexion").on('click', function() {
+	$("#popupConnexion").show();
 });
 
-$("#buttonInscription").click(function() {
-	$(".popup-wrapper").show();
+$("#buttonInscription").on('click', function() {
+	$("#popupInscription").show();
 });
 
-$(".close-popup").click(function() {
-	$(".popup-wrapper").hide();
+$(".close-popup").on('click', function() {
+	var wrapper = $(this).parents('.popup-wrapper');
+	wrapper.hide();
 });
+
+/*$('#donneUser').on('click', function() {
+	alert(myModule.role);
+})*/

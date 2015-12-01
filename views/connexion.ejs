@@ -1,4 +1,4 @@
-<div class="popup-wrapper">
+<div id="popupConnexion" class="popup-wrapper">
     <div class="popup-absolute">
         <div class="container">
             <div class="row">
@@ -12,11 +12,11 @@
                             <form action="/guildmaster/connexion/validation" method="post">
                                 <div class="col-sm-12 input-popup">
                                     <label for="pseudo">Pseudo :</label>
-                                    <input type="text" name="pseudo" id="pseudo" class="form-control" autofocus >
+                                    <input type="text" name="pseudo" id="pseudo" class="form-control" autofocus required>
                                 </div>
                                 <div class="col-sm-12 input-popup">
                                     <label for="MdP">Mot de passe :</label>
-                                    <input type="password" name="MdP" id="MdP" class="form-control" >
+                                    <input type="password" name="MdP" id="MdP" class="form-control" required>
                                 </div>     
                                 <div class="col-sm-12 text-center btn-popup">
                                     <button class="btn btn-lg btn-default" type="submit">Confirmer</button>

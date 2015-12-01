@@ -52,7 +52,7 @@ on en crée une vide sous forme d'array avant la suite */
         var post={login:req.body.pseudo,
                   pass:req.body.mdp,
                   email:req.body.email,
-                  role:'utilisateur'};
+                  role:'en attente'};
         connection.query("INSERT INTO user set ?", post, function(error){
                 if(error){
                  // console.log(error.message);
@@ -77,6 +77,7 @@ on en crée une vide sous forme d'array avant la suite */
 		if (rows !== undefined && rows[0] !== undefined ){	
 			//if(rows[0]['etat']==1){
 				req.session.user = {id:rows[0]['idUser'],role:rows[0]['role']};
+        /*exports.role = role;*/
 				res.redirect('/guildmaster/');
 			//}
 		}
