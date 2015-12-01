@@ -1,28 +1,36 @@
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Inscription</title>
-     <% include ./header.ejs %>
-
-	 <form id="send" action="/guildmaster/inscription/validation" method="post">
-	    <p>
-			<label for="register">pseudo </label>
-		        <input type="text" name="pseudo" id="pseudo" required/><br>
- 	    </p>
-	    <p>
-			<label for="register">Mot de passe </label>
-		        <input type="password" name="mdp" id="mdp" required/><br>
- 	    </p>
-	    <p>
-			<label for="register">adresse mail </label>
-		        <input type="email" name="email" id="email" required/><br>
- 	    </p>
-	    <p>
-		        <input type="submit" />
-	    </p>
-	</form>
-    </body>
-</html>
-
+<div id="popupInscription" class="popup-wrapper">
+    <div class="popup-absolute">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Inscription
+                            <div class="close-popup">&#xf00d</div>
+                        </div>
+                        <div class="panel-body">
+                            <form action="/guildmaster/inscription/validation" method="post">
+                                <div class="col-sm-12 input-popup">
+                                    <label for="pseudo">Pseudo :</label>
+                                    <input type="text" name="pseudo" id="pseudo" class="form-control" autofocus >
+                                </div>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="mdp">Mot de passe :</label>
+                                    <input type="password" name="mdp" id="mdp" class="form-control" required>
+                                </div>
+                                <div class="col-sm-12 input-popup">
+                                	<label for="email">E-mail :</label>
+		        					<input type="email" name="email" id="email" class="form-control" required>
+                                </div>
+                                <div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
