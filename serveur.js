@@ -140,6 +140,21 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(req.session.user);
 })
 
+/* profil */
+.get('/guildmaster/profil', function(req, res) {
+    connection.query("SELECT login, email ,role, name, rank, prestige, gold FROM user, guild where user.idUser = guild.idUser AND user.idUser = "+req.session.user['id'], function(err, rows, fields){
+      if (!err){
+	   //console.log(rows);
+	    res.render('profil.ejs', {data:rows, role:req.session.user});
+	   //console.log(data);
+      }
+	else{
+         res.render('accueil.ejs', {role:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
 /* inventaire */
 .get('/guildmaster/inventaire', function(req, res) { 
      connection.query("SELECT idInventory, quantity, name, price, rarity, description, minStr, minDex, minInt, minLuk, minEnd, bonusStr, bonusDex, bonusInt, bonusLuk, bonusEnd FROM inventory,equipment WHERE idUser = '"+ req.session.user['id'] +"' and inventory.idEquipment = equipment.idEquipment ", function(err, rows, fields){
