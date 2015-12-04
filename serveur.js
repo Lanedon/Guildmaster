@@ -22,6 +22,8 @@ app.use(express.static(__dirname + '/public'));
   }
 }); */
 
+
+
 /* On utilise les sessions */
 app.use(session({secret: 'UserSession'}))
 
@@ -34,11 +36,17 @@ on en crée une vide sous forme d'array avant la suite */
     next();
 })
 
+
 /* accueil */
 .get('/guildmaster', function(req, res) { 
-    res.render('accueil.ejs', {role: req.session.user});
-	//console.log(req.session.user);
-	
+    if (req.session.user['role'] !== 'en attente'){
+     res.render('accueil.ejs', {role: req.session.user});
+    }
+    else {
+     req.session.user = {role:'anonyme'};
+     res.render('accueilEnAttente.ejs', {role: req.session.user});
+     //console.log(req.session.user);
+    }
 })
 
 /* Inscription */
@@ -77,7 +85,6 @@ on en crée une vide sous forme d'array avant la suite */
 		if (rows !== undefined && rows[0] !== undefined ){	
 			//if(rows[0]['etat']==1){
 				req.session.user = {id:rows[0]['idUser'],role:rows[0]['role']};
-        /*exports.role = role;*/
 				res.redirect('/guildmaster/');
 			//}
 		}
