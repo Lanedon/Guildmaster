@@ -25,8 +25,8 @@
 </head>
 <body>
 
+<div id="popup-background"></div>
 
- 
 <nav id="primary-bar" class="navbar navbar-default">
   	<div class="container-fluid">
   		<div class="navbar-header">
@@ -36,20 +36,20 @@
   		</ul>
   		<ul class="nav navbar-nav navbar-right">
   			<% if(role['role']=='anonyme'){ %>
-  			<li><a id="buttonInscription" class="lien-actif">Inscription</a></li>
-  			<li><a id="buttonConnexion">Connexion</a></li>
+  			<li><a id="buttonInscription" class="lien-actif texte-header">Inscription</a></li>
+  			<li><a id="buttonConnexion" class="texte-header">Connexion</a></li>
 			<%  } if(role['role']=='admin'){   %>
-			<li><a href="/guildmaster/gestion">Gestion utilisateurs</a></li>
+			<li><a href="/guildmaster/gestion" class="texte-header">Gestion utilisateurs</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
-			<li><a href="/guildmaster/profil">Profil</a></li>
+			<li><a href="/guildmaster/profil" class="texte-header">Profil</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
-			<li><a href="/guildmaster/inventaire">Inventaire</a></li>
+			<li><a href="/guildmaster/inventaire" class="texte-header">Inventaire</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
-			<li><a href="/guildmaster/personnel">Personnel</a></li>
+			<li><a href="/guildmaster/personnel" class="texte-header">Personnel</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
-			<li><a href="/guildmaster/quete">Quête</a></li>
+			<li><a href="/guildmaster/quete" class="texte-header">Quête</a></li>
 			<%  } if(role['role']!='anonyme'){ %>
-			<li><a href="/guildmaster/deconnexion">Déconnexion</a></li>
+			<li><a href="/guildmaster/deconnexion" class="texte-header">Déconnexion</a></li>
 			<%  } %>
   		</ul>
 	</div>
