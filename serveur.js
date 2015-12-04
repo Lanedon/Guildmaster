@@ -14,13 +14,13 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var app = express();
 app.use(express.static(__dirname + '/public'));
 
-/* connection.connect(function(err){
+connection.connect(function(err){
   if(!err) {
-      //console.log("Database is connected ... \n\n");  
+      console.log("Database is connected ... \n\n");  
   } else {
-      //console.log("Error connecting database ... \n\n");  
+      console.log("Error connecting database ... \n\n" + err);  
   }
-}); */
+}); 
 
 /* On utilise les sessions */
 app.use(session({secret: 'UserSession'}))
