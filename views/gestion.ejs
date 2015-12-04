@@ -6,53 +6,52 @@
         <style>
             a {text-decoration: none; color: black;}
         </style>
-
     <% include ./header.ejs %>
-<div class="container-fluid">
- 	<div class="row">
- 		<div class="col-sm-10 col-sm-offset-1">
- 			<div class="table-responsive">
-				<table class="table table-condensed table-stripped table-hover">
-					<tr class="thead">
-						<th width="50px">#</th>
-						<th>Pseudo</th>
-						<th>Guilde</th>
-						<th>Adresse e-mail</th>
-						<th>Rôle</th>
-						<th>Rang</th>
-						<th>Prestige</th>
-						<th>Or</th>
-						<th>Modifier</th>
-						<th>Bannir</th>
-						<th>Supprimer</th>
-					</tr>
-					<% if(data.length){
-					for(var i = 0;i < data.length;i++) { %>
-					<tr class="tbody text-center">
-						<td><%=data[i].idUser%></td>
-						<td><%=data[i].login%></td>
-						<td><%=data[i].name%></td>
-						<td><%=data[i].email%></td>
-						<td><%=data[i].role%></td>
-						<td><%=data[i].rank%></td>
-						<td><%=data[i].prestige%></td>
-						<td><%=data[i].gold%></td>
-						<td><a href="/guildmaster/gestion/modifier<%=data[i].idUser%>">modifier</a></td>
-						<td><a href="/guildmaster/gestion/bannir<%=data[i].idUser%>">bannir</a></td>
-						<% if(data[i].role!='admin'){ %>
-						<td><a href="/guildmaster/gestion/supprimer<%=data[i].idUser%>">supprimer</a></td>
-						<% } else { %>
-						 <td></td>
-						<% } %>
-					</tr>
-					<% } } %>
-				</table>
-			</div>
+	<div class="container-fluid">
+	    <div class="row">
+		    <div class="col-sm-10 col-sm-offset-1">
+			    <div class="table-responsive">
+				    <table class="table table-condensed table-stripped table-hover">
+					    <tr class="thead">
+						    <th width="50px">#</th>
+						    <th>Pseudo</th>
+						    <th>Guilde</th>
+						    <th>Adresse e-mail</th>
+						    <th>Rôle</th>
+						    <th>Rang</th>
+						    <th>Prestige</th>
+						    <th>Or</th>
+						    <th>Modifier</th>
+						    <th>Bannir</th>
+						    <th>Supprimer</th>
+					    </tr>
+					    <% if(data.length){
+					    for(var i = 0;i < data.length;i++) { %>
+					    <tr class="tbody text-center">
+						    <td><%=data[i].idUser%></td>
+						    <td><%=data[i].login%></td>
+						    <td><%=data[i].name%></td>
+						    <td><%=data[i].email%></td>
+						    <td><%=data[i].role%></td>
+						    <td><%=data[i].rank%></td>
+						    <td><%=data[i].prestige%></td>
+						    <td><%=data[i].gold%></td>
+						    <td><a href="/guildmaster/gestion/modifier<%=data[i].idUser%>">modifier</a></td>
+						    <td><a href="/guildmaster/gestion/bannir<%=data[i].idUser%>">bannir</a></td>
+						    <% if(data[i].role!='admin'){ %>
+						    <td><a href="/guildmaster/gestion/supprimer<%=data[i].idUser%>">supprimer</a></td>
+						    <% } else { %>
+						     <td></td>
+						    <% } %>
+					    </tr>
+					    <% } } %>
+				    </table>
+			    </div>
+		    </div>
 	    </div>
-	</div>
-</div>		
+	</div>		
     </body>
-<%  } else{ %>
-<meta http-equiv="refresh" content="0; url=/guildmaster" />
-<%  } %>
+    <%  } else{ %>
+    <meta http-equiv="refresh" content="0; url=/guildmaster" />
+    <%  } %>
 </html>
