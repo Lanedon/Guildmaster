@@ -1,26 +1,17 @@
 @import "fontFace.css";
 
-body {
-	background: url("https://placekitten.com/1100/1100") no-repeat;
-	/*width: 100%;
-	height: 100%;*/
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-	&, html {
-		position: relative;
-		min-height: 100%; 
-		margin: 0; 
-		padding: 0;
-	}
+body, html {
+	position: relative;
+	min-height: 100%; 
+	margin: 0; 
+	padding: 0;
 }
 
 #panelAccueil {
 	margin-top: 100px;
-	background: black;
-	border-color: black;
-	color: white;
+	background: rgba(0, 0, 0, 0.5);
+	border-color: rgba(0, 0, 0, 0.5);
+	color: rgba(255, 255, 255, 0.7);
 	font-size: 1.5em;
 }
 
@@ -139,4 +130,28 @@ body {
 	height: 100%;
 	width: 100%;
 	z-index: 1000;
+}
+
+@couleurTableBorder: lightgrey;
+
+table {
+	th {
+		border-collapse: collapse;
+		border: 1px orange solid;
+		background-color: orange;
+		color: white;
+	}
+	td {
+		border-collapse: collapse;
+		border-left: 1px @couleurTableBorder solid;
+		border-right: 1px @couleurTableBorder solid;
+		border-top: 1px transparent solid;
+		border-bottom: 1px transparent solid;
+	}
+	tr:last-child td{
+		border-bottom: 1px @couleurTableBorder solid;
+	}
+	.thead {
+		font-size: 1.5em;
+	}
 }
