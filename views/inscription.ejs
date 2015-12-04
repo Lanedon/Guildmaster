@@ -14,17 +14,35 @@
                                     <label for="pseudo">Pseudo :</label>
                                     <input type="text" name="pseudo" id="pseudo" class="form-control" autofocus >
                                 </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="email">E-mail :</label>
+		        	    <input type="email" name="email" id="email" class="form-control" required>
+                                </div>
                                 <div class="col-sm-12 input-popup">
                                     <label for="mdp">Mot de passe :</label>
                                     <input type="password" name="mdp" id="mdp" class="form-control" required>
                                 </div>
                                 <div class="col-sm-12 input-popup">
-                                	<label for="email">E-mail :</label>
-		        					<input type="email" name="email" id="email" class="form-control" required>
+                                    <label for="mdpConfirm">confirmer mot de passe :</label>
+                                    <input type="password" name="mdpConfirm" id="mdpConfirm" class="form-control" required><span id='message'></span>
                                 </div>
-                                <div class="col-sm-12 text-center btn-popup">
-                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+				<div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit" name="submit" id="submit" disabled>Confirmer</button>
                                 </div>
+				<script>
+				$('#mdp, #mdpConfirm').on('keyup', function () {
+				    if ($('#mdp').val().length>3) {
+					if ($('#mdp').val() == $('#mdpConfirm').val()) {
+					    $('#message').html('Matching').css('color', 'green');
+					    $('#submit').attr({disabled:false});
+					} else {
+					    $('#message').html('Not Matching').css('color', 'red');
+					    $('#submit').attr({disabled:true});
+					}
+				    }
+				});
+				</script>
+                               
                             </form>
                         </div>
                     </div>
