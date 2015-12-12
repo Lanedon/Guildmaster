@@ -3,30 +3,24 @@
 <html>
     <head>
         <title>Personnel</title>
-
      <% include ./header.ejs %>
-
-   <div class="container-fluid">
-     	<div class="row">
-     		<div class="col-sm-10 col-sm-offset-1">
-     			<div class="panel panel-default" id="panelAccueil">
-			    <div class="panel-body">
-			      <a href="/guildmaster/personnel/recruter">recruter</a>
-			  
-				  <table>
-				   <tr>
+	<div class="container-fluid">
+	    <div class="row">
+		    <div class="col-sm-10 col-sm-offset-1">
+			    <div class="table-responsive">
+				<table class="table table-condensed table-stripped table-hover">
+					<tr class="thead">
 				    <th width="50px">id</th>
 				    <th>nom</th>
 				    <th>niveau</th>
 				    <th>talent</th>
 				    <th>prix</th>
 				    <th>job</th>
-				    <th>detail</th>
-			  
+				    <th>detail</th>  
 				  </tr>
 				  <% if(data.length){ 
 				  for(var i = 0;i < data.length;i++) { %>
-				  <tr>
+				  <tr class="tbody text-center">
 				   <td><%=(i+1)%></td>
 				   <td><%=data[i].name%> <%=data[i].surname%></td>
 				   <td><%=data[i].level%></td>
@@ -39,12 +33,10 @@
 				   </tr>
 				  <% }
 				  } %>
-				  
 				  </table>
-			      </div>
-		       </div>
-     		</div>
-     	</div>
-    </div>
+			   </div>
+		    </div>
+	    </div>
+	</div>
     </body>
 </html>

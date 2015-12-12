@@ -13,14 +13,15 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
-
- connection.connect(function(err){
+/*
+connection.connect(function(err){
   if(!err) {
       console.log("Database is connected ... \n\n");  
   } else {
-      console.log("Error connecting database ... \n\n");  
+      console.log("Error connecting database ... \n\n" + err);  
   }
 }); 
+*/
 
 /* On utilise les sessions */
 app.use(session({secret: 'UserSession'}))
@@ -34,11 +35,17 @@ on en crée une vide sous forme d'array avant la suite */
     next();
 })
 
+
 /* accueil */
 .get('/guildmaster', function(req, res) { 
-    res.render('accueil.ejs', {role: req.session.user});
-	//console.log(req.session.user);
-	
+    if (req.session.user['role'] !== 'en attente'){
+     res.render('accueil.ejs', {role: req.session.user});
+    }
+    else {
+     req.session.user = {role:'anonyme'};
+     res.render('accueilEnAttente.ejs', {role: req.session.user});
+     //console.log(req.session.user);
+    }
 })
 
 /* Inscription */
@@ -77,7 +84,6 @@ on en crée une vide sous forme d'array avant la suite */
 		if (rows !== undefined && rows[0] !== undefined ){	
 			//if(rows[0]['etat']==1){
 				req.session.user = {id:rows[0]['idUser'],role:rows[0]['role']};
-        /*exports.role = role;*/
 				res.redirect('/guildmaster/');
 			//}
 		}
@@ -138,6 +144,21 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/personnel/recruter', function(req, res) { 
     res.render('recruter.ejs', {role: req.session.user});
 	//console.log(req.session.user);
+})
+
+/* profil */
+.get('/guildmaster/profil', function(req, res) {
+    connection.query("SELECT login, email ,role, name, rank, prestige, gold FROM user, guild where user.idUser = guild.idUser AND user.idUser = "+req.session.user['id'], function(err, rows, fields){
+      if (!err){
+	   //console.log(rows);
+	    res.render('profil.ejs', {data:rows, role:req.session.user});
+	   //console.log(data);
+      }
+	else{
+         res.render('accueil.ejs', {role:req.session.user});
+	 // console.log(err.message);
+        }
+    })
 })
 
 /* inventaire */
