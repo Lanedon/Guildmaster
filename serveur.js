@@ -43,9 +43,14 @@ on en crée une vide sous forme d'array avant la suite */
     }
     else {
      req.session.user = {role:'anonyme'};
-     res.render('accueilEnAttente.ejs', {role: req.session.user});
+     res.render('nouveauJoueur.ejs', {role: req.session.user});
      //console.log(req.session.user);
     }
+})
+
+.get('/guildmaster/nouveauJoueur', function(req, res) {
+  req.session.user = {role:'anonyme'};
+  res.render('nouveauJoueur.ejs', {role: req.session.user});
 })
 
 /* Inscription */
