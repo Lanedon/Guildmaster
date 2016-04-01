@@ -24,6 +24,7 @@
                                       <th>tete</th>
                                       <th>jambes</th>
                                       <th>pieds</th>
+                                      <th>recruter</th>
                                     </tr>
                                     <% if(data.length){ 
                                     for(var i = 0;i < data.length;i++) { %>
@@ -41,6 +42,7 @@
                                      <td><%=data[i].head%></td>
                                      <td><%=data[i].legs%></td>
                                      <td><%=data[i].feet%></td>
+                                     <td><a href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
                                      </tr>
                                     <% }
                                     } %>

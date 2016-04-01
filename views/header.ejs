@@ -6,22 +6,25 @@
   		</div>
   		<ul class="nav navbar-nav navbar-left">
   			<li><a href="/guildmaster/accueil" id="icon-home"><img class="img-responsive" src="/favicon-32x32.png"></a></li>
+			<%  if(user['role']!='anonyme'){   %>
+			<li><%= user['gold']%> pieces d'or</li>
+			<%  }  %>
   		</ul>
   		<ul class="nav navbar-nav navbar-right">
-  			<% if(role['role']=='anonyme'){ %>
+  			<% if(user['role']=='anonyme'){ %>
   			<li><a id="buttonInscription" class="lien-actif texte-header">Inscription</a></li>
   			<li><a id="buttonConnexion" class="texte-header">Connexion</a></li>
-			<%  } if(role['role']=='admin'){   %>
+			<%  } if(user['role']=='admin'){   %>
 			<li><a href="/guildmaster/gestion" class="texte-header">Gestion utilisateurs</a></li>
-			<%  } if(role['role']!='anonyme'){ %>
+			<%  } if(user['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/profil" class="texte-header">Profil</a></li>
-			<%  } if(role['role']!='anonyme'){ %>
+			<%  } if(user['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/inventaire" class="texte-header">Inventaire</a></li>
-			<%  } if(role['role']!='anonyme'){ %>
+			<%  } if(user['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/personnel" class="texte-header">Personnel</a></li>
-			<%  } if(role['role']!='anonyme'){ %>
+			<%  } if(user['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/quete" class="texte-header">Quête</a></li>
-			<%  } if(role['role']!='anonyme'){ %>
+			<%  } if(user['role']!='anonyme'){ %>
 			<li><a href="/guildmaster/deconnexion" class="texte-header">Déconnexion</a></li>
 			<%  } %>
   		</ul>
