@@ -6,7 +6,7 @@
   		</div>
   		<ul class="nav navbar-nav navbar-left">
   			<li><a href="/guildmaster/accueil" id="icon-home"><img class="img-responsive" src="/favicon-32x32.png"></a></li>
-			<%  if(user['role']!='anonyme'){   %>
+			<%  if(user['gold']){   %>
 			<li><%= user['gold']%> pieces d'or</li>
 			<%  }  %>
   		</ul>

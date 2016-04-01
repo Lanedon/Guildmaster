@@ -49,7 +49,7 @@ on en crée une vide sous forme d'array avant la suite */
 })
 
 .get('/guildmaster/nouveauJoueur', function(req, res) {
-  req.session.user = {role:'anonyme'};
+  //req.session.user = {role:'anonyme'};
   res.render('nouveauJoueur.ejs', {user: req.session.user});
 })
 
@@ -84,13 +84,22 @@ on en crée une vide sous forme d'array avant la suite */
 .post('/guildmaster/connexion/validation', urlencodedParser, function(req, res) { 
        //console.log('pseudo',req.body.pseudo);
        //console.log('MdP',req.body.MdP);
-       connection.query("SELECT user.idUser, role, gold FROM user, guild WHERE login = '"+ req.body.pseudo +"' and pass = '"+ req.body.MdP +"' and guild.idUser = user.idUser", function(err, rows, fields) {
-		//console.log(rows);	 
-		if (rows !== undefined && rows[0] !== undefined ){	
-			//if(rows[0]['etat']==1){
-				req.session.user = {id:rows[0]['idUser'], role:rows[0]['role'], gold:rows[0]['gold']};
-				res.redirect('/guildmaster/');
-			//}
+       connection.query("SELECT user.idUser, role FROM user WHERE login = '"+ req.body.pseudo +"' and pass = '"+ req.body.MdP +"'", function(err, rows, fields) {
+		//console.log(rows);
+		if (rows !== undefined && rows[0] !== undefined ){
+		        var user = {id:rows[0]['idUser'],
+				    role:rows[0]['role']};
+			if(rows[0]['role']!=='en attente'){
+			  connection.query("SELECT gold FROM guild where idUser = '"+ rows[0]['idUser'] +"'", function(err, rows, fields) {
+				  req.session.user = {id:user['id'], role:user['role'], gold:rows[0]['gold']};
+				  res.redirect('/guildmaster/');
+			  })
+			}
+			else{
+			  req.session.user = {id:user['id'], role:user['role']};
+			  res.redirect('/guildmaster/');
+			}
+			
 		}
 		else{
 	   		res.redirect('/guildmaster/');		
@@ -105,7 +114,6 @@ on en crée une vide sous forme d'array avant la suite */
 		  rank: req.session.user['id'],
 		  gold: 100,
 		  idUser: req.session.user['id']};
-		  //console.log(post);
                   //option:req.body.optionsRadios
         connection.query("INSERT INTO guild set ?", post, function(err){
                 if(err){
@@ -113,10 +121,10 @@ on en crée une vide sous forme d'array avant la suite */
                 }else{
 		  connection.query("UPDATE user SET role = 'user' WHERE idUser ="+ req.session.user['id'] +";", post, function(err){
 		    if(err){
-		      console.log(err.message);
+		      //console.log(err.message);
 		    }else{
 		     // console.log('success');
-		     req.session.user = {id:req.session.user['id'], role:'user'};
+		     req.session.user = {id:req.session.user['id'], role:'user', gold:'100'};
 		     res.redirect('/guildmaster');
 		    }
 		  })
@@ -149,7 +157,7 @@ on en crée une vide sous forme d'array avant la suite */
              connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
-                res.render('detail.ejs', {data:rows, role: req.session.user});
+                res.render('detail.ejs', {data:rows, user: req.session.user});
                 //console.log(data);
               }
               else{
@@ -191,7 +199,7 @@ on en crée une vide sous forme d'array avant la suite */
         //console.log(rows[0]['idUser'] === req.session.user['id']);
              connection.query("select name, surname, crew.idCrew, classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM crew, heroes WHERE crew.idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
-                console.log(rows);
+                //console.log(rows);
                 res.render('detailRecrue.ejs', {data:rows, user: req.session.user});
                 //console.log(data);
               }
@@ -241,7 +249,7 @@ on en crée une vide sous forme d'array avant la suite */
 		     }
 // hero // 
 		    if (hero['hero']==1) {
-		      connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ detail['idCrew'] +"'", function(err, rows, fields){
+		      connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
 			if (rows !== undefined && rows[0] !== undefined){
 			   var detailPers={classe:rows[0]['classe'],
 				       prestige:rows[0]['prestige'],
@@ -259,7 +267,7 @@ on en crée une vide sous forme d'array avant la suite */
 				       idCrew:detail['idCrew']};
 			  connection.query("INSERT INTO heroes set ?", detailPers, function(err){
 			    if(err){
-			     // console.log(err.message);
+			    //  console.log(err.message);
 			     res.redirect('/guildmaster/recruter');	
 			    }else{
 			     // console.log('success');
