@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 01 Avril 2016 à 16:07
--- Version du serveur: 5.5.46-0ubuntu0.14.04.2
--- Version de PHP: 5.6.16-4+deb.sury.org~trusty+1
+-- Généré le: Lun 11 Avril 2016 à 13:53
+-- Version du serveur: 5.5.47-0ubuntu0.14.04.1
+-- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,15 +23,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `acceptedquest`
+-- Structure de la table `acceptedQuest`
 --
 
-CREATE TABLE IF NOT EXISTS `acceptedquest` (
-  `idUser` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `acceptedQuest` (
   `idQuest` int(11) NOT NULL,
-  PRIMARY KEY (`idUser`,`idQuest`),
-  KEY `fk_guild_has_quest_quest1_idx` (`idQuest`),
-  KEY `fk_guild_has_quest_guild1_idx` (`idUser`)
+  `idUser` int(11) NOT NULL,
+  `dateFin` varchar(45) DEFAULT NULL,
+  `idSquad` int(11) NOT NULL,
+  PRIMARY KEY (`idQuest`,`idUser`),
+  KEY `fk_quest_has_guild_guild1_idx` (`idUser`),
+  KEY `fk_quest_has_guild_quest1_idx` (`idQuest`),
+  KEY `fk_acceptedQuest_squad1_idx` (`idSquad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -41,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `acceptedquest` (
 --
 
 CREATE TABLE IF NOT EXISTS `armor` (
-  `protection` int(11) DEFAULT NULL,
+  `protection` int(11) NOT NULL,
   `idEquipment` int(11) NOT NULL,
   PRIMARY KEY (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -54,32 +57,29 @@ CREATE TABLE IF NOT EXISTS `armor` (
 
 CREATE TABLE IF NOT EXISTS `crew` (
   `idCrew` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) DEFAULT NULL,
-  `surname` varchar(25) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL COMMENT '		',
+  `surname` varchar(45) DEFAULT NULL,
   `level` int(11) DEFAULT NULL,
-  `talent` varchar(25) DEFAULT NULL,
   `fee` int(11) DEFAULT NULL,
   `idUser` int(11) DEFAULT NULL,
+  `talent` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idCrew`),
-  KEY `fk_crew_guild1_idx` (`idUser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+  KEY `fk_crew_user1_idx` (`idUser`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Contenu de la table `crew`
 --
 
-INSERT INTO `crew` (`idCrew`, `name`, `surname`, `level`, `talent`, `fee`, `idUser`) VALUES
-(2, 'jean', 'eugene', 1, 'none', 100, NULL),
-(3, 'pierre', 'paul', 1, 'none', 100, NULL),
-(31, 'pierre', 'paul', 1, 'none', 100, 15),
-(37, 'jean', 'eugene', 1, 'none', 100, 15),
-(38, 'jean', 'eugene', 1, 'none', 100, 15),
-(39, 'jean', 'eugene', 1, 'none', 100, 15),
-(40, 'jean', 'eugene', 1, 'none', 100, 15),
-(41, 'jean', 'eugene', 1, 'none', 100, 15),
-(42, 'jean', 'eugene', 1, 'none', 100, 15),
-(43, 'jean', 'eugene', 1, 'none', 100, 15),
-(44, 'jean', 'eugene', 1, 'none', 100, 15);
+INSERT INTO `crew` (`idCrew`, `name`, `surname`, `level`, `fee`, `idUser`, `talent`) VALUES
+(1, 'jean', 'eugene', 1, 100, NULL, 'none'),
+(2, 'paul', 'jacques', 1, 100, NULL, 'none'),
+(3, 'jean', 'eugene', 1, 100, 2, 'none'),
+(4, 'paul', 'jacques', 1, 100, 2, 'none'),
+(5, 'paul', 'jacques', 1, 100, 2, 'none'),
+(6, 'paul', 'jacques', 1, 100, 2, 'none'),
+(7, 'paul', 'jacques', 1, 100, 2, 'none'),
+(8, 'paul', 'jacques', 1, 100, 2, 'none');
 
 -- --------------------------------------------------------
 
@@ -91,7 +91,8 @@ CREATE TABLE IF NOT EXISTS `equip` (
   `idEquipment` int(11) NOT NULL,
   `idCrew` int(11) NOT NULL,
   PRIMARY KEY (`idEquipment`,`idCrew`),
-  KEY `FK_equip_id_Crew` (`idCrew`)
+  KEY `fk_equipment_has_crew_crew1_idx` (`idCrew`),
+  KEY `fk_equipment_has_crew_equipment1_idx` (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -102,19 +103,17 @@ CREATE TABLE IF NOT EXISTS `equip` (
 
 CREATE TABLE IF NOT EXISTS `equipment` (
   `idEquipment` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) DEFAULT NULL,
-  `price` int(11) DEFAULT NULL,
-  `rarity` varchar(25) DEFAULT NULL,
-  `description` text,
+  `name` varchar(45) DEFAULT NULL,
+  `price` varchar(45) DEFAULT NULL,
+  `rarity` varchar(45) DEFAULT NULL,
   `minStr` int(11) DEFAULT NULL,
   `minDex` int(11) DEFAULT NULL,
-  `minEnd` int(11) DEFAULT NULL,
   `minInt` int(11) DEFAULT NULL,
   `minLuk` int(11) DEFAULT NULL,
   `bonusStr` int(11) DEFAULT NULL,
   `bonusDex` int(11) DEFAULT NULL,
-  `bonusEnd` int(11) DEFAULT NULL,
   `bonusInt` int(11) DEFAULT NULL,
+  `bonusEnd` int(11) DEFAULT NULL,
   `bonusLuk` int(11) DEFAULT NULL,
   PRIMARY KEY (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -126,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `equipment` (
 --
 
 CREATE TABLE IF NOT EXISTS `guild` (
-  `name` varchar(25) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
   `rank` int(11) DEFAULT NULL,
   `prestige` int(11) DEFAULT NULL,
   `gold` int(11) DEFAULT NULL,
@@ -139,11 +138,8 @@ CREATE TABLE IF NOT EXISTS `guild` (
 --
 
 INSERT INTO `guild` (`name`, `rank`, `prestige`, `gold`, `idUser`) VALUES
-('BestGuildEver', 1, 0, 0, 1),
-('La super guilde de Jean o', 2, 0, 0, 2),
-('wololo', 3, 0, 0, 3),
-('test', 15, 0, 100, 15),
-('azeae', 16, 0, 0, 16);
+('', 1, 1, 100, 1),
+('test', 2, 0, 100, 2);
 
 -- --------------------------------------------------------
 
@@ -152,7 +148,7 @@ INSERT INTO `guild` (`name`, `rank`, `prestige`, `gold`, `idUser`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `heroes` (
-  `classe` varchar(25) DEFAULT NULL,
+  `classe` varchar(45) NOT NULL,
   `prestige` int(11) DEFAULT NULL,
   `str` int(11) DEFAULT NULL,
   `dex` int(11) DEFAULT NULL,
@@ -168,8 +164,7 @@ CREATE TABLE IF NOT EXISTS `heroes` (
   `idCrew` int(11) NOT NULL,
   `idSquad` int(11) DEFAULT NULL,
   PRIMARY KEY (`idCrew`),
-  UNIQUE KEY `idCrew_UNIQUE` (`idCrew`),
-  KEY `FK_Heros_id_Squad` (`idSquad`)
+  KEY `fk_heroes_squad1_idx` (`idSquad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -177,7 +172,10 @@ CREATE TABLE IF NOT EXISTS `heroes` (
 --
 
 INSERT INTO `heroes` (`classe`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `handRight`, `handLeft`, `torso`, `head`, `legs`, `feet`, `idCrew`, `idSquad`) VALUES
-('aventurier', 0, 5, 5, 5, 5, 5, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL);
+('aventurier', 1, 5, 5, 5, 5, 5, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL),
+('aventurier', 1, 5, 5, 5, 5, 5, NULL, NULL, NULL, NULL, NULL, NULL, 6, NULL),
+('aventurier', 1, 5, 5, 5, 5, 5, NULL, NULL, NULL, NULL, NULL, NULL, 7, 3),
+('aventurier', 1, 5, 5, 5, 5, 5, NULL, NULL, NULL, NULL, NULL, NULL, 8, 3);
 
 -- --------------------------------------------------------
 
@@ -187,12 +185,12 @@ INSERT INTO `heroes` (`classe`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`,
 
 CREATE TABLE IF NOT EXISTS `inventory` (
   `idInventory` int(11) NOT NULL AUTO_INCREMENT,
-  `idEquipment` int(11) NOT NULL,
   `quantity` varchar(45) DEFAULT NULL,
   `idUser` int(11) NOT NULL,
+  `idEquipment` int(11) NOT NULL,
   PRIMARY KEY (`idInventory`,`idEquipment`),
-  KEY `fk_equipement_has_inventory_equipement1_idx` (`idEquipment`),
-  KEY `fk_inventory_user1_idx` (`idUser`)
+  KEY `fk_inventory_user1_idx` (`idUser`),
+  KEY `fk_inventory_equipment1_idx` (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -202,17 +200,23 @@ CREATE TABLE IF NOT EXISTS `inventory` (
 --
 
 CREATE TABLE IF NOT EXISTS `quest` (
-  `idQuest` int(11) NOT NULL,
+  `idQuest` int(11) NOT NULL AUTO_INCREMENT,
   `summary` text,
   `difficulty` int(11) DEFAULT NULL,
   `reward` int(11) DEFAULT NULL,
-  `dateBegin` date DEFAULT NULL,
-  `dateEnd` date DEFAULT NULL,
-  `fight` text,
-  `idSquad` int(11) NOT NULL,
+  `length` time DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `experience` int(11) NOT NULL,
   PRIMARY KEY (`idQuest`),
-  KEY `FK_Quest_id_Squad` (`idSquad`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `quest`
+--
+
+INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `length`, `name`, `experience`) VALUES
+(1, 'blablabla', 50, NULL, '00:00:10', 'wololo', 5);
 
 -- --------------------------------------------------------
 
@@ -221,11 +225,20 @@ CREATE TABLE IF NOT EXISTS `quest` (
 --
 
 CREATE TABLE IF NOT EXISTS `squad` (
-  `idsquad` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(25) DEFAULT NULL,
-  `experience` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idsquad`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `idSquad` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `experience` varchar(45) DEFAULT NULL,
+  `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`idSquad`),
+  KEY `fk_squad_user1_idx` (`idUser`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `squad`
+--
+
+INSERT INTO `squad` (`idSquad`, `name`, `experience`, `idUser`) VALUES
+(3, 'test squad', '0', 2);
 
 -- --------------------------------------------------------
 
@@ -235,23 +248,20 @@ CREATE TABLE IF NOT EXISTS `squad` (
 
 CREATE TABLE IF NOT EXISTS `user` (
   `idUser` int(11) NOT NULL AUTO_INCREMENT,
-  `role` varchar(255) NOT NULL,
-  `login` varchar(25) DEFAULT NULL,
-  `pass` varchar(25) DEFAULT NULL,
-  `email` varchar(25) DEFAULT NULL,
+  `role` varchar(45) DEFAULT NULL,
+  `login` varchar(45) DEFAULT NULL,
+  `pass` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idUser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `user`
 --
 
 INSERT INTO `user` (`idUser`, `role`, `login`, `pass`, `email`) VALUES
-(1, 'admin', 'Banedon', 'root', 'root@root.com'),
-(2, 'en attente', 'Jean-Test', 'jesuisjean', 'jean@test.test'),
-(3, 'admin', 'zeis', 'root', 'zaeaze@kjghekt.zaee'),
-(15, 'user', 'test', 'test', 'test@testAZEAZEZQDSQDEZQD'),
-(16, 'user', 'test2', 'azeaze', 'testazeze@qsdd.dfdf');
+(1, 'admin', 'root', 'root', 'root@root.root'),
+(2, 'user', 'test', 'test', 'test@test.cpù');
 
 -- --------------------------------------------------------
 
@@ -260,9 +270,9 @@ INSERT INTO `user` (`idUser`, `role`, `login`, `pass`, `email`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `weapon` (
-  `minDamage` int(11) DEFAULT NULL,
-  `maxDamage` int(11) DEFAULT NULL,
-  `distance` tinyint(1) DEFAULT NULL,
+  `minDamage` int(11) NOT NULL,
+  `maxDamage` varchar(45) DEFAULT NULL,
+  `distance` int(11) DEFAULT NULL,
   `idEquipment` int(11) NOT NULL,
   PRIMARY KEY (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -274,10 +284,9 @@ CREATE TABLE IF NOT EXISTS `weapon` (
 --
 
 CREATE TABLE IF NOT EXISTS `worker` (
-  `job` varchar(25) DEFAULT NULL,
+  `job` varchar(45) NOT NULL,
   `idCrew` int(11) NOT NULL,
-  PRIMARY KEY (`idCrew`),
-  UNIQUE KEY `idCrew_UNIQUE` (`idCrew`)
+  PRIMARY KEY (`idCrew`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -285,63 +294,71 @@ CREATE TABLE IF NOT EXISTS `worker` (
 --
 
 INSERT INTO `worker` (`job`, `idCrew`) VALUES
-('mineur', 3),
-('mineur', 31);
+('mineur', 1),
+('mineur', 3);
 
 --
 -- Contraintes pour les tables exportées
 --
 
 --
--- Contraintes pour la table `acceptedquest`
+-- Contraintes pour la table `acceptedQuest`
 --
-ALTER TABLE `acceptedquest`
-  ADD CONSTRAINT `fk_guild_has_quest_guild1` FOREIGN KEY (`idUser`) REFERENCES `guild` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_guild_has_quest_quest1` FOREIGN KEY (`idQuest`) REFERENCES `quest` (`idQuest`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `acceptedQuest`
+  ADD CONSTRAINT `fk_quest_has_guild_quest1` FOREIGN KEY (`idQuest`) REFERENCES `quest` (`idQuest`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_quest_has_guild_guild1` FOREIGN KEY (`idUser`) REFERENCES `guild` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_acceptedQuest_squad1` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idSquad`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `armor`
 --
 ALTER TABLE `armor`
-  ADD CONSTRAINT `FK_Armor_id` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_armor_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `crew`
 --
 ALTER TABLE `crew`
-  ADD CONSTRAINT `fk_crew_guild1` FOREIGN KEY (`idUser`) REFERENCES `guild` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_crew_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `equip`
 --
 ALTER TABLE `equip`
-  ADD CONSTRAINT `FK_equip_id` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_equip_id_Crew` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_equipment_has_crew_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_equipment_has_crew_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `guild`
 --
 ALTER TABLE `guild`
-  ADD CONSTRAINT `fk_guild_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_guild_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Contraintes pour la table `heroes`
+--
+ALTER TABLE `heroes`
+  ADD CONSTRAINT `fk_heroes_squad1` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idSquad`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_heroes_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `inventory`
 --
 ALTER TABLE `inventory`
-  ADD CONSTRAINT `fk_equipement_has_inventory_equipement1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_inventory_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_inventory_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_inventory_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `quest`
+-- Contraintes pour la table `squad`
 --
-ALTER TABLE `quest`
-  ADD CONSTRAINT `FK_Quest_id_Squad` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idsquad`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `squad`
+  ADD CONSTRAINT `fk_squad_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `weapon`
 --
 ALTER TABLE `weapon`
-  ADD CONSTRAINT `FK_Weapon_id` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_weapon_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `worker`

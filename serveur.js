@@ -252,19 +252,19 @@ on en crée une vide sous forme d'array avant la suite */
 		      connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
 			if (rows !== undefined && rows[0] !== undefined){
 			   var detailPers={classe:rows[0]['classe'],
-				       prestige:rows[0]['prestige'],
-				       str:rows[0]['str'],
-				       dex:rows[0]['dex'],
-				       intel:rows[0]['intel'],
-				       luk:rows[0]['luk'],
-				       end:rows[0]['end'],
-				       handRight:rows[0]['handRight'],
-				       handLeft:rows[0]['handLeft'],
-				       torso:rows[0]['torso'],
-				       head:rows[0]['head'],
-				       legs:rows[0]['legs'],
-				       feet:rows[0]['feet'],
-				       idCrew:detail['idCrew']};
+					   prestige:rows[0]['prestige'],
+					   str:rows[0]['str'],
+					   dex:rows[0]['dex'],
+					   intel:rows[0]['intel'],
+					   luk:rows[0]['luk'],
+					   end:rows[0]['end'],
+					   handRight:rows[0]['handRight'],
+					   handLeft:rows[0]['handLeft'],
+					   torso:rows[0]['torso'],
+					   head:rows[0]['head'],
+					   legs:rows[0]['legs'],
+					   feet:rows[0]['feet'],
+					   idCrew:detail['idCrew']};
 			  connection.query("INSERT INTO heroes set ?", detailPers, function(err){
 			    if(err){
 			    //  console.log(err.message);
@@ -291,6 +291,111 @@ on en crée une vide sous forme d'array avant la suite */
 	}
      })
 })
+
+
+/* escouades */
+.get('/guildmaster/escouades',urlencodedParser, function(req, res) {
+     connection.query("select idSquad, name from squad where idUser ='"+ req.session.user['id'] +"'" , function(err, rows, fields){
+	if (!err){  
+	   //console.log(rows);
+	    res.render('escouades.ejs', {data:rows, user:req.session.user});
+      }
+	else{
+         res.render('escouades.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+/* detail escouades */
+.get('/guildmaster/escouades/detail/:id/:name', function(req, res) {
+  //console.log(req.params);
+      connection.query("SELECT idUser FROM squad WHERE idSquad = '"+ req.params['id'] +"'", function(err, rows, fields){
+	if (!err){
+	//console.log(rows , req.session.user['id']);
+        //console.log(rows[0]['idUser'] === req.session.user['id']);
+          if (rows[0]['idUser'] === req.session.user['id'] ) {
+             connection.query("SELECT classe, prestige, str, dex, intel, luk, end FROM heroes WHERE idSquad = '"+ req.params['id'] +"'", function(err, rows, fields){
+              if (!err){
+                //console.log(rows);
+                res.render('detailEscouades.ejs', {data:rows, user: req.session.user});
+                //console.log(data);
+              }
+              else{
+               res.redirect('/guildmaster/personnel');
+               // console.log(err.message);
+              }
+             }) 
+          }
+      }
+      else{
+        res.render('personnel.ejs', {user:req.session.user});
+        // console.log(err.message);
+      }
+    })
+	//console.log(req.session.user);	
+})
+
+
+/* nouvelle escouade */
+.get('/guildmaster/escouades/creer', function(req, res) {
+    if (req.session.user['role']=='admin' || req.session.user['role']=='user') {
+         connection.query("SELECT heroes.idCrew, classe, prestige, str, dex, intel, luk, end FROM heroes, crew WHERE idUser = '"+ req.session.user['id'] +"' and idSquad is null and crew.idCrew = heroes.idCrew", function(err, rows, fields){
+              if (!err){
+                res.render('creerEscouade.ejs', {data:rows, user: req.session.user});
+              }
+              else{
+               res.redirect('/guildmaster/personnel');
+               // console.log(err.message);
+              }
+             }) 
+    } else
+      res.redirect('/guildmaster/');
+})
+
+
+
+/* nouvelle escouade validation */
+.post('/guildmaster/escouades/creer/validation', urlencodedParser, function(req, res) { 
+	var squad={name:req.body.name,
+		   experience: 0,
+		   idUser: req.session.user['id']};
+        var membres = req.body.membres;
+        connection.query("INSERT INTO squad set ?", squad, function(err){
+                if(err){
+                 // console.log(err.message);
+		 res.redirect('/guildmaster/');
+                }else{
+		  connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
+		    var idSquad = rows[0]['MAX(idSquad)'];
+		      for (i=0;i<membres.length;i++) {
+			connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ membres[i] +";", function(err){
+			  if(err){
+			    connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
+			    res.redirect('/guildmaster/');
+			  }else{
+			   // console.log('success');
+			  }
+		        })
+		      }
+		      res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
+		  })
+                }
+        })
+})
+
+
+/*supprimer escouade */
+.get('/guildmaster/escouades/supprimer/:id/:name', urlencodedParser, function(req, res) {
+        connection.query("DELETE FROM squad WHERE idSquad = "+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err){
+	    if(err){
+	     // console.log(err.message);
+	    }else{
+	    }
+        })
+	res.redirect('/guildmaster/escouades')
+})
+
 
 /* profil */
 .get('/guildmaster/profil', function(req, res) {
@@ -326,8 +431,17 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* quete */
 .get('/guildmaster/quete', function(req, res) { 
-    res.render('quete.ejs', {user: req.session.user});
-	//console.log(req.session.user);
+     connection.query("SELECT idQUest, experience, name, summary, length, reward FROM quest", function(err, rows, fields){
+	if (!err){
+	   //console.log(rows);
+	    res.render('quete.ejs', {data:rows, user:req.session.user});
+	   //console.log(data);
+      }
+	else{
+         res.render('queste.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
 })
 
 /* deconnexion */

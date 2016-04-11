@@ -2,31 +2,26 @@
 
 <html>
     <head>
-        <title>quetes</title>
+        <title>escouades</title>
 
      <% include ./header.ejs %>
         <div class="container-fluid">
+               <a href="/guildmaster/escouades/creer">créer une escouade</a>
                 <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
                                 <div class="table-responsive">
                                     <table class="table table-condensed table-stripped table-hover">
-                                     <tr class="thead">
+                                            <tr class="thead">
                                       <th>nom</th>
-                                      <th>résumé</th>
-                                      <th>durée</th>
-                                      <th>récompence</th>
-	                              <th>experience</th>
-				      <th></th>
+                                      <th>detail</th>
+                                      <th>supprimer</th>
                                     </tr>
                                     <% if(data.length){ 
                                     for(var i = 0;i < data.length;i++) { %>
                                     <tr class="tbody text-center">
                                      <td><%=data[i].name%></td>
-                                     <td><%=data[i].summary%></td>
-				     <td><%=data[i].length%></td>
-                                     <td><%=data[i].reward%></td>
-				     <td><%=data[i].experience%></td>
-                                    <td><a href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>">c'est parti!</a></td>
+                                     <td><a href="/guildmaster/escouades/detail/<%=data[i].idSquad%>/<%=data[i].name%>">detail</a></td>
+                                     <td><a href="/guildmaster/escouades/supprimer/<%=data[i].idSquad%>/<%=data[i].name%>">supprimer</a></td>
                                      </tr>
                                     <% }
                                     } %>
@@ -34,6 +29,6 @@
                                </div>
                         </div>
                 </div>
-        </div> 
+            </div> 
     </body>
 </html>
