@@ -429,20 +429,85 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
-/* quete */
+/* affichage quete */
 .get('/guildmaster/quete', function(req, res) { 
-     connection.query("SELECT idQUest, experience, name, summary, length, reward FROM quest", function(err, rows, fields){
+     connection.query("SELECT idQuest, experience, name, summary, length, reward FROM quest", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('quete.ejs', {data:rows, user:req.session.user});
 	   //console.log(data);
       }
 	else{
-         res.render('queste.ejs', {user:req.session.user});
+         res.render('quete.ejs', {user:req.session.user});
 	 // console.log(err.message);
         }
     })
 })
+
+
+/* commencer quete */
+.get('/guildmaster/quete/commencer/:id/:name', function(req, res) {
+     connection.query("SELECT idQuest, experience, name, summary, length, reward FROM quest where idQuest ="+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err, rows, fields){
+	if (!err){
+	   var quest = rows; 
+	    connection.query("SELECT name, idSquad FROM squad where idQuest is null", function(err, rows, fields){
+		if (!err){
+		  var squad = rows;
+		  res.render('queteCommencer.ejs', {quest:quest, squad:squad, user:req.session.user});
+	      }
+		else{
+		// res.redirect('accueil.ejs', {user:req.session.user});
+		 // console.log(err.message);
+		}
+	    })
+	   //console.log(data);
+      }
+	else{
+       //  res.redirect('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+/* commencer quete validation*/
+.get('/guildmaster/quete/commencer/validation/:idQuest/:nameQuest/:idSquad/:nameSquad', function(req, res) {
+     connection.query("SELECT length, difficulty FROM quest where idQuest ="+ req.params['idQuest'] +" and name = '"+ req.params['nameQuest'] +"'", function(err, rows, fields){
+	if (!err){
+	   var quest = rows[0]; 
+	    connection.query("select sum(coalesce(a.str + b.bonusStr, a.str)) as str, sum(coalesce(a.end + b.bonusEnd, a.end)) as end, sum(coalesce(a.intel + b.bonusInt, a.intel)) as intel, sum(coalesce(a.luk + b.bonusLuk, a.luk)) as luk, sum(coalesce(a.dex + b.bonusDex, a.dex)) as dex from (SELECT str, dex, luk, end, intel, idCrew FROM heroes where idSquad = "+ req.params['idSquad'] +") as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,heroes where idSquad = "+ req.params['idSquad'] +" and idEquipment = torso or idEquipment = head or idEquipment = handLeft or idEquipment = handRight or idEquipment = feet or idEquipment = legs) as b on b.idCrew = a.idCrew", function(err, rows, fields){
+		if (!err){
+		  var squad = rows[0];
+		  var stats = squad['str'] + squad['end'] + squad['intel'] + squad['luk'] + squad['dex'];
+		  var reussiteChance = Math.floor((Math.random() * quest['difficulty']) + 1);
+		  var reussite = 0;
+		  if (stats >= reussiteChance){ reussite = 1 }
+		  var dateTime =  Math.round(new Date() / 1000);
+		  var dateFinQuete = new Date((dateTime+quest['length'])*1000);
+		  dateFinQuete =  dateFinQuete.getFullYear()+"-"+parseInt(dateFinQuete.getMonth()+1)+"-"+dateFinQuete.getDate()+" "+dateFinQuete.getHours()+":"+dateFinQuete.getMinutes()+":"+dateFinQuete.getSeconds();
+		 
+		  connection.query("UPDATE squad SET idQuest = "+ req.params['idQuest'] +", reussiteQuete = "+ reussite +", dateFinQuete = '"+ dateFinQuete +"' WHERE idSquad = "+ req.params['idSquad'] +";", function(err){
+			  if(err){
+			   
+			  }else{
+			   res.redirect('/guildmaster/');
+			  }
+		        })
+		}
+		else{
+		 res.redirect('/guildmaster/');
+		 // console.log(err.message);
+		}
+	    })
+	   //console.log(data);
+      }
+	else{
+        res.redirect('/guildmaster/');
+	 // console.log(err.message);
+        }
+    })
+})
+
+
 
 /* deconnexion */
 .get('/guildmaster/deconnexion', function(req, res) {

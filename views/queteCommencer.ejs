@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>commencer la quete</title>
+
+     <% include ./header.ejs %>
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                                <div class="table-responsive">
+				     <h1><%=quest[0].name%></h1>
+                                     <h2><%=quest[0].summary%></h2>
+				     <p>durée: <%=quest[0].length%></p>
+				     <% if(quest[0].reward != null){ %>
+                                     <p>récompenses: <%=quest[0].reward%> et <%=quest[0].experience%> XP</p>
+				     <% } else { %>
+				     <p>récompenses: <%=quest[0].experience%> XP</p> 
+				     <% } %>
+                                    <p>quelle escouade va accomplir la tâche? :<p>
+		        	    <br>
+				    <table class="table table-condensed table-stripped table-hover">
+					    <tr class="thead">
+					      <th></th>
+					      <th></th>
+					    </tr>
+					    <% if(squad.length){ 
+					    for(var i = 0;i < squad.length;i++) { %>
+					    <tr class="tbody text-center">
+					    <td><%=squad[i].name%></td>
+					    <td><a href="/guildmaster/quete/commencer/validation/<%=quest[0].idQuest%>/<%=quest[0].name%>/<%=squad[i].idSquad%>/<%=squad[i].name%>">c'est parti!</a></td>
+					    </tr>
+					    <% }
+					    } %>
+                                    </table>
+                                </div>
+                        </div>
+                </div>
+            </div> 
+    </body>
+</html>
