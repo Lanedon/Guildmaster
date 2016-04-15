@@ -2,9 +2,16 @@
 
 <html>
     <head>
-        <title>detail</title>
 
+        <title>Détail</title>
+
+      <% include ./styles.ejs %>
+      <% include ./scripts.ejs %>
+  </head>
+  <body>
      <% include ./header.ejs %>
+     <% include ./connexion.ejs %>
+     <% include ./inscription.ejs %>
         <div class="container-fluid">
                 <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
@@ -25,29 +32,170 @@
                                       <th>jambes</th>
                                       <th>pieds</th>
                                     </tr>
-                                    <% if(data.length){ 
-                                    for(var i = 0;i < data.length;i++) { %>
                                     <tr class="tbody text-center">
-                                     <td><%=data[i].classe%></td>
-                                     <td><%=data[i].prestige%></td>
-                                     <td><%=data[i].str%></td>
-                                     <td><%=data[i].dex%></td>
-                                     <td><%=data[i].intel%></td>
-                                     <td><%=data[i].luk%></td>
-                                     <td><%=data[i].end%></td>
-                                     <td><%=data[i].handRight%></td>
-                                     <td><%=data[i].handLeft%></td>
-                                     <td><%=data[i].torso%></td>
-                                     <td><%=data[i].head%></td>
-                                     <td><%=data[i].legs%></td>
-                                     <td><%=data[i].feet%></td>
+                                     <td><%=data.classe%></td>
+                                     <td><%=data.prestige%></td>
+                                     <td><%=data.str%></td>
+                                     <td><%=data.dex%></td>
+                                     <td><%=data.intel%></td>
+                                     <td><%=data.luk%></td>
+                                     <td><%=data.end%></td>
+                                     <td><%=data.handRight%></td>
+                                     <td><%=data.handLeft%></td>
+                                     <td><%=data.torso%></td>
+                                     <td><%=data.head%></td>
+                                     <td><%=data.legs%></td>
+                                     <td><%=data.feet%></td>
                                      </tr>
-                                    <% }
-                                    } %>
                                     </table>
                                </div>
                         </div>
                 </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="row text-center">
+                            <h3><%=crew.name+' '+crew.surname %></h3>
+                          </div>
+                          <div class="row text-center">
+                            <h4><%=data.classe %></h4>
+                          </div>
+                          <div class="row text-center">
+                            <h4>Level <%=crew.level%></h4>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 76%;">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-primary btn-lg btn-icone">&#xf132</button>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-success btn-lg btn-icone">&#xf080</button>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-danger btn-lg btn-icone">&#xf157</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Attributs</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          
+                          <div id="force" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Force :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                0 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="dexterite" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Dexterité :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                0 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="endurance" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Endurance :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                0 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="intelligence" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Intelligence :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                0 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="chance" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Chance :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                0 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="row" style="margin-top: 20px">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span id="pointsAttributs">5</span><strong> points restants</strong>
+                            </div>
+                          </div>
+
+                          <div class="row" style="margin-top: 20px">
+                            <div class="col-sm-offset-1 col-sm-10 text-center">
+                              <button class="btn btn-default">OK</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Équipement</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          
+                          <div id="mainDroite" class="row color-row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Main Droite :</strong></span>
+                              <span style="float: right;">
+                                <% if (data.handRight == null || data.handRight == "") { %>
+                                <%="Bonjour"%>
+                                <% } else { %>
+                                <%=data.handRight%>
+                                <% } %>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="mainGauche" class="row color-row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              Coucou
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div> 
     </body>
 </html>

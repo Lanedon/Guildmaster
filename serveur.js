@@ -6,14 +6,14 @@ var mysql       = require('mysql');
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
-  password : "sio",
+  password : "",
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
-/*
+
 connection.connect(function(err){
   if(!err) {
       console.log("Database is connected ... \n\n");  
@@ -21,7 +21,7 @@ connection.connect(function(err){
       console.log("Error connecting database ... \n\n" + err);  
   }
 }); 
-*/
+
 
 /* On utilise les sessions */
 app.use(session({secret: 'UserSession'}))
@@ -154,10 +154,17 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("SELECT * FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
-                //console.log(rows);
-                res.render('detail.ejs', {data:rows, user: req.session.user});
+                //Infos sur la personne (Nom, prenom, ...)
+                connection.query("SELECT * FROM crew WHERE idCrew = '"+ req.params['id'] +"'", function(err, crew, fields){
+                  //Infos sur les armes et armures
+                  connection.query("SELECT weapon.*, equipment.* FROM heroes, weapon, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                    " AND heroes.handRight = weapon.idEquipment AND equipment.idEquipment = heroes.handRight", function(err, handRightInfos, fields){
+                      rows[0]['handRight'] = handRightInfos[0];
+                      res.render('detail.ejs', {data:rows[0], crew:crew[0], user: req.session.user});
+                  });
+                });
                 //console.log(data);
               }
               else{
