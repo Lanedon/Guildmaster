@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 14 Avril 2016 à 13:14
+-- Généré le: Ven 15 Avril 2016 à 16:54
 -- Version du serveur: 5.5.47-0ubuntu0.14.04.1
 -- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `heroes` (
   `head` int(11) DEFAULT NULL,
   `legs` int(11) DEFAULT NULL,
   `feet` int(11) DEFAULT NULL,
+  `experience` int(11) NOT NULL,
   PRIMARY KEY (`idCrew`),
   KEY `fk_heroes_squad1_idx` (`idSquad`),
   KEY `fk_heroes_equipment1_idx` (`handRight`),
@@ -159,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `heroes` (
 -- Contenu de la table `heroes`
 --
 
-INSERT INTO `heroes` (`classe`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `handRight`, `handLeft`, `torso`, `head`, `legs`, `feet`) VALUES
-('aventurier', 1, 5, 5, 5, 5, 5, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-('aventurier', 1, 5, 5, 5, 5, 5, 9, 3, NULL, NULL, 1, 2, NULL, NULL),
-('aventurier', 1, 5, 5, 5, 5, 5, 10, 3, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `heroes` (`classe`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `handRight`, `handLeft`, `torso`, `head`, `legs`, `feet`, `experience`) VALUES
+('aventurier', 1, 5, 5, 5, 5, 5, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+('aventurier', 1, 5, 5, 5, 5, 5, 9, 3, NULL, NULL, 1, 2, NULL, NULL, 500),
+('aventurier', 1, 5, 5, 5, 5, 5, 10, 3, NULL, NULL, NULL, NULL, NULL, NULL, 600);
 
 -- --------------------------------------------------------
 
@@ -210,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `quest` (
 --
 
 INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `length`, `name`, `experience`) VALUES
-(2, 'blablabla', 50, NULL, 10, 'wololo', 100);
+(2, 'blablabla', 50, NULL, 3600, 'wololo', 100);
 
 -- --------------------------------------------------------
 
@@ -221,7 +222,7 @@ INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `length`, `na
 CREATE TABLE IF NOT EXISTS `squad` (
   `idSquad` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
-  `reussiteQuete` int(11) DEFAULT NULL,
+  `reussiteQuete` tinyint(1) DEFAULT NULL,
   `idUser` int(11) NOT NULL,
   `idQuest` int(11) DEFAULT NULL,
   `dateFinQuete` datetime DEFAULT NULL,
@@ -235,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `squad` (
 --
 
 INSERT INTO `squad` (`idSquad`, `name`, `reussiteQuete`, `idUser`, `idQuest`, `dateFinQuete`) VALUES
-(3, 'test', 1, 2, 2, '2016-04-14 13:13:47');
+(3, 'test', NULL, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -321,13 +322,13 @@ ALTER TABLE `guild`
 --
 ALTER TABLE `heroes`
   ADD CONSTRAINT `fk_heroes_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_heroes_squad1` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idSquad`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_equipment1` FOREIGN KEY (`handRight`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_equipment2` FOREIGN KEY (`handLeft`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_equipment3` FOREIGN KEY (`torso`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_equipment4` FOREIGN KEY (`head`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_equipment5` FOREIGN KEY (`legs`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_heroes_equipment6` FOREIGN KEY (`feet`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_heroes_equipment6` FOREIGN KEY (`feet`) REFERENCES `equipment` (`idEquipment`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_heroes_squad1` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idSquad`) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `inventory`

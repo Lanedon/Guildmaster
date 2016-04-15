@@ -154,7 +154,7 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("SELECT experience, classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
                 res.render('detail.ejs', {data:rows, user: req.session.user});
@@ -315,7 +315,7 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("SELECT classe, prestige, str, dex, intel, luk, end FROM heroes WHERE idSquad = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("SELECT experience, classe, prestige, str, dex, intel, luk, end FROM heroes WHERE idSquad = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
                 res.render('detailEscouades.ejs', {data:rows, user: req.session.user});
@@ -489,7 +489,7 @@ on en crée une vide sous forme d'array avant la suite */
 			  if(err){
 			   
 			  }else{
-			   res.redirect('/guildmaster/');
+			   res.redirect('/guildmaster/quete/enCours');
 			  }
 		        })
 		}
@@ -507,6 +507,69 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
+
+
+/* quete en cours */
+.get('/guildmaster/quete/enCours', function(req, res) { 
+     connection.query("SELECT reussiteQuete, squad.idQuest, idSquad, quest.name as questName, squad.name as squadName, dateFinQuete FROM squad, quest where squad.idQuest is not null ", function(err, rows, fields){
+	if (!err){
+	   //console.log(rows);
+	   var dateFin = [];
+	   for (i=0; i< rows.length;i++) {
+	    var dateFinQuete =  (rows[i]['dateFinQuete']);
+	    dateFinQuete =  dateFinQuete.getFullYear()+"-"+parseInt(dateFinQuete.getMonth()+1)+"-"+dateFinQuete.getDate()+" "+dateFinQuete.getHours()+":"+dateFinQuete.getMinutes()+":"+dateFinQuete.getSeconds();
+	    dateFin[i] = dateFinQuete; 
+	   }
+	   res.render('queteEnCours.ejs', {data:rows, dateFin:dateFin, user:req.session.user});
+	   //console.log(data);
+       } 
+	else{
+         res.render('quete.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+
+/* quete terminer */
+.get('/guildmaster/quete/terminer/:idQuest/:nameQuest/:idSquad/:nameSquad', function(req, res) {
+     connection.query("SELECT dateFinQuete, reward, experience, reussiteQuete FROM squad,quest where squad.idSquad ="+ req.params['idSquad'] +" and squad.name = '"+ req.params['nameSquad'] +"' and quest.idQuest ="+ req.params['idQuest'] +" and quest.name = '"+ req.params['nameQuest'] +"'", function(err, rows, fields){
+	if (!err){
+	  var quest = rows[0];
+	  if (quest['dateFinQuete'].getTime()/1000 - Math.round(new Date() / 1000)<=0) {
+	      connection.query("UPDATE squad SET reussiteQuete = NULL ,idQuest = NULL ,dateFinQuete = NULL WHERE idSquad ='"+ req.params['idSquad'] +"';", function(err){
+		if(err){
+		}else{
+		  if (quest['reussiteQuete']==1) {
+		    connection.query("select idCrew, experience from heroes where idSquad ="+ req.params['idSquad'], function(err, rows, fields){
+		      if(err){
+		      }else{
+			var exp = 0;
+			for (i=0; i<rows.length; i++) {
+			  exp= rows[i]['experience']+quest['experience'];
+			  connection.query("UPDATE heroes SET experience ="+ exp +"  WHERE idCrew ="+ rows[i]['idCrew'], function(err){
+			   if(err){
+			    }else{
+			    }
+			  })
+			}
+		         res.redirect('/guildmaster/quete/enCours');
+		      }
+		    })
+		  }
+		  else{
+		       res.redirect('/guildmaster/quete/enCours');
+		  }
+		}
+	      })
+	  }
+      }
+	else{
+        res.redirect('/guildmaster/');
+	 // console.log(err.message);
+        }
+    })
+})
 
 
 /* deconnexion */

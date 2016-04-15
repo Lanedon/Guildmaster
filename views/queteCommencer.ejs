@@ -2,6 +2,7 @@
 
 <html>
     <head>
+	
         <title>commencer la quete</title>
 
      <% include ./header.ejs %>
@@ -11,7 +12,8 @@
                                 <div class="table-responsive">
 				     <h1><%=quest[0].name%></h1>
                                      <h2><%=quest[0].summary%></h2>
-				     <p>durée: <%=quest[0].length%></p>
+				     <% quest[i].length = new Date(quest[i].length)%>
+				     <p>durée: <%= quest[0].length.getHours() +" H "+ quest[0].length.getMinutes() +" min "+ quest[0].length.getSeconds() + "sec"%>< %></p>
 				     <% if(quest[0].reward != null){ %>
                                      <p>récompenses: <%=quest[0].reward%> et <%=quest[0].experience%> XP</p>
 				     <% } else { %>
