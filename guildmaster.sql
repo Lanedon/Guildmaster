@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 15 Avril 2016 à 16:54
+-- Généré le: Ven 15 Avril 2016 à 17:11
 -- Version du serveur: 5.5.47-0ubuntu0.14.04.1
 -- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `quest` (
   `summary` text,
   `difficulty` int(11) DEFAULT NULL,
   `reward` int(11) DEFAULT NULL,
-  `length` int(11) DEFAULT NULL,
+  `duree` int(11) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `experience` int(11) NOT NULL,
   PRIMARY KEY (`idQuest`)
@@ -210,8 +210,8 @@ CREATE TABLE IF NOT EXISTS `quest` (
 -- Contenu de la table `quest`
 --
 
-INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `length`, `name`, `experience`) VALUES
-(2, 'blablabla', 50, NULL, 3600, 'wololo', 100);
+INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`) VALUES
+(2, 'blablabla', 50, NULL, 60, 'wololo', 100);
 
 -- --------------------------------------------------------
 
