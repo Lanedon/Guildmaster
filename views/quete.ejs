@@ -21,15 +21,15 @@
                                     </tr>
                                     <% if(data.length){ 
                                     for(var i = 0;i < data.length;i++) {
-				    data[i].length = new Date(data[i].length)%>
-                                    <tr class="tbody text-center">
-                                     <td><%=data[i].name%></td>
-                                     <td><%=data[i].summary%></td>
-				     <td><%= data[i].length.getHours() +" H "+ data[i].length.getMinutes() +" min "+ data[i].length.getSeconds() + "sec"%></td>
-                                     <td><%=data[i].reward%></td>
-				     <td><%=data[i].experience%></td>
-                                    <td><a href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>">choisir</a></td>
-                                     </tr>
+					data[i].duree = new Date(data[i].duree*1000)%>
+					<tr class="tbody text-center">
+					 <td><%= data[i].name%></td>
+					 <td><%= data[i].summary%></td>
+					 <td><%= data[i].duree.getHours()-1 +" H "+ data[i].duree.getMinutes() +" min "+ data[i].duree.getSeconds() + "sec"%></td>
+					 <td><%= data[i].reward%></td>
+					 <td><%= data[i].experience%></td>
+					<td><a href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>">choisir</a></td>
+					 </tr>
                                     <% }
                                     } %>
                                     </table>
