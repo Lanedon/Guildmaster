@@ -154,10 +154,36 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("SELECT experience, classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("select a.idCrew, experience, classe, prestige, coalesce(a.str + b.bonusStr, a.str) as str, coalesce(a.end + b.bonusEnd, a.end) as end, coalesce(a.intel + b.bonusInt, a.intel) as intel, coalesce(a.luk + b.bonusLuk, a.luk) as luk, coalesce(a.dex + b.bonusDex, a.dex) as dex from (SELECT experience, classe, prestige, str, dex, luk, end, intel, idCrew FROM heroes where idCrew= "+ req.params['id'] +" group by idCrew) as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,inventory where idCrew = "+ req.params['id'] +" AND equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
-                res.render('detail.ejs', {data:rows, user: req.session.user});
+		 var crew={idCrew:rows[0]['idCrew'],
+			   experience:rows[0]['experience'],
+			   classe:rows[0]['classe'],
+			   prestige:rows[0]['prestige'],
+			   str:rows[0]['str'],
+			   dex:rows[0]['dex'],
+			   intel:rows[0]['intel'],
+			   luk:rows[0]['luk'],
+			   end:rows[0]['end'],
+			   handRight:'',
+			   handLeft:'',
+			   head:'',
+			   legs:'',
+			   feet:''};
+		connection.query("select idCrew, name, slot from inventory, equipment where idCrew = "+ req.params['id'] +" and inventory.idEquipment = equipment.idEquipment" , function(err, rows, fields){
+		  if (!err){ 
+		    for (var i=0;i<rows.length;i++) {
+		  	crew[rows[i]['slot']] = rows[i]['name'];
+		    }
+		    res.render('detail.ejs', {data:crew, user: req.session.user});
+		    //console.log(data);
+		  }
+		  else{
+		   res.redirect('/guildmaster/personnel');
+		   // console.log(err.message);
+		  }
+	        }) 
                 //console.log(data);
               }
               else{
@@ -197,7 +223,7 @@ on en crée une vide sous forme d'array avant la suite */
 	if (!err){
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
-             connection.query("select name, surname, crew.idCrew, classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM crew, heroes WHERE crew.idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("select experience, classe, prestige, sum(coalesce(a.str + b.bonusStr, a.str)) as str, sum(coalesce(a.end + b.bonusEnd, a.end)) as end, sum(coalesce(a.intel + b.bonusInt, a.intel)) as intel, sum(coalesce(a.luk + b.bonusLuk, a.luk)) as luk, sum(coalesce(a.dex + b.bonusDex, a.dex)) as dex from (SELECT experience, classe, prestige, str, dex, luk, end, intel, idCrew FROM heroes where idCrew = "+ req.params['id'] +") as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,inventory where idCrew = "+ req.params['id'] +" AND equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
                 res.render('detailRecrue.ejs', {data:rows, user: req.session.user});
@@ -249,7 +275,7 @@ on en crée une vide sous forme d'array avant la suite */
 		     }
 // hero // 
 		    if (hero['hero']==1) {
-		      connection.query("SELECT classe, prestige, str, dex, intel, luk, end, handRight, handLeft, torso, head, legs, feet  FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
+		      connection.query("SELECT classe, prestige, str, dex, intel, luk, end FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
 			if (rows !== undefined && rows[0] !== undefined){
 			   var detailPers={classe:rows[0]['classe'],
 					   prestige:rows[0]['prestige'],
@@ -258,12 +284,6 @@ on en crée une vide sous forme d'array avant la suite */
 					   intel:rows[0]['intel'],
 					   luk:rows[0]['luk'],
 					   end:rows[0]['end'],
-					   handRight:rows[0]['handRight'],
-					   handLeft:rows[0]['handLeft'],
-					   torso:rows[0]['torso'],
-					   head:rows[0]['head'],
-					   legs:rows[0]['legs'],
-					   feet:rows[0]['feet'],
 					   idCrew:detail['idCrew']};
 			  connection.query("INSERT INTO heroes set ?", detailPers, function(err){
 			    if(err){
@@ -315,7 +335,7 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("SELECT experience, classe, prestige, str, dex, intel, luk, end FROM heroes WHERE idSquad = '"+ req.params['id'] +"'", function(err, rows, fields){
+             connection.query("select a.idCrew, experience, classe, prestige, coalesce(a.str + b.bonusStr, a.str) as str, coalesce(a.end + b.bonusEnd, a.end) as end, coalesce(a.intel + b.bonusInt, a.intel) as intel, coalesce(a.luk + b.bonusLuk, a.luk) as luk, coalesce(a.dex + b.bonusDex, a.dex) as dex from (SELECT experience, classe, prestige, str, dex, luk, end, intel, idCrew FROM heroes where idSquad = "+ req.params['id'] +" group by idCrew) as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, heroes.idCrew as idCrew from equipment,inventory, heroes where heroes.idCrew = inventory.idCrew and idSquad = "+ req.params['id'] +" AND equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
               if (!err){
                 //console.log(rows);
                 res.render('detailEscouades.ejs', {data:rows, user: req.session.user});
@@ -340,7 +360,7 @@ on en crée une vide sous forme d'array avant la suite */
 /* nouvelle escouade */
 .get('/guildmaster/escouades/creer', function(req, res) {
     if (req.session.user['role']=='admin' || req.session.user['role']=='user') {
-         connection.query("SELECT heroes.idCrew, classe, prestige, str, dex, intel, luk, end FROM heroes, crew WHERE idUser = '"+ req.session.user['id'] +"' and idSquad is null and crew.idCrew = heroes.idCrew", function(err, rows, fields){
+         connection.query("select a.idCrew, experience, classe, prestige, coalesce(a.str + b.bonusStr, a.str) as str, coalesce(a.end + b.bonusEnd, a.end) as end, coalesce(a.intel + b.bonusInt, a.intel) as intel, coalesce(a.luk + b.bonusLuk, a.luk) as luk, coalesce(a.dex + b.bonusDex, a.dex) as dex from (SELECT experience, classe, prestige, str, dex, luk, end, intel, heroes.idCrew as idCrew FROM heroes, crew where idSquad is null and idUser = "+ req.session.user['id'] +" and crew.idCrew = heroes.idCrew group by idCrew) as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,inventory where equipment.idEquipment = inventory.idEquipment group by idCrew) as b on b.idCrew = a.idCrew", function(err, rows, fields){
               if (!err){
                 res.render('creerEscouade.ejs', {data:rows, user: req.session.user});
               }
@@ -358,18 +378,18 @@ on en crée une vide sous forme d'array avant la suite */
 /* nouvelle escouade validation */
 .post('/guildmaster/escouades/creer/validation', urlencodedParser, function(req, res) { 
 	var squad={name:req.body.name,
-		   experience: 0,
 		   idUser: req.session.user['id']};
-        var membres = req.body.membres;
-        connection.query("INSERT INTO squad set ?", squad, function(err){
+	if (req.body.membres.length <= 4) {
+	//  console.log(squad);
+	  connection.query("INSERT INTO squad set ?", squad, function(err){
                 if(err){
                  // console.log(err.message);
-		 res.redirect('/guildmaster/');
+		 res.redirect('/guildmaster/escouades');
                 }else{
 		  connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
 		    var idSquad = rows[0]['MAX(idSquad)'];
-		      for (i=0;i<membres.length;i++) {
-			connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ membres[i] +";", function(err){
+		      for (i=0;i<req.body.membres.length;i++) {
+			connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ req.body.membres[i] +";", function(err){
 			  if(err){
 			    connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
 			    res.redirect('/guildmaster/');
@@ -381,7 +401,11 @@ on en crée une vide sous forme d'array avant la suite */
 		      res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
 		  })
                 }
-        })
+	  })
+	}
+	else {
+	   res.redirect('/guildmaster/escouades');
+	}
 })
 
 
@@ -416,7 +440,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* inventaire */
 .get('/guildmaster/inventaire', function(req, res) { 
-     connection.query("SELECT idInventory, quantity, name, price, rarity, description, minStr, minDex, minInt, minLuk, minEnd, bonusStr, bonusDex, bonusInt, bonusLuk, bonusEnd FROM inventory,equipment WHERE idUser = '"+ req.session.user['id'] +"' and inventory.idEquipment = equipment.idEquipment ", function(err, rows, fields){
+     connection.query("SELECT equipment.name as equipmentName,inventory.idCrew, slot, rarity, description, minStr, minDex, minInt, minLuk, minEnd, bonusStr, bonusDex, bonusInt, bonusLuk, bonusEnd, crew.name, surname FROM crew,inventory,equipment WHERE inventory.idUser = "+ req.session.user['id'] +" and inventory.idEquipment = equipment.idEquipment and (crew.idCrew = inventory.idCrew or inventory.idCrew is null) group by idInventory", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('inventaire.ejs', {data:rows, user:req.session.user});
@@ -474,7 +498,7 @@ on en crée une vide sous forme d'array avant la suite */
      connection.query("SELECT duree, difficulty FROM quest where idQuest ="+ req.params['idQuest'] +" and name = '"+ req.params['nameQuest'] +"'", function(err, rows, fields){
 	if (!err){
 	   var quest = rows[0]; 
-	    connection.query("select sum(coalesce(a.str + b.bonusStr, a.str)) as str, sum(coalesce(a.end + b.bonusEnd, a.end)) as end, sum(coalesce(a.intel + b.bonusInt, a.intel)) as intel, sum(coalesce(a.luk + b.bonusLuk, a.luk)) as luk, sum(coalesce(a.dex + b.bonusDex, a.dex)) as dex from (SELECT str, dex, luk, end, intel, idCrew FROM heroes where idSquad = "+ req.params['idSquad'] +") as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,heroes where idSquad = "+ req.params['idSquad'] +" and idEquipment = torso or idEquipment = head or idEquipment = handLeft or idEquipment = handRight or idEquipment = feet or idEquipment = legs) as b on b.idCrew = a.idCrew", function(err, rows, fields){
+	    connection.query("select sum(coalesce(a.str + b.bonusStr, a.str)) as str, sum(coalesce(a.end + b.bonusEnd, a.end)) as end, sum(coalesce(a.intel + b.bonusInt, a.intel)) as intel, sum(coalesce(a.luk + b.bonusLuk, a.luk)) as luk, sum(coalesce(a.dex + b.bonusDex, a.dex)) as dex from (SELECT str, dex, luk, end, intel, idCrew FROM heroes where idSquad = "+ req.params['idSquad'] +") as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, heroes.idCrew as idCrew from equipment,inventory,heroes where inventory.idCrew = heroes.idCrew and idSquad = "+ req.params['idSquad'] +" and equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
 		if (!err){
 		  var squad = rows[0];
 		  var stats = squad['str'] + squad['end'] + squad['intel'] + squad['luk'] + squad['dex'];
@@ -494,14 +518,14 @@ on en crée une vide sous forme d'array avant la suite */
 		        })
 		}
 		else{
-		 res.redirect('/guildmaster/');
+		 res.redirect('/guildmaster/quete/commencer/'+req.params['idQuest']+'/'+req.params['nameQuest']);
 		 // console.log(err.message);
 		}
 	    })
 	   //console.log(data);
       }
 	else{
-        res.redirect('/guildmaster/');
+        res.redirect('/guildmaster/quete/commencer/'+req.params['idQuest']+'/'+req.params['nameQuest']);
 	 // console.log(err.message);
         }
     })
@@ -511,7 +535,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* quete en cours */
 .get('/guildmaster/quete/enCours', function(req, res) { 
-     connection.query("SELECT reussiteQuete, squad.idQuest, idSquad, quest.name as questName, squad.name as squadName, dateFinQuete FROM squad, quest where squad.idQuest is not null ", function(err, rows, fields){
+     connection.query("SELECT reussiteQuete, squad.idQuest, idSquad, quest.name as questName, squad.name as squadName, dateFinQuete FROM squad, quest where squad.idQuest is not null and quest.idQuest = squad.idQuest", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	   var dateFin = [];
@@ -553,7 +577,7 @@ on en crée une vide sous forme d'array avant la suite */
 			    }
 			  })
 			}
-		         res.redirect('/guildmaster/quete/enCours');
+		         res.redirect('/guildmaster/quete');
 		      }
 		    })
 		  }
@@ -565,7 +589,7 @@ on en crée une vide sous forme d'array avant la suite */
 	  }
       }
 	else{
-        res.redirect('/guildmaster/');
+        res.redirect('/guildmaster/quete/enCours');
 	 // console.log(err.message);
         }
     })

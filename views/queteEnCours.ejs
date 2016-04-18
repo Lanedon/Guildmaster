@@ -35,20 +35,21 @@
     </body>
 	<script type="text/javascript">
 	    $('[data-countdown]').each(function() {
-	       var $this = $(this), finalDate = $(this).data('countdown'), idQuest = $(this).data('idquest'), idSquad = $this.data('idsquad'), nameSquad = $this.data('squadname'), nameQuest = $this.data('questname'), reussiteQuete = $this.data('reussitequetes');
+	       var $this = $(this), finalDate = $this.data('countdown'), idQuest = $this.data('idquest'), idSquad = $this.data('idsquad'), nameSquad = $this.data('squadname'), nameQuest = $this.data('questname'), reussiteQuete = $this.data('reussitequete');
 	       var fin = "<a href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad;
-	       if (reussiteQuete==1) {
+	       if (reussiteQuete!=1) {
 		fin = fin +  "'> Echec de la mission</a>";
 	       }
 	       else{
 		fin = fin +  "'> Réussite de la mission</a>";
 	       }
-	      
-	       $this.countdown(finalDate, function(event) {
-		 $this.html(event.strftime('%Djours %Hh %Mmin %Ssec'));
+	       $this.countdown(finalDate, {elapse: true}).on('update.countdown', function(event) {
+		if (event.elapsed) {
+		    $this.html(fin);
+		} else {
+		    $this.html(event.strftime('%Djours %Hh %Mmin %Ssec'));
+		}
 	       })
-	       .on('finish.countdown', $this.html(fin))
 	    });
-	
        </script>
 </html>

@@ -15,7 +15,7 @@
                                     <input type="text" name="name" id="name" class="form-control" required autofocus >
                                 </div>
 				<div class="col-sm-12 input-popup">
-                                    <label for="membres">membres :</label>
+                                    <label for="membres">choisissez jusqu'a 4 membres :</label>
 		        	  
 				    <table class="table table-condensed table-stripped table-hover">
 					    <tr class="thead">
@@ -49,6 +49,17 @@
                                </div>
                         </div>
                 </div>
-            </div> 
+            </div>
+			
+			<script>
+			    var max = 4;
+			    var checkboxes = $('input[type="checkbox"]');
+			
+			    checkboxes.change(function(){
+				var current = checkboxes.filter(':checked').length;
+				checkboxes.filter(':not(:checked)').prop('disabled', current >= max);
+			    });
+			</script>
+			
     </body>
 </html>

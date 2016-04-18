@@ -11,8 +11,7 @@
 				<table class="table table-condensed table-stripped table-hover">
 					<tr class="thead">
 				      <th>nom</th>
-				      <th>quantite</th>
-				      <th>prix</th>
+				      <th>emplacement</th>
 				      <th>rarete</th>
 				      <th>description</th>
 				      <th>force min</th>
@@ -25,13 +24,13 @@
 				      <th>bonus en intelligence</th>
 				      <th>bonus en chance</th>
 				      <th>bonus en endurence</th>
+				      <th>possesseur</th>
 				    </tr>
 				    <% if(data.length){ 
 				    for(var i = 0;i < data.length;i++) { %>
 				    <tr class="tbody text-center">
-				     <td><%=data[i].name%></td>
-				     <td><%=data[i].quantity%></td>
-				     <td><%=data[i].price%></td>
+				     <td><%=data[i].equipmentName%></td>
+				     <td><%=data[i].slot%></td>
 				     <td><%=data[i].rarity%></td>
 				     <td><%=data[i].description%></td>
 				     <td><%=data[i].minStr%></td>
@@ -44,6 +43,11 @@
 				     <td><%=data[i].bonusInt%></td>
 				     <td><%=data[i].bonusLuk%></td>
 				     <td><%=data[i].bonusEnd%></td>
+				     <% if (data[i].idCrew) { %>
+				     <td><%=data[i].name%> <%=data[i].surname%></td>
+				     <% } else {%>
+				     <td></td>
+				     <% } %>
 				     </tr>
 				    <% }
 				    } %>

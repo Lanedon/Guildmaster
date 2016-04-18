@@ -18,12 +18,6 @@
                                       <th>intelligence</th>
                                       <th>chance</th>
                                       <th>endurence</th>
-                                      <th>main droite</th>
-                                      <th>main gauche</th>
-                                      <th>torse</th>
-                                      <th>tete</th>
-                                      <th>jambes</th>
-                                      <th>pieds</th>
                                       <th>recruter</th>
                                     </tr>
                                     <% if(data.length){ 
@@ -36,12 +30,6 @@
                                      <td><%=data[i].intel%></td>
                                      <td><%=data[i].luk%></td>
                                      <td><%=data[i].end%></td>
-                                     <td><%=data[i].handRight%></td>
-                                     <td><%=data[i].handLeft%></td>
-                                     <td><%=data[i].torso%></td>
-                                     <td><%=data[i].head%></td>
-                                     <td><%=data[i].legs%></td>
-                                     <td><%=data[i].feet%></td>
                                      <td><a href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
                                      </tr>
                                     <% }
