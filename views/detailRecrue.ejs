@@ -13,6 +13,7 @@
                                             <tr class="thead">
                                       <th>classe</th>
                                       <th>prestige</th>
+                                      <th>niveau</th>
                                       <th>force</th>
                                       <th>dexterite</th>
                                       <th>intelligence</th>
@@ -25,7 +26,12 @@
                                     <tr class="tbody text-center">
                                      <td><%=data[i].classe%></td>
                                      <td><%=data[i].prestige%></td>
-                                     <td><%=data[i].str%></td>
+                                     <% if (data[i].niveau) { %>
+				     <td><%=data[i].niveau%></td>
+                                     <% } else { %>
+                                     <td></td>
+                                     <%}%>
+                                     <td><%=data[i].str%></td>                                     
                                      <td><%=data[i].dex%></td>
                                      <td><%=data[i].intel%></td>
                                      <td><%=data[i].luk%></td>

@@ -17,6 +17,7 @@
                                       <th>durée</th>
                                       <th>récompence</th>
 	                              <th>experience</th>
+				      <th>or</th>
 				      <th></th>
                                     </tr>
                                     <% if(data.length){ 
@@ -28,6 +29,7 @@
 					 <td><%= data[i].duree.getHours()-1 +" H "+ data[i].duree.getMinutes() +" min "+ data[i].duree.getSeconds() + "sec"%></td>
 					 <td><%= data[i].reward%></td>
 					 <td><%= data[i].experience%></td>
+					 <td><%= data[i].gold%></td>
 					<td><a href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>">choisir</a></td>
 					 </tr>
                                     <% }

@@ -15,9 +15,9 @@
 				     <% quest[0].duree = new Date(quest[0].duree*1000)%>
 				     <p>durée: <%= quest[0].duree.getHours()-1 +" H "+ quest[0].duree.getMinutes() +" min "+ quest[0].duree.getSeconds() + "sec"%></p>
 				     <% if(quest[0].reward != null){ %>
-                                     <p>récompenses: <%=quest[0].reward%> et <%=quest[0].experience%> XP</p>
+                                     <p>récompenses: <%=quest[0].reward%>, <%=quest[0].experience%> XP et <%=quest[0].gold%> or</p>
 				     <% } else { %>
-				     <p>récompenses: <%=quest[0].experience%> XP</p> 
+				     <p>récompenses: <%=quest[0].experience%> XP et  <%=quest[0].gold%> or</p> 
 				     <% } %>
                                     <p>quelle escouade va accomplir la tâche? :<p>
 		        	    <br>
