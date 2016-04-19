@@ -160,9 +160,35 @@ on en crée une vide sous forme d'array avant la suite */
                 connection.query("SELECT * FROM crew WHERE idCrew = '"+ req.params['id'] +"'", function(err, crew, fields){
                   //Infos sur les armes et armures
                   connection.query("SELECT weapon.*, equipment.* FROM heroes, weapon, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
-                    " AND heroes.handRight = weapon.idEquipment AND equipment.idEquipment = heroes.handRight", function(err, handRightInfos, fields){
-                      rows[0]['handRight'] = handRightInfos[0];
-                      res.render('detail.ejs', {data:rows[0], crew:crew[0], user: req.session.user});
+                  " AND heroes.handRight = weapon.idEquipment AND equipment.idEquipment = heroes.handRight", function(err, handRightInfos, fields){
+                    connection.query("SELECT weapon.*, equipment.* FROM heroes, weapon, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                    " AND heroes.handLeft = weapon.idEquipment AND equipment.idEquipment = heroes.handLeft", function(err, handLeftInfos, fields){
+                      connection.query("SELECT armor.*, equipment.* FROM heroes, armor, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                      " AND heroes.torso = armor.idEquipment AND equipment.idEquipment = heroes.torso", function(err, torsoInfos, fields){
+                        connection.query("SELECT armor.*, equipment.* FROM heroes, armor, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                        " AND heroes.head = armor.idEquipment AND equipment.idEquipment = heroes.head", function(err, headInfos, fields){
+                            connection.query("SELECT armor.*, equipment.* FROM heroes, armor, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                            " AND heroes.legs = armor.idEquipment AND equipment.idEquipment = heroes.legs", function(err, legsInfos, fields){
+                                connection.query("SELECT armor.*, equipment.* FROM heroes, armor, equipment WHERE heroes.idCrew = '"+ req.params['id'] +"'" + 
+                                " AND heroes.feet = armor.idEquipment AND equipment.idEquipment = heroes.feet", function(err, feetInfos, fields){
+                                  connection.query("SELECT * FROM inventory NATURAL JOIN equipment NATURAL JOIN armor WHERE inventory.idUser = '"+ 
+                                  req.session.user['id'] +"'", function(err, inventoryArmor, fields){
+                                    connection.query("SELECT * FROM inventory NATURAL JOIN equipment NATURAL JOIN weapon WHERE inventory.idUser = '"+ 
+                                    req.session.user['id'] +"'", function(err, inventoryWeapon, fields){
+                                      rows[0]['handRight'] = handRightInfos[0];
+                                      rows[0]['handLeft'] = handLeftInfos[0];
+                                      rows[0]['torso'] = torsoInfos[0];
+                                      rows[0]['head'] = headInfos[0];
+                                      rows[0]['legs'] = legsInfos[0];
+                                      rows[0]['feet'] = feetInfos[0];
+                                      res.render('detail.ejs', {data:rows[0], crew:crew[0], inventoryWeapon:inventoryWeapon, inventoryArmor:inventoryArmor, user: req.session.user});
+                                    });
+                                  });
+                                }); 
+                            }); 
+                        }); 
+                      }); 
+                    });
                   });
                 });
                 //console.log(data);

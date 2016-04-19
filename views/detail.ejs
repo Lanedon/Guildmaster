@@ -67,7 +67,8 @@
                           <div class="row">
                             <div class="col-sm-10 col-sm-offset-1">
                               <div class="progress">
-                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 76%;">
+                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <%=Math.round((crew.xp/(crew.level*crew.level/0.04))*100)%>%; min-width: 10em;">
+                                  <%=crew.xp %> / <%=(crew.level*crew.level/0.04) %>
                                 </div>
                               </div>
                             </div>
@@ -98,7 +99,7 @@
                               <span style="float: left;"><strong>Force :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                0 
+                                <%= data.str %>
                                 <button class="btn btn-default btn-icone-small">&#xf0da</button>
                               </span>
                             </div>
@@ -109,7 +110,7 @@
                               <span style="float: left;"><strong>Dexterité :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                0 
+                                <%= data.dex %> 
                                 <button class="btn btn-default btn-icone-small">&#xf0da</button>
                               </span>
                             </div>
@@ -120,7 +121,7 @@
                               <span style="float: left;"><strong>Endurance :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                0 
+                                <%= data.end %>
                                 <button class="btn btn-default btn-icone-small">&#xf0da</button>
                               </span>
                             </div>
@@ -131,7 +132,7 @@
                               <span style="float: left;"><strong>Intelligence :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                0 
+                                <%= data.intel %> 
                                 <button class="btn btn-default btn-icone-small">&#xf0da</button>
                               </span>
                             </div>
@@ -142,7 +143,7 @@
                               <span style="float: left;"><strong>Chance :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                0 
+                                <%= data.luk %> 
                                 <button class="btn btn-default btn-icone-small">&#xf0da</button>
                               </span>
                             </div>
@@ -150,7 +151,7 @@
 
                           <div class="row" style="margin-top: 20px">
                             <div class="col-sm-offset-1 col-sm-10">
-                              <span id="pointsAttributs">5</span><strong> points restants</strong>
+                              <span id="pointsAttributs"><%=crew.attrPoints %></span><strong> points restants</strong>
                             </div>
                           </div>
 
@@ -165,6 +166,14 @@
                   </div>
                   <div class="row">
                     <div class="col-sm-6 col-sm-offset-1">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Inventaire</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          <%= inventoryArmor[0].name %>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="panel panel-default">
@@ -173,25 +182,166 @@
                         </div>
                         <div class="panel-body" style="font-size: 1.2em">
                           
-                          <div id="mainDroite" class="row color-row">
-                            <div class="col-sm-offset-1 col-sm-10">
-                              <span style="float: left;"><strong>Main Droite :</strong></span>
-                              <span style="float: right;">
-                                <% if (data.handRight == null || data.handRight == "") { %>
-                                <%="Bonjour"%>
-                                <% } else { %>
-                                <%=data.handRight%>
-                                <% } %>
-                              </span>
+                          <div id="mainDroite" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Main Droite :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.handRight == null || data.handRight == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.handRight.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.handRight == null || data.handRight == "")) { %>
+                                  <%=data.handRight.rarity %> /
+                                  Dégâts : <%=data.handRight.minDamage%> - <%=data.handRight.maxDamage%>
+                                  / 
+                                  <%if (data.handRight.distance == 0) {%>
+                                    <%="Mêlée"%>
+                                  <% } else { %>
+                                    <%="À distance" %>
+                                  <% }} %>
+                                  <span style="float: right;">
+                                    <% if (!(data.handRight == null || data.handRight == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
 
-                          <div id="mainGauche" class="row color-row">
-                            <div class="col-sm-offset-1 col-sm-10">
-                              Coucou
+                          <div id="mainGauche" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Main Gauche :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.handLeft == null || data.handLeft == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.handLeft.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.handLeft == null || data.handLeft == "")) { %>
+                                  <%=data.handLeft.rarity %> /
+                                  Dégâts : <%=data.handLeft.minDamage%> - <%=data.handLeft.maxDamage%>
+                                  / 
+                                  <%if (data.handLeft.distance == 0) {%>
+                                    <%="Mêlée"%>
+                                  <% } else { %>
+                                    <%="À distance" %>
+                                  <% }} %>
+                                  <span style="float: right;">
+                                    <% if (!(data.handLeft == null || data.handLeft == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          
+
+                          <div id="torse" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Torse :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.torso == null || data.torso == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.torso.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.torso == null || data.torso == "")) { %>
+                                  <%=data.torso.rarity %> /
+                                  Protection : <%=data.torso.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.torso == null || data.torso == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="jambes" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Jambes :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.legs == null || data.legs == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.legs.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.legs == null || data.legs == "")) { %>
+                                  <%=data.legs.rarity %> /
+                                  Protection : <%=data.legs.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.legs == null || data.legs == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="pieds" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Pieds :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.feet == null || data.feet == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.feet.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.feet == null || data.feet == "")) { %>
+                                  <%=data.feet.rarity %> /
+                                  Protection : <%=data.feet.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.feet == null || data.feet == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>
