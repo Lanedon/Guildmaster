@@ -124,6 +124,17 @@ body, html {
 	}
 }
 
+.btn-icone {
+	font-family: 'FontAwesome';
+	display: inline;
+}
+
+.btn-icone-small {
+	font-family: 'FontAwesome';
+	display: inline;
+	padding: 0px 2px;
+}
+
 .popup-wrapper {
 	position: relative;
 	display: none;
@@ -234,4 +245,21 @@ table {
 
 .radio {
 	font-size: 0.8em;
+}
+
+.color-row {
+	padding: 10px;
+	&:nth-child(even) {
+		background-color: #eaeaea;
+	}
+}
+
+.description-item {
+	color: grey;
+	font-style: italic;
+	font-size: 0.8em;
+	.btn {
+		color: white;
+		font-style: normal;
+	}
 }

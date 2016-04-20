@@ -155,38 +155,38 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(rows , req.session.user['id']);
         //console.log(rows[0]['idUser'] === req.session.user['id']);
           if (rows[0]['idUser'] === req.session.user['id'] ) {
-             connection.query("select a.idCrew, experience,niveau, classe, prestige, coalesce(a.str + b.bonusStr, a.str) as str, coalesce(a.end + b.bonusEnd, a.end) as end, coalesce(a.intel + b.bonusInt, a.intel) as intel, coalesce(a.luk + b.bonusLuk, a.luk) as luk, coalesce(a.dex + b.bonusDex, a.dex) as dex from (SELECT experience, classe, niveau, prestige, str, dex, luk, end, intel, idCrew FROM heroes where idCrew= "+ req.params['id'] +" group by idCrew) as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, idCrew from equipment,inventory where idCrew = "+ req.params['id'] +" AND equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
+             connection.query("SELECT * FROM heroes WHERE idCrew = '"+ req.params['id'] +"'", function(err, rows, fields){
               if (!err){
-            //   console.log(rows);
-		 var crew={idCrew:rows[0]['idCrew'],
-			   experience:rows[0]['experience'],
-			   niveau:rows[0]['niveau'],
-			   classe:rows[0]['classe'],
-			   prestige:rows[0]['prestige'],
-			   str:rows[0]['str'],
-			   dex:rows[0]['dex'],
-			   intel:rows[0]['intel'],
-			   luk:rows[0]['luk'],
-			   end:rows[0]['end'],
-			   handRight:'',
-			   handLeft:'',
-			   torso:'',
-			   head:'',
-			   legs:'',
-			   feet:''};
-		connection.query("select idCrew, name, slot from inventory, equipment where idCrew = "+ req.params['id'] +" and inventory.idEquipment = equipment.idEquipment" , function(err, rows, fields){
-		  if (!err){ 
-		    for (var i=0;i<rows.length;i++) {
-		  	crew[rows[i]['slot']] = rows[i]['name'];
-		    }
-		    res.render('detail.ejs', {data:crew, user: req.session.user});
-		    //console.log(data);
-		  }
-		  else{
-		   res.redirect('/guildmaster/personnel');
-		   // console.log(err.message);
-		  }
-	        }) 
+                //Infos sur la personne (Nom, prenom, ...)
+                connection.query("SELECT * FROM crew WHERE idCrew = '"+ req.params['id'] +"'", function(err, crew, fields){
+                  //Infos sur les armes et armures
+                  connection.query("select * from inventory NATURAL JOIN equipment NATURAL JOIN armor where idCrew = "+ req.params['id'], function(err, equipArmor, fields){
+		    connection.query("select * from inventory NATURAL JOIN equipment NATURAL JOIN weapon where idCrew = "+ req.params['id'], function(err, equipWeapon, fields){
+		      connection.query("select * from inventory NATURAL JOIN equipment NATURAL JOIN armor where idUser = "+ req.session.user['id'] , function(err, inventoryArmor, fields){
+		        connection.query("select * from inventory NATURAL JOIN equipment NATURAL JOIN weapon where idUser = "+ req.session.user['id'] , function(err, inventoryWeapon, fields){
+			  rows[0]['handRight'] = '';
+			  rows[0]['handLeft'] = '';
+			  rows[0]['torso'] = '';
+			  rows[0]['head'] = '';
+			  rows[0]['legs'] = '';
+			  rows[0]['feet'] = '';
+			  if (equipArmor) {
+			    for (var i = 0;i<equipArmor.length;i++) {
+			      rows[0][equipArmor[i]['slot']] = equipArmor[i];
+			    }
+			  }
+			  if (equipWeapon) {
+			    for (var i = 0;i<equipWeapon.length;i++) {
+			      rows[0][equipWeapon[i]['slot']] = equipWeapon[i];
+			    }
+			  }
+			  //console.log(inventoryArmor);
+			  res.render('detail.ejs', {data:rows[0], crew:crew[0], inventoryWeapon:inventoryWeapon, inventoryArmor:inventoryArmor, user: req.session.user});
+                        });
+                      });
+                    });
+                  });
+                });
                 //console.log(data);
               }
               else{

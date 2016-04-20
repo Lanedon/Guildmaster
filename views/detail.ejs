@@ -2,18 +2,24 @@
 
 <html>
     <head>
-        <title>detail</title>
 
+        <title>Détail</title>
+
+      <% include ./styles.ejs %>
+      <% include ./scripts.ejs %>
+  </head>
+  <body>
      <% include ./header.ejs %>
+     <% include ./connexion.ejs %>
+     <% include ./inscription.ejs %>
         <div class="container-fluid">
                 <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
                                 <div class="table-responsive">
                                     <table class="table table-condensed table-stripped table-hover">
-                                     <tr class="thead">
+                                            <tr class="thead">
                                       <th>classe</th>
                                       <th>prestige</th>
-                                      <th>niveau</th>
                                       <th>force</th>
                                       <th>dexterite</th>
                                       <th>intelligence</th>
@@ -25,29 +31,356 @@
                                       <th>tete</th>
                                       <th>jambes</th>
                                       <th>pieds</th>
-                                      <th>experience</th>
                                     </tr>
                                     <tr class="tbody text-center">
                                      <td><%=data.classe%></td>
                                      <td><%=data.prestige%></td>
-                                     <td><%=data.niveau%></td>
                                      <td><%=data.str%></td>
                                      <td><%=data.dex%></td>
                                      <td><%=data.intel%></td>
                                      <td><%=data.luk%></td>
                                      <td><%=data.end%></td>
-                                     <td><%=data.handRight%></td>
-                                     <td><%=data.handLeft%></td>
-                                     <td><%=data.torso%></td>
-                                     <td><%=data.head%></td>
-                                     <td><%=data.legs%></td>
-                                     <td><%=data.feet%></td>
-                                     <td><%=data.experience%></td>
+                                     <td><%=data.handRight.name%></td>
+                                     <td><%=data.handLeft.name%></td>
+                                     <td><%=data.torso.name%></td>
+                                     <td><%=data.head.name%></td>
+                                     <td><%=data.legs.name%></td>
+                                     <td><%=data.feet.name%></td>
                                      </tr>
                                     </table>
                                </div>
                         </div>
                 </div>
-        </div> 
+                  <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <div class="row text-center">
+                            <h3><%=crew.name+' '+crew.surname %></h3>
+                          </div>
+                          <div class="row text-center">
+                            <h4><%=data.classe %></h4>
+                          </div>
+                          <div class="row text-center">
+                            <h4>Level <%=data.niveau%></h4>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                              <div class="progress">
+                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <%=Math.round((crew.xp/(data.niveau*data.niveau/0.04))*100)%>%; min-width: 10em;">
+                                  <%=data.experience %> / <%=(data.niveau*data.niveau/0.04) %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-primary btn-lg btn-icone">&#xf132</button>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-success btn-lg btn-icone">&#xf080</button>
+                            </div>
+                            <div class="col-sm-4 text-center">
+                              <button class="btn btn-danger btn-lg btn-icone">&#xf157</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Attributs</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          
+                          <div id="force" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Force :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                <%= data.str %>
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="dexterite" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Dexterité :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                <%= data.dex %> 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="endurance" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Endurance :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                <%= data.end %>
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="intelligence" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Intelligence :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                <%= data.intel %> 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div id="chance" class="row">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span style="float: left;"><strong>Chance :</strong></span>
+                              <span style="float: right;">
+                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
+                                <%= data.luk %> 
+                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="row" style="margin-top: 20px">
+                            <div class="col-sm-offset-1 col-sm-10">
+                              <span id="pointsAttributs"><%=crew.attrPoints %></span><strong> points restants</strong>
+                            </div>
+                          </div>
+
+                          <div class="row" style="margin-top: 20px">
+                            <div class="col-sm-offset-1 col-sm-10 text-center">
+                              <button class="btn btn-default">OK</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Inventaire</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          <% for(var i = 0;i < inventoryArmor.length;i++) { 
+                            if (inventoryArmor[i].idCrew == null) { %>
+                               <p><%=  inventoryArmor[i].name %></p>
+                          <%  }
+                           } %>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                          <h2 style="font-size: 1.3em" class="panel-title"><strong>Équipement</strong></h2>
+                        </div>
+                        <div class="panel-body" style="font-size: 1.2em">
+                          
+                          <div id="mainDroite" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Main Droite :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.handRight == null || data.handRight == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.handRight.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.handRight == null || data.handRight == "")) { %>
+                                  <%=data.handRight.rarity %> /
+                                  Dégâts : <%=data.handRight.minDamage%> - <%=data.handRight.maxDamage%>
+                                  / 
+                                  <%if (data.handRight.distance == 0) {%>
+                                    <%="Mêlée"%>
+                                  <% } else { %>
+                                    <%="À distance" %>
+                                  <% }} %>
+                                  <span style="float: right;">
+                                    <% if (!(data.handRight == null || data.handRight == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="mainGauche" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Main Gauche :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.handLeft == null || data.handLeft == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.handLeft.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.handLeft == null || data.handLeft == "")) { %>
+                                  <%=data.handLeft.rarity %> /
+                                  Dégâts : <%=data.handLeft.minDamage%> - <%=data.handLeft.maxDamage%>
+                                  / 
+                                  <%if (data.handLeft.distance == 0) {%>
+                                    <%="Mêlée"%>
+                                  <% } else { %>
+                                    <%="À distance" %>
+                                  <% }} %>
+                                  <span style="float: right;">
+                                    <% if (!(data.handLeft == null || data.handLeft == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="tete" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Tete :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.head == null || data.head == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.head.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.head == null || data.head == "")) { %>
+                                  <%=data.head.rarity %> /
+                                  Protection : <%=data.head.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.head == null || data.head == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div id="torse" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Torse :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.torso == null || data.torso == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.torso.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.torso == null || data.torso == "")) { %>
+                                  <%=data.torso.rarity %> /
+                                  Protection : <%=data.torso.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.torso == null || data.torso == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="jambes" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Jambes :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.legs == null || data.legs == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.legs.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.legs == null || data.legs == "")) { %>
+                                  <%=data.legs.rarity %> /
+                                  Protection : <%=data.legs.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.legs == null || data.legs == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div id="pieds" class="color-row">
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <span style="float: left;"><strong>Pieds :</strong></span>
+                                <span style="float: right;">
+                                  <% if (data.feet == null || data.feet == "") { %>
+                                  <%="Rien"%>
+                                  <% } else { %>
+                                  <%=data.feet.name%>
+                                  <% } %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-offset-1 col-sm-10">
+                                <div class="description-item">
+                                  <% if (!(data.feet == null || data.feet == "")) { %>
+                                  <%=data.feet.rarity %> /
+                                  Protection : <%=data.feet.protection%>
+                                  <% } %>
+                                  <span style="float: right;">
+                                    <% if (!(data.feet == null || data.feet == "")) { %>
+                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                    <% } %>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div> 
     </body>
 </html>
