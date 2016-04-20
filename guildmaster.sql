@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Mar 19 Avril 2016 à 17:09
+-- Généré le: Mer 20 Avril 2016 à 11:25
 -- Version du serveur: 5.5.47-0ubuntu0.14.04.1
 -- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `guild` (
 
 INSERT INTO `guild` (`name`, `rank`, `prestige`, `gold`, `idUser`) VALUES
 ('rootGuild', 1, 1, 100, 1),
-('test', 2, 0, 710, 2),
+('test', 2, 0, 730, 2),
 ('squalala', 3, 0, 100, 3);
 
 -- --------------------------------------------------------
@@ -153,6 +153,7 @@ CREATE TABLE IF NOT EXISTS `heroes` (
   `idCrew` int(11) NOT NULL,
   `idSquad` int(11) DEFAULT NULL,
   `niveau` int(11) NOT NULL,
+  `attrPoints` int(11) NOT NULL,
   PRIMARY KEY (`idCrew`),
   KEY `fk_heroes_squad1_idx` (`idSquad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -161,18 +162,18 @@ CREATE TABLE IF NOT EXISTS `heroes` (
 -- Contenu de la table `heroes`
 --
 
-INSERT INTO `heroes` (`classe`, `experience`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `niveau`) VALUES
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 1, NULL, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 16, 5, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 17, 6, 1),
-('aventurier', 275, 1, 5, 5, 5, 5, 5, 18, 4, 4),
-('aventurier', 275, 1, 5, 5, 5, 5, 5, 19, 4, 4),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 20, 5, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 21, 5, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 22, 6, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 23, NULL, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 24, NULL, 1),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 25, NULL, 1);
+INSERT INTO `heroes` (`classe`, `experience`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `niveau`, `attrPoints`) VALUES
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 1, NULL, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 16, 5, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 17, 6, 1, 0),
+('aventurier', 275, 1, 5, 5, 5, 5, 5, 18, 4, 4, 0),
+('aventurier', 275, 1, 5, 5, 5, 5, 5, 19, 4, 4, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 20, 5, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 21, 5, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 22, 6, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 23, NULL, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 24, NULL, 1, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 25, NULL, 1, 0);
 
 -- --------------------------------------------------------
 

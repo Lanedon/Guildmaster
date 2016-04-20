@@ -598,7 +598,7 @@ on en crée une vide sous forme d'array avant la suite */
 			  exp = rows[i]['experience']+quest['experience'];
 			  lvl = rows[i]['niveau'];
 			  while (exp > lvlUp) {
-			    lvlUp = ((lvl+1)*(lvl+1))*25;
+			    lvlUp = ((lvl)*(lvl))*25;
 			    if (exp >= lvlUp) {
 			      lvl++;
 			      exp = exp-lvlUp;
