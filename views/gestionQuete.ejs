@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<% if(user['role']=='admin'){ %>
+    <head>
+        <title>Gestion</title>
+        <style>
+            a {text-decoration: none; color: black;}
+        </style>
+    <% include ./header.ejs %>
+    <% include ./modifierQuete.ejs %>
+    <% include ./ajouterQuete.ejs %>
+	<div class="container-fluid">
+	    <a href="/guildmaster/gestion/">Utilisateurs</a><br>
+	    <a class="buttonAjoutQuete" data-id="<%=i%>" class="texte-header">ajout d'une quête</a>
+                <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-stripped table-hover">
+                                     <tr class="thead">
+				      <th width="50px">#</th>
+                                      <th>nom</th>
+                                      <th>résumé</th>
+                                      <th>dur&eacutee</th>
+				      <th>difficulte</th>
+                                      <th>récompence</th>
+	                              <th>experience</th>
+				      <th>or</th>
+				      <th>modifier</th>
+				      <th>supprimer</th>
+                                    </tr>
+                                    <% if(data.length){ 
+                                    for(var i = 0;i < data.length;i++) {
+					var duree = new Date(data[i].duree*1000)%>
+					<tr class="tbody text-center">
+				         <td class="duree"      data-id="<%=i%>" hidden><%= data[i].duree%></td>
+					 <td class="idQuest"    data-id="<%=i%>"><%= data[i].idQuest%></td>
+					 <td class="name"       data-id="<%=i%>"><%= data[i].name%></td>
+					 <td class="summary"    data-id="<%=i%>"><%= data[i].summary%></td>
+					 <td><%= duree.getHours()-1 +" H "+ duree.getMinutes() +" min "+ duree.getSeconds() + "sec"%></td>
+					 <td class="difficulty" data-id="<%=i%>"><%= data[i].difficulty%></td>
+					 <td class="reward"     data-id="<%=i%>"><%= data[i].reward%></td>
+					 <td class="experience" data-id="<%=i%>"><%= data[i].experience%></td>
+					 <td class="gold"       data-id="<%=i%>"><%= data[i].gold%></td>
+					 <td><a class="buttonModifQuete" data-id="<%=i%>" class="texte-header">modifier</a></td>
+					 <td><a href="/guildmaster/gestion/quete/supprimer/<%=data[i].idQuest%>/<%=data[i].name%>">supprimer</a></td>
+					 </tr>
+                                    <% }
+                                    } %>
+                                    </table>
+                               </div>
+                        </div>
+                </div>
+        </div> 		
+    </body>
+    <%  } else{ %>
+    <meta http-equiv="refresh" content="0; url=/guildmaster" />
+    <%  } %>
+    <script type="text/javascript" src="/js/global.js"></script>
+</html>

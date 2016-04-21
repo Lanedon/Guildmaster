@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 21 Avril 2016 à 13:06
+-- Généré le: Jeu 21 Avril 2016 à 15:41
 -- Version du serveur: 5.5.47-0ubuntu0.14.04.1
 -- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
@@ -193,14 +193,14 @@ INSERT INTO `inventory` (`idInventory`, `idEquipment`, `idUser`, `idCrew`, `slot
 CREATE TABLE IF NOT EXISTS `quest` (
   `idQuest` int(11) NOT NULL AUTO_INCREMENT,
   `summary` text,
-  `difficulty` int(11) DEFAULT NULL,
+  `difficulty` int(11) NOT NULL,
   `reward` int(11) DEFAULT NULL,
   `duree` int(11) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `experience` int(11) NOT NULL,
   `gold` int(11) NOT NULL,
   PRIMARY KEY (`idQuest`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Contenu de la table `quest`
@@ -208,7 +208,8 @@ CREATE TABLE IF NOT EXISTS `quest` (
 
 INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`, `gold`) VALUES
 (2, 'blablabla', 50, NULL, 1, 'wololo', 1000, 10),
-(3, 'blabla', 15000, NULL, 20, 'plop', 200, 100);
+(3, 'blabla', 1500, NULL, 20, 'plop', 200, 100),
+(5, 'test1', 500, NULL, 200, 'test1', 500, 500);
 
 -- --------------------------------------------------------
 

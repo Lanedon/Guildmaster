@@ -25,6 +25,28 @@ $(".buttonModifUtilisateur").on('click', function() {
 	$("input:first").focus();
 });
 
+$(".buttonModifQuete").on('click', function() {
+	var id = $(this).data('id');
+	$("#popupModifQuete").show();
+	$("#popup-background").show();
+	$("#idModifQuete").val($(".idQuest[data-id="+id+"]").html());
+	$("#nameModif").val($(".name[data-id="+id+"]").html());
+	$("#summaryModif").val($(".summary[data-id="+id+"]").html());
+	$("#experienceModif").val($(".experience[data-id="+id+"]").html());
+	$("#dureeModif").val($(".duree[data-id="+id+"]").html());
+	$("#difficultyModif").val($(".difficulty[data-id="+id+"]").html());
+	$("#goldModif").val($(".gold[data-id="+id+"]").html());
+	$("input:first").focus();
+});
+
+
+$(".buttonAjoutQuete").on('click', function() {
+	var id = $(this).data('id');
+	$("#popupAjoutQuete").show();
+	$("#popup-background").show();
+	$("input:first").focus();
+});
+
 $(".close-popup").on('click', function() {
 	var wrapper = $(this).parents('.popup-wrapper');
 	wrapper.hide();

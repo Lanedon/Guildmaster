@@ -637,6 +637,9 @@ on en crée une vide sous forme d'array avant la suite */
 })
 
 
+
+
+
 /* deconnexion */
 .get('/guildmaster/deconnexion', function(req, res) {
     req.session = null;
@@ -685,8 +688,7 @@ on en crée une vide sous forme d'array avant la suite */
 })
 
 
-
-/*supprimer escouade */
+/*supprimer utilisateur */
 .get('/guildmaster/gestion/supprimer/utilisateur/:id/:userName/:email', urlencodedParser, function(req, res) {
   connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
 	if (!err){
@@ -703,6 +705,70 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
+/* gestion quete */
+.get('/guildmaster/gestion/quete', function(req, res) { 
+     connection.query("SELECT idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
+	if (!err){
+	   //console.log(rows);
+	    res.render('gestionQuete.ejs', {data:rows, user:req.session.user});
+	   //console.log(data);
+      }
+	else{
+         res.render('gestionQuete.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+/* modifier quete validation*/
+.post('/guildmaster/gestion/quete/modifier/validation', urlencodedParser, function(req, res) { 
+        //console.log(req.body);
+        connection.query("UPDATE quest SET name = '"+ req.body['name'] +"',difficulty = "+ req.body['difficulty'] +",experience = "+ req.body['experience'] +",gold = "+ req.body['gold'] +",summary = '"+ req.body['summary'] +"',duree = "+ req.body['duree'] +" WHERE idQuest ="+ req.body['id'], function(err){
+                if(err){
+                 // console.log(err.message);
+                }else{
+		  res.redirect('/guildmaster/gestion/quete');
+                }
+        })
+})
+
+
+/*supprimer quete */
+.get('/guildmaster/gestion/quete/supprimer/:id/:name', urlencodedParser, function(req, res) {
+  connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
+	if (!err){
+	 //console.log(req.params);
+	  if (req.session.user['id']==rows[0]['idUser'] && req.session.user['name']==rows[0]['login'] && req.session.user['role']==rows[0]['role']) {
+	       connection.query("DELETE FROM quest WHERE idQuest = "+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err){})
+	       res.redirect('/guildmaster/gestion/quete');
+	  }
+	}
+	else{
+         res.render('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+
+/* ajout d'une quete*/
+.post('/guildmaster/gestion/quete/ajout/validation', urlencodedParser, function(req, res) { 
+	//console.log(req.body);
+        var post={name:req.body.name,
+                  difficulty:req.body.difficulty,
+		  summary:req.body.summary,
+                  experience:req.body.experience,
+                  duree:req.body.duree,
+                  gold:req.body.gold};
+        connection.query("INSERT INTO quest set ?", post, function(err){
+                if(err){
+                 // console.log(err.message);
+                }else{
+                 // console.log('success');
+                  res.redirect('/guildmaster/gestion/quete');
+                }
+        })
+})
 
 /* On redirige vers l'accueil si la page demandée n'est pas trouvée */
 .use(function(req, res, next){
