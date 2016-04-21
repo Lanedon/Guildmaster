@@ -7,6 +7,7 @@
             a {text-decoration: none; color: black;}
         </style>
     <% include ./header.ejs %>
+    <% include ./modifierUtilisateur.ejs %>
 	<div class="container-fluid">
 	    <div class="row">
 		    <div class="col-sm-10 col-sm-offset-1">
@@ -28,18 +29,18 @@
 					<% if(data.length){
 					for(var i = 0;i < data.length;i++) { %>
 					<tr class="tbody text-center">
-						<td><%=data[i].idUser%></td>
-						<td><%=data[i].login%></td>
-						<td><%=data[i].name%></td>
-						<td><%=data[i].email%></td>
-						<td><%=data[i].role%></td>
-						<td><%=data[i].rank%></td>
-						<td><%=data[i].prestige%></td>
-						<td><%=data[i].gold%></td>
-						<td><a href="/guildmaster/gestion/modifier<%=data[i].idUser%>">modifier</a></td>
-						<td><a href="/guildmaster/gestion/bannir<%=data[i].idUser%>">bannir</a></td>
+						<td class="id"       data-id="<%=i%>"><%=data[i].idUser%></td>
+						<td class="pseudo"   data-id="<%=i%>"><%=data[i].login%></td>
+						<td class="guild"    data-id="<%=i%>"><%=data[i].name%></td>
+						<td class="email"    data-id="<%=i%>"><%=data[i].email%></td>
+						<td class="role"     data-id="<%=i%>"><%=data[i].role%></td>
+						<td class="rank"     data-id="<%=i%>"><%=data[i].rank%></td>
+						<td class="prestige" data-id="<%=i%>"><%=data[i].prestige%></td>
+						<td class="gold"     data-id="<%=i%>"><%=data[i].gold%></td>
+						<td><a class="buttonModifUtilisateur" data-id="<%=i%>" class="texte-header">modifier</a></td>
+						<td><a href="/guildmaster/gestion/bannir/utilisateur/<%=data[i].idUser%>">bannir</a></td>
 						<% if(data[i].role!='admin'){ %>
-						<td><a href="/guildmaster/gestion/supprimer<%=data[i].idUser%>">supprimer</a></td>
+						<td><a href="/guildmaster/gestion/supprimer/utilisateur/<%=data[i].idUser%>/<%=data[i].login%>/<%=data[i].email%>">supprimer</a></td>
 						<% } else { %>
 						 <td></td>
 						<% } %>
@@ -54,4 +55,5 @@
     <%  } else{ %>
     <meta http-equiv="refresh" content="0; url=/guildmaster" />
     <%  } %>
+    <script type="text/javascript" src="/js/global.js"></script>
 </html>

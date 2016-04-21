@@ -12,6 +12,19 @@ $("#buttonInscription").on('click', function() {
 	$("input:first").focus();
 });
 
+$(".buttonModifUtilisateur").on('click', function() {
+	var id = $(this).data('id');
+	$("#popupModif").show();
+	$("#popup-background").show();
+	$("#idModif").val($(".id[data-id='"+id+"']").html());
+	$("#pseudoModif").val($(".pseudo[data-id='"+id+"']").html());
+	$("#guildModif").val($(".guild[data-id='"+id+"']").html());
+	$("#emailModif").val($(".email[data-id='"+id+"']").html());
+	$("#prestigeModif").val($(".prestige[data-id='"+id+"']").html());
+	$("#goldModif").val($(".gold[data-id='"+id+"']").html());
+	$("input:first").focus();
+});
+
 $(".close-popup").on('click', function() {
 	var wrapper = $(this).parents('.popup-wrapper');
 	wrapper.hide();
@@ -30,7 +43,7 @@ $('#createGuild').on('click', function(){
             $("#test").append(data);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('error ' + textStatus + " " + errorThrown);
+           // alert('error ' + textStatus + " " + errorThrown);
         }
     });
 });

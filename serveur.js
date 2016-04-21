@@ -113,7 +113,7 @@ on en crée une vide sous forme d'array avant la suite */
         var post={name:req.body.guilde,
 		  prestige: 0,
 		  rank: req.session.user['id'],
-		  gold: 100,
+		  gold: 1000,
 		  idUser: req.session.user['id']};
                   //option:req.body.optionsRadios
         connection.query("INSERT INTO guild set ?", post, function(err){
@@ -125,7 +125,7 @@ on en crée une vide sous forme d'array avant la suite */
 		      //console.log(err.message);
 		    }else{
 		     // console.log('success');
-		     req.session.user = {id:req.session.user['id'], role:'user', gold:'100'};
+		     req.session.user = {id:req.session.user['id'], role:'user', gold:'1000'};
 		     res.redirect('/guildmaster');
 		    }
 		  })
@@ -326,6 +326,7 @@ on en crée une vide sous forme d'array avant la suite */
 	    
 
        }
+       res.redirect('/guildmaster/recruter');	
 	} 
 	else{
 	  res.redirect('/guildmaster/recruter');		
@@ -648,7 +649,6 @@ on en crée une vide sous forme d'array avant la suite */
 	if (!err){
 	  var admin = 0;
 	  for (var i = 0;i<rows.length;i++) {
-	    
 	    if (rows[i]['role']== "admin") {
 	      // console.log(rows[i]);
 	      // console.log(req.session.user);
@@ -664,6 +664,45 @@ on en crée une vide sous forme d'array avant la suite */
         }
     })
 })
+
+/* modifier utilisateur validation*/
+.post('/guildmaster/gestion/modifier/utilisateur/validation', urlencodedParser, function(req, res) { 
+       // console.log(req.body);
+        connection.query("UPDATE user SET login = '"+ req.body['pseudo'] +"',email = '"+ req.body['email'] +"',role = '"+ req.body['role'] +"' WHERE idUser ="+ req.body['id'], function(err){
+                if(err){
+                 // console.log(err.message);
+                }else{
+                  connection.query("UPDATE guild SET name = '"+ req.body['guild'] +"',prestige = "+ req.body['prestige'] +",gold = "+ req.body['gold'] +" WHERE idUser ="+ req.body['id'], function(err){
+			  if(err){
+			   // console.log(err.message);
+			  }else{
+			   // console.log('success');
+			    res.redirect('/guildmaster/gestion/');
+			  }
+		  })
+                }
+        })
+})
+
+
+
+/*supprimer escouade */
+.get('/guildmaster/gestion/supprimer/utilisateur/:id/:userName/:email', urlencodedParser, function(req, res) {
+  connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
+	if (!err){
+	 //console.log(req.params);
+	  if (req.session.user['id']==rows[0]['idUser'] && req.session.user['name']==rows[0]['login'] && req.session.user['role']==rows[0]['role']) {
+	       connection.query("DELETE FROM user WHERE idUser = "+ req.params['id'] +" and login = '"+ req.params['userName'] +"' and email = '"+ req.params['email']+"'", function(err){})
+	       res.redirect('/guildmaster/gestion/');
+	  }
+	}
+	else{
+         res.render('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
 
 /* On redirige vers l'accueil si la page demandée n'est pas trouvée */
 .use(function(req, res, next){
