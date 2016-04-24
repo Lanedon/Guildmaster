@@ -1,0 +1,52 @@
+<div id="popupModif" class="popup-wrapper">
+    <div class="popup-absolute">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            modifier utilisateur
+                            <div class="close-popup">&#xf00d</div>
+                        </div>
+                        <div class="panel-body">  
+                            <form action="/guildmaster/gestion/modifier/utilisateur/validation" method="post">
+                               <input type="number" name="id" id="idModif" hidden>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="pseudo">Pseudo :</label>
+                                    <input type="text" name="pseudo" id="pseudoModif" class="form-control" autofocus required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="guild">Guilde :</label>
+                                    <input type="text" name="guild" id="guildModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="Email">E-mail :</label>
+                                    <input type="email" name="email" id="emailModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="role">Rôle :</label>
+                                    <SELECT name="role" size="1">
+					<OPTION selected>user
+					<OPTION>admin
+					<OPTION>en attente
+				    </SELECT>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="prestige">Prestige :</label>
+                                    <input type="number" name="prestige" id="prestigeModif" class="form-control" required>
+                                </div>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="gold">Or :</label>
+                                    <input type="number" name="gold" id="goldModif" class="form-control" required>
+                                </div>     
+                                <div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

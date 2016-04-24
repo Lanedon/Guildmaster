@@ -1,0 +1,48 @@
+<div id="popupModifQuete" class="popup-wrapper">
+    <div class="popup-absolute">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            modifier quete
+                            <div class="close-popup">&#xf00d</div>
+                        </div>
+                        <div class="panel-body">  
+                            <form action="/guildmaster/gestion/quete/modifier/validation" method="post">
+                                <input type="number" name="id" id="idModifQuete" hidden>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="name">Nom :</label>
+                                    <input type="text" name="name" id="nameModif" class="form-control" autofocus required>
+                                </div>
+				 <div class="col-sm-12 input-popup">
+                                    <label for="summary">Summary :</label>
+                                    <input type="textarea" name="summary" id="summaryModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="duree">Dur&eacutee en secondes:</label>
+                                    <input type="time" name="duree" id="dureeModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="difficulty">Difficult&eacutee:</label>
+                                    <input type="time" name="difficulty" id="difficultyModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="experience">Experience :</label>
+                                    <input type="number" name="experience" id="experienceModif" class="form-control" required>
+                                </div>
+                                <div class="col-sm-12 input-popup">
+                                    <label for="gold">Or :</label>
+                                    <input type="number" name="gold" id="goldModif" class="form-control" required>
+                                </div>     
+                                <div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
