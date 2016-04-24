@@ -13,44 +13,6 @@
      <% include ./connexion.ejs %>
      <% include ./inscription.ejs %>
         <div class="container-fluid">
-                <div class="row">
-                        <div class="col-sm-10 col-sm-offset-1">
-                                <div class="table-responsive">
-                                    <table class="table table-condensed table-stripped table-hover">
-                                            <tr class="thead">
-                                      <th>classe</th>
-                                      <th>prestige</th>
-                                      <th>force</th>
-                                      <th>dexterite</th>
-                                      <th>intelligence</th>
-                                      <th>chance</th>
-                                      <th>endurence</th>
-                                      <th>main droite</th>
-                                      <th>main gauche</th>
-                                      <th>torse</th>
-                                      <th>tete</th>
-                                      <th>jambes</th>
-                                      <th>pieds</th>
-                                    </tr>
-                                    <tr class="tbody text-center">
-                                     <td><%=data.classe%></td>
-                                     <td><%=data.prestige%></td>
-                                     <td><%=data.str%></td>
-                                     <td><%=data.dex%></td>
-                                     <td><%=data.intel%></td>
-                                     <td><%=data.luk%></td>
-                                     <td><%=data.end%></td>
-                                     <td><%=data.handRight.name%></td>
-                                     <td><%=data.handLeft.name%></td>
-                                     <td><%=data.torso.name%></td>
-                                     <td><%=data.head.name%></td>
-                                     <td><%=data.legs.name%></td>
-                                     <td><%=data.feet.name%></td>
-                                     </tr>
-                                    </table>
-                               </div>
-                        </div>
-                </div>
                   <div class="row">
                     <div class="col-sm-6 col-sm-offset-1">
                       <div class="panel panel-default">
@@ -98,9 +60,10 @@
                             <div class="col-sm-offset-1 col-sm-10">
                               <span style="float: left;"><strong>Force :</strong></span>
                               <span style="float: right;">
-                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                <%= data.str %>
-                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                                <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
+                                <span><%= data.str %></span>
+                                <div style="display: none"><%= data.str %></div>
+                                <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
                             </div>
                           </div>
@@ -109,9 +72,10 @@
                             <div class="col-sm-offset-1 col-sm-10">
                               <span style="float: left;"><strong>Dexterité :</strong></span>
                               <span style="float: right;">
-                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                <%= data.dex %> 
-                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                                <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
+                                <span><%= data.dex %></span>
+                                <div style="display: none"><%= data.dex %></div>
+                                <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
                             </div>
                           </div>
@@ -120,9 +84,10 @@
                             <div class="col-sm-offset-1 col-sm-10">
                               <span style="float: left;"><strong>Endurance :</strong></span>
                               <span style="float: right;">
-                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                <%= data.end %>
-                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                                <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
+                                <span><%= data.end %></span>
+                                <div style="display: none"><%= data.end %></div>
+                                <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
                             </div>
                           </div>
@@ -131,9 +96,10 @@
                             <div class="col-sm-offset-1 col-sm-10">
                               <span style="float: left;"><strong>Intelligence :</strong></span>
                               <span style="float: right;">
-                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                <%= data.intel %> 
-                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                                <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
+                                <span><%= data.intel %></span>
+                                <div style="display: none"><%= data.intel %></div>
+                                <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
                             </div>
                           </div>
@@ -142,9 +108,10 @@
                             <div class="col-sm-offset-1 col-sm-10">
                               <span style="float: left;"><strong>Chance :</strong></span>
                               <span style="float: right;">
-                                <button class="btn btn-default btn-icone-small">&#xf0d9</button>
-                                <%= data.luk %> 
-                                <button class="btn btn-default btn-icone-small">&#xf0da</button>
+                                <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
+                                <span><%= data.luk %></span>
+                                <div style="display: none"><%= data.luk %></div>
+                                <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
                             </div>
                           </div>
@@ -171,12 +138,64 @@
                           <h2 style="font-size: 1.3em" class="panel-title"><strong>Inventaire</strong></h2>
                         </div>
                         <div class="panel-body" style="font-size: 1.2em">
-                          <% for(var i = 0;i < inventoryArmor.length;i++) { 
-                            if (inventoryArmor[i].idCrew == null) { %>
-                               <p><%=  inventoryArmor[i].name %></p>
-                          <%  }
-                           } %>
-                          
+                          <div class="col-ms-12">
+                            <% for(var i = 0;i < inventoryArmor.length;i++) { 
+                              if (inventoryArmor[i].idCrew == null) { %>
+                                <div class="color-row">
+                                  <div class="row">
+                                    <div class="col-sm-offset-1 col-sm-10">
+                                      <strong><%= inventoryArmor[i].name %></strong>
+                                      -
+                                      <%= inventoryArmor[i].rarity %>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-sm-offset-1 col-sm-10">
+                                      <div class="description-item">
+                                        Protection : <%=inventoryArmor[i].protection%>
+                                        <span style="float: right;">
+                                            <button class="btn btn-success btn-icone placer-item" style="padding: 1px 4px;">&#xf061</button>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            <%  }
+                             } %>
+
+                             <% for(var i = 0;i < inventoryWeapon.length;i++) { 
+                              if (inventoryWeapon[i].idCrew == null) { %>
+                                 <div class="color-row">
+                                  <div class="row">
+                                    <div class="col-sm-offset-1 col-sm-10">
+                                      <strong><%= inventoryWeapon[i].name %></strong>
+                                      -
+                                      <%= inventoryWeapon[i].rarity %>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-sm-offset-1 col-sm-10">
+                                      <div class="description-item">
+                                        Dégâts : <%=inventoryWeapon[i].minDamage%> - <%=inventoryWeapon[i].maxDamage%>
+                                        / 
+                                        <%if (inventoryWeapon[i].distance == 0) {%>
+                                          <%="Mêlée"%>
+                                        <% } else { %>
+                                          <%="À distance" %>
+                                        <% } %>
+                                        <span style="float: right;">
+                                            <button class="btn btn-success btn-icone placer-item" style="padding: 1px 4px;">&#xf061</button>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            <%  }
+                             } %>
+
+                            
+
+                          </div>                       
                         </div>
                       </div>
                     </div>
