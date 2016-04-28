@@ -6,7 +6,7 @@ var mysql       = require('mysql');
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
-  password : "",
+  password : "sio",
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
