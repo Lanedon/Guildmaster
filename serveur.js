@@ -2,6 +2,7 @@ var express     = require('express');
 var session     = require('cookie-session'); // Charge le middleware de sessions
 var bodyParser  = require('body-parser');    // Charge le middleware de gestion des paramètres  
 var mysql       = require('mysql');
+var util = require('util');
 
 var connection = mysql.createConnection({
   host     : "localhost",
@@ -811,6 +812,50 @@ on en crée une vide sous forme d'array avant la suite */
                   res.redirect('/guildmaster/gestion/quete');
                 }
         })
+})
+
+.post('/guildmaster/enregistrer-attributs',urlencodedParser, function(req, res) {
+  connection.query("SELECT * FROM heroes WHERE idCrew = " + req.body.idCrew, 
+    function(err, rows, fields){
+    if (!err){
+      var forMin = rows[0].str;
+      var dexMin = rows[0].dex;
+      var endMin = rows[0].end;
+      var intMin = rows[0].intel;
+      var lukMin = rows[0].luk;
+      if (forMin > req.body.nbFor || dexMin > req.body.nbDex || endMin > req.body.nbEnd || intMin > req.body.nbInt || lukMin > req.body.nbLuk) {
+        res.send('Erreur');
+      } else {
+        var total = parseInt(req.body.nbFor - forMin) + parseInt(req.body.nbDex - dexMin) + parseInt(req.body.nbEnd - endMin) + 
+        parseInt(req.body.nbInt - intMin) + parseInt(req.body.nbLuk - lukMin);
+        console.log('Total : ' + total);
+        if (total == 0) {
+          res.send('Same');
+        } else if (total < 0) {
+          res.send('Erreur');
+        } else if (total > 0) {
+          if (total <= rows[0].attrPoints) {
+            //Requete
+            var diff = rows[0].attrPoints - total;
+            connection.query("UPDATE heroes SET str = " + req.body.nbFor +", dex = " + req.body.nbDex +", end = " + req.body.nbEnd +", " +
+              "intel = " + req.body.nbInt +", luk = " + req.body.nbLuk + ", attrPoints = " + diff + " WHERE idCrew = " + 
+              req.body.idCrew, function(err){
+                if (!err)
+                  res.send('OK');
+                else
+                  res.send('Fail');
+                console.log(err);
+              })
+          } else {
+            res.send('Erreur');
+          }
+        }
+      }
+    }
+    else {
+      res.send('Fail');
+    }
+  })
 })
 
 /* On redirige vers l'accueil si la page demandée n'est pas trouvée */
