@@ -1,4 +1,10 @@
 /*var myModule = require('./module');*/
+
+
+function verifAction() {
+    confirm("Etes vous sur de vouloir continuer ?");
+}
+
 $(document).ready ( function () {
 	$("#buttonConnexion").on('click', function() {
 		$("#popupConnexion").show();

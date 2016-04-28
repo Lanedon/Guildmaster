@@ -2,6 +2,8 @@
 <html>
 <% if(user['role']=='admin'){ %>
     <head>
+	<% include ./styles.ejs %>
+      	<% include ./scripts.ejs %>
         <title>Gestion</title>
         <style>
             a {text-decoration: none; color: black;}
@@ -42,7 +44,7 @@
 					 <td class="experience" data-id="<%=i%>"><%= data[i].experience%></td>
 					 <td class="gold"       data-id="<%=i%>"><%= data[i].gold%></td>
 					 <td><a class="buttonModifQuete" data-id="<%=i%>" class="texte-header">modifier</a></td>
-					 <td><a href="/guildmaster/gestion/quete/supprimer/<%=data[i].idQuest%>/<%=data[i].name%>">supprimer</a></td>
+					 <td><a onclick="verifAction()" href="/guildmaster/gestion/quete/supprimer/<%=data[i].idQuest%>/<%=data[i].name%>">supprimer</a></td>
 					 </tr>
                                     <% }
                                     } %>
@@ -55,5 +57,4 @@
     <%  } else{ %>
     <meta http-equiv="refresh" content="0; url=/guildmaster" />
     <%  } %>
-    <script type="text/javascript" src="/js/global.js"></script>
 </html>

@@ -2,6 +2,8 @@
 <html>
 <% if(user['role']=='admin'){ %>
     <head>
+	<% include ./styles.ejs %>
+      	<% include ./scripts.ejs %>
         <title>Gestion</title>
         <style>
             a {text-decoration: none; color: black;}
@@ -39,9 +41,9 @@
 						<td class="prestige" data-id="<%=i%>"><%=data[i].prestige%></td>
 						<td class="gold"     data-id="<%=i%>"><%=data[i].gold%></td>
 						<td><a class="buttonModifUtilisateur" data-id="<%=i%>" class="texte-header">modifier</a></td>
-						<td><a href="/guildmaster/gestion/bannir/utilisateur/<%=data[i].idUser%>">bannir</a></td>
+						<td><a onclick="verifAction()" href="/guildmaster/gestion/bannir/utilisateur/<%=data[i].idUser%>">bannir</a></td>
 						<% if(data[i].role!='admin'){ %>
-						<td><a href="/guildmaster/gestion/supprimer/utilisateur/<%=data[i].idUser%>/<%=data[i].login%>/<%=data[i].email%>">supprimer</a></td>
+						<td><a onclick="verifAction()" href="/guildmaster/gestion/supprimer/utilisateur/<%=data[i].idUser%>/<%=data[i].login%>/<%=data[i].email%>">supprimer</a></td>
 						<% } else { %>
 						 <td></td>
 						<% } %>
@@ -56,5 +58,4 @@
     <%  } else{ %>
     <meta http-equiv="refresh" content="0; url=/guildmaster" />
     <%  } %>
-    <script type="text/javascript" src="/js/global.js"></script>
 </html>

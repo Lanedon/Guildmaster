@@ -7,7 +7,7 @@ var util = require('util');
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
-  password : "",
+  password : "sio",
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -205,6 +205,27 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(req.session.user);	
 })
 
+/*supprimer personnel */
+.get('/guildmaster/personnel/supprimer/:id/:name/:surname', urlencodedParser, function(req, res) {
+        connection.query("DELETE FROM crew WHERE idCrew = "+ req.params['id'] +" and name = '"+ req.params['name'] +"' and surname = '"+ req.params['surname'] +"' and idUser="+req.session.user['id'], function(err){
+	    if(err){
+	     // console.log(err.message);
+	    }else{
+	    connection.query(" select idSquad from squad where idUser = "+req.session.user['id']+" and idSquad not in(select idSquad from crew,heroes where idSquad is not null and idUser = "+req.session.user['id']+" group by idSquad);",  function(err, rows, fields){
+		if(err){
+		 // console.log(err.message);
+		}else{
+		  if (rows !== undefined && rows[0] !== undefined ){
+		    console.log(rows);
+		    connection.query("DELETE FROM squad WHERE idSquad = "+ rows[0]['idSquad'] +" and idUser="+req.session.user['id'], function(err){})
+		  }
+	        }
+	    })
+	    }
+	})
+	res.redirect('/guildmaster/personnel');
+})
+
 /* recruter personnel */
 .get('/guildmaster/recruter', function(req, res) { 
      connection.query("SELECT crew.idCrew, name, surname,null as niveau, talent, fee, job, 0 as hero FROM worker, crew WHERE idUser is null and worker.idCrew = crew.idCrew UNION SELECT crew.idCrew, name, surname,niveau, talent, fee, classe, 1 as hero FROM heroes, crew WHERE idUser is null and heroes.idCrew = crew.idCrew" , function(err, rows, fields){
@@ -257,9 +278,11 @@ on en crée une vide sous forme d'array avant la suite */
 		      hero:rows[0]['hero']};
 	  if (gold >= perso['fee']) {
 	    gold = gold-perso['fee'];
-	    req.session.user['gold'] = gold;
+
 	    connection.query("UPDATE guild SET gold = "+gold+" WHERE idUser ="+req.session.user['id'], function(err, rows, fields){
               if (!err){
+	       req.session.user['gold'] = gold;
+	      // console.log(req.session.user);
 	       connection.query("INSERT INTO crew set ?", perso, function(err){
 		  if(err){
 		   // console.log(err.message);
@@ -307,8 +330,8 @@ on en crée une vide sous forme d'array avant la suite */
 			    })
 			  }
 			  else{
+			  //console.log(err.message);
 			   res.redirect('/guildmaster/recruter');
-			   // console.log(err.message);
 			  }
 			})
 		      }
@@ -322,12 +345,7 @@ on en crée une vide sous forme d'array avant la suite */
                // console.log(err.message);
               }
              })
-	    
-	    
-	    
-
        }
-       res.redirect('/guildmaster/recruter');	
 	} 
 	else{
 	  res.redirect('/guildmaster/recruter');		
@@ -402,44 +420,65 @@ on en crée une vide sous forme d'array avant la suite */
 .post('/guildmaster/escouades/creer/validation', urlencodedParser, function(req, res) { 
 	var squad={name:req.body.name,
 		   idUser: req.session.user['id']};
-	if (req.body.membres.length <= 4) {
-	//  console.log(squad);
-	  connection.query("INSERT INTO squad set ?", squad, function(err){
-                if(err){
-                 // console.log(err.message);
-		 res.redirect('/guildmaster/escouades');
-                }else{
-		  connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
-		    var idSquad = rows[0]['MAX(idSquad)'];
-		      for (i=0;i<req.body.membres.length;i++) {
-			connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ req.body.membres[i] +";", function(err){
-			  if(err){
-			    connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
-			    res.redirect('/guildmaster/');
-			  }else{
-			   // console.log('success');
-			  }
-		        })
-		      }
-		      res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
-		  })
-                }
-	  })
+	if (req.body.membres != undefined){
+	  if (req.body.membres.length <= 4 || typeof req.body.membres === 'string' ) {
+	   if (typeof req.body.membres === 'string' ) {
+	    connection.query("INSERT INTO squad set ?", squad, function(err){
+		   if(err){
+		    // console.log(err.message);
+		    res.redirect('/guildmaster/escouades');
+		   }else{
+		     connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
+		       var idSquad = rows[0]['MAX(idSquad)'];
+			   connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ req.body.membres +";", function(err){
+			     if(err){
+			       connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
+			       res.redirect('/guildmaster/');
+			     }else{
+			      // console.log('success');
+			     }
+			   })
+			 res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
+		     })
+		   }
+	     })
+	   }
+	   else{
+	    connection.query("INSERT INTO squad set ?", squad, function(err){
+		  if(err){
+		   // console.log(err.message);
+		   res.redirect('/guildmaster/escouades');
+		  }else{
+		    connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
+		      var idSquad = rows[0]['MAX(idSquad)'];
+			for (i=0;i<req.body.membres.length;i++) {
+			  connection.query("UPDATE heroes SET idSquad = "+ idSquad +" WHERE idCrew = "+ req.body.membres[i] +";", function(err){
+			    if(err){
+			      connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
+			      res.redirect('/guildmaster/');
+			    }else{
+			     // console.log('success');
+			    }
+			  })
+			}
+			res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
+		    })
+		  }
+	    })
+	  }
+	  }
+	  else {
+	     res.redirect('/guildmaster/escouades');
+	  }
 	}
-	else {
-	   res.redirect('/guildmaster/escouades');
+	else{
+	  res.redirect('/guildmaster/escouades');
 	}
 })
 
-
 /*supprimer escouade */
 .get('/guildmaster/escouades/supprimer/:id/:name', urlencodedParser, function(req, res) {
-        connection.query("DELETE FROM squad WHERE idSquad = "+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err){
-	    if(err){
-	     // console.log(err.message);
-	    }else{
-	    }
-        })
+        connection.query("DELETE FROM squad WHERE idSquad = "+ req.params['id'] +" and name = '"+ req.params['name'] +"' and idUser="+req.session.user['id'], function(err){})
 	res.redirect('/guildmaster/escouades')
 })
 
@@ -558,7 +597,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* quete en cours */
 .get('/guildmaster/quete/enCours', function(req, res) { 
-     connection.query("SELECT reussiteQuete, squad.idQuest, idSquad, quest.name as questName, squad.name as squadName, dateFinQuete FROM squad, quest where squad.idQuest is not null and quest.idQuest = squad.idQuest", function(err, rows, fields){
+     connection.query("SELECT reussiteQuete, squad.idQuest, experience, gold, reward, idSquad, quest.name as questName, squad.name as squadName, dateFinQuete FROM squad, quest where squad.idQuest is not null and quest.idQuest = squad.idQuest", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	   var dateFin = [];
@@ -693,8 +732,9 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/gestion/supprimer/utilisateur/:id/:userName/:email', urlencodedParser, function(req, res) {
   connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
 	if (!err){
-	 //console.log(req.params);
+	// console.log(req.params);
 	  if (req.session.user['id']==rows[0]['idUser'] && req.session.user['name']==rows[0]['login'] && req.session.user['role']==rows[0]['role']) {
+	    //console.log(rows);
 	       connection.query("DELETE FROM user WHERE idUser = "+ req.params['id'] +" and login = '"+ req.params['userName'] +"' and email = '"+ req.params['email']+"'", function(err){})
 	       res.redirect('/guildmaster/gestion/');
 	  }

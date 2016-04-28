@@ -2,6 +2,8 @@
 
 <html>
     <head>
+        <% include ./styles.ejs %>
+      	<% include ./scripts.ejs %>
         <title>detail</title>
 
      <% include ./header.ejs %>
@@ -36,7 +38,7 @@
                                      <td><%=data[i].intel%></td>
                                      <td><%=data[i].luk%></td>
                                      <td><%=data[i].end%></td>
-                                     <td><a href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
+                                     <td><a onclick="verifAction()" href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
                                      </tr>
                                     <% }
                                     } %>
