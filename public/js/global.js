@@ -76,10 +76,10 @@ $('#createGuild').on('click', function(){
 $('.attr-minus').on('click', function () {
 	var value = $(this).parent().find('span').text();
 	var limite = $(this).parent().find('div').text();
-	if (value > limite) {
+	if (parseInt(value) > parseInt(limite)) {
 		var points = $("#pointsAttributs").text();
-		if (value >= 1 && points >= 1) {
-			$(this).parent().find('span').text(value-1);
+		if (parseInt(value) >= 1) {
+			$(this).parent().find('span').text(parseInt(value)-1);
 			$("#pointsAttributs").text(parseInt(points)+1);
 
 			if ($(this).parent().find('span').text() == limite)
@@ -92,11 +92,47 @@ $('.attr-plus').on('click', function () {
 	var value = $(this).parent().find('span').text();
 	var points = $("#pointsAttributs").text();
 	var limite = $(this).parent().find('div').text();
-	if (value >= 1 && points >= 1) {
+	if (points >= 1) {
 		$(this).parent().find('span').text(parseInt(value)+1);
 		$("#pointsAttributs").text(points-1);
 		if ($(this).parent().find('span').text() > limite)
 				$(this).parent().find('.attr-minus').prop("disabled", false);
 	}
 });
+
+$('.enregistrer-attributs').on('click', function () {
+	var data = {};
+	data.idCrew = $('#idCrew').val();
+	data.nbFor = $('#nbFor').text();
+	data.nbDex = $('#nbDex').text();
+	data.nbEnd = $('#nbEnd').text();
+	data.nbInt = $('#nbInt').text();
+	data.nbLuk = $('#nbLuk').text();
+
+	$.ajax({
+        url: '/guildmaster/enregistrer-attributs',
+        type: 'POST',
+		data: data,
+        success: function (data) {
+            /*var ret = jQuery.parseJSON(data);
+            $('body').html(ret.msg);
+            console.log('Success: ')*/
+            if (data == "Erreur") {
+            	alert('Vous avez commis une erreur, veuillez réessayer !');
+            } else if (data == "Fail") {
+            	alert('La connection à la base de données est impossible, veuillez réesayer plus tard !')
+            } else if (data == "OK") {
+            	alert('Changements enregistrés !');
+            }
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            /*console.log('Error: ' + error.message);
+            $('body').html('Error connecting to the server.');*/
+            alert('Erreur !');
+            location.reload();
+        },
+    });
+});
+
 });

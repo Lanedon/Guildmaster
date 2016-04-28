@@ -12,6 +12,7 @@
      <% include ./header.ejs %>
      <% include ./connexion.ejs %>
      <% include ./inscription.ejs %>
+        <input type="hidden" id="idCrew" value="<%= crew.idCrew %>">
         <div class="container-fluid">
                   <div class="row">
                     <div class="col-sm-6 col-sm-offset-1">
@@ -61,7 +62,7 @@
                               <span style="float: left;"><strong>Force :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
-                                <span><%= data.str %></span>
+                                <span id="nbFor"><%= data.str %></span>
                                 <div style="display: none"><%= data.str %></div>
                                 <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
@@ -73,7 +74,7 @@
                               <span style="float: left;"><strong>Dexterité :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
-                                <span><%= data.dex %></span>
+                                <span id="nbDex"><%= data.dex %></span>
                                 <div style="display: none"><%= data.dex %></div>
                                 <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
@@ -85,7 +86,7 @@
                               <span style="float: left;"><strong>Endurance :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
-                                <span><%= data.end %></span>
+                                <span id="nbEnd"><%= data.end %></span>
                                 <div style="display: none"><%= data.end %></div>
                                 <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
@@ -97,7 +98,7 @@
                               <span style="float: left;"><strong>Intelligence :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
-                                <span><%= data.intel %></span>
+                                <span id="nbInt"><%= data.intel %></span>
                                 <div style="display: none"><%= data.intel %></div>
                                 <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
@@ -109,7 +110,7 @@
                               <span style="float: left;"><strong>Chance :</strong></span>
                               <span style="float: right;">
                                 <button class="btn btn-default btn-icone-small attr-minus" disabled>&#xf0d9</button>
-                                <span><%= data.luk %></span>
+                                <span id="nbLuk"><%= data.luk %></span>
                                 <div style="display: none"><%= data.luk %></div>
                                 <button class="btn btn-default btn-icone-small attr-plus">&#xf0da</button>
                               </span>
@@ -124,7 +125,7 @@
 
                           <div class="row" style="margin-top: 20px">
                             <div class="col-sm-offset-1 col-sm-10 text-center">
-                              <button class="btn btn-default">OK</button>
+                              <button class="btn btn-default enregistrer-attributs">OK</button>
                             </div>
                           </div>
                         </div>
