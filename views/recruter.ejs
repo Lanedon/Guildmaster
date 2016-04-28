@@ -36,7 +36,7 @@
 				   <td><%=data[i].job%></td>
 				   <td><a href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
 				   <% if(data[i].hero == 1){ %>
-				   <td><a href="/guildmaster/recruter/detail/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">detail</a></td>
+				   <td><a onclick="verifAction()" href="/guildmaster/recruter/detail/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">detail</a></td>
 				   <% } %>
 				   </tr>
 				  <% }

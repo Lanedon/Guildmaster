@@ -22,8 +22,8 @@
 					    <tr class="tbody text-center">
 					     <td><%= data[i].questName%></td>
 					     <td><%= data[i].squadName%></td>
-					     <td data-idsquad='<%=data[i].idSquad%>' data-reussitequete='<%=data[i].reussiteQuete%>' data-idquest='<%=data[i].idQuest%>' data-questname='<%=data[i].questName%>' data-squadname='<%=data[i].squadName%>' data-countdown="<%= dateFin[i] %>"></td>
-					    </tr>
+					     <td data-idsquad='<%=data[i].idSquad%>' data-reussitequete='<%=data[i].reussiteQuete%>' data-reward='<%=data[i].reward%>' data-gold='<%=data[i].gold%>' data-exp='<%=data[i].experience%>' data-idquest='<%=data[i].idQuest%>' data-questname='<%=data[i].questName%>' data-squadname='<%=data[i].squadName%>' data-countdown="<%= dateFin[i] %>"></td>
+					      </tr>
 					<% } %>
 				    </tr>    
                                     </table>
@@ -37,13 +37,17 @@
     </body>
 	<script type="text/javascript">
 	    $('[data-countdown]').each(function() {
-	       var $this = $(this), finalDate = $this.data('countdown'), idQuest = $this.data('idquest'), idSquad = $this.data('idsquad'), nameSquad = $this.data('squadname'), nameQuest = $this.data('questname'), reussiteQuete = $this.data('reussitequete');
-	       var fin = "<a href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad;
+	       var $this = $(this), finalDate = $this.data('countdown'), idQuest = $this.data('idquest'), exp = $this.data('exp'), gold = $this.data('gold'), reward = $this.data('reward'), idSquad = $this.data('idsquad'), nameSquad = $this.data('squadname'), nameQuest = $this.data('questname'), reussiteQuete = $this.data('reussitequete');
+	       var fin = "";
+	       var recompense = "gain exp: "+exp+", gain or: "+gold;
+	       if (reward) {
+		recompense = recompense+", bonus: "+reward;
+	       }
 	       if (reussiteQuete!=1) {
-		fin = fin +  "'> Echec de la mission</a>";
+		fin = "<a href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad+"'> Echec de la mission</a>";
 	       }
 	       else{
-		fin = fin +  "'> Réussite de la mission</a>";
+		fin = "<a onclick=\"alert('"+recompense+"')\" href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad+"'>Reussite de la mission</a>";
 	       }
 	       $this.countdown(finalDate, {elapse: true}).on('update.countdown', function(event) {
 		if (event.elapsed) {
@@ -53,5 +57,6 @@
 		}
 	       })
 	    });
+
        </script>
 </html>

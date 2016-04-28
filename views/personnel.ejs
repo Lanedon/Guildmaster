@@ -20,7 +20,8 @@
 				    <th>niveau</th>
 				    <th>talent</th>
 				    <th>job</th>
-				    <th>detail</th>  
+				    <th>detail</th>
+				    <th>supprimer</th>  
 				  </tr>
 				  <% if(data.length){ 
 				  for(var i = 0;i < data.length;i++) { %>
@@ -35,7 +36,10 @@
 				   <td><%=data[i].job%></td>
 				   <% if(data[i].hero == 1){ %>
 				   <td><a href="/guildmaster/personnel/detail/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">detail</a></td>
+				   <% } else{ %>
+				   <td></td>
 				   <% } %>
+				   <td><a onclick="verifAction()" href="/guildmaster/personnel/supprimer/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">supprimer</a></td>
 				  </tr>
 				  <% }
 				  } %>

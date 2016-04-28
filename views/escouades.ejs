@@ -23,7 +23,7 @@
                                     <tr class="tbody text-center">
                                      <td><%=data[i].name%></td>
                                      <td><a href="/guildmaster/escouades/detail/<%=data[i].idSquad%>/<%=data[i].name%>">detail</a></td>
-                                     <td><a href="/guildmaster/escouades/supprimer/<%=data[i].idSquad%>/<%=data[i].name%>">supprimer</a></td>
+                                     <td><a onclick="verifAction()" href="/guildmaster/escouades/supprimer/<%=data[i].idSquad%>/<%=data[i].name%>">supprimer</a></td>
                                      </tr>
                                     <% }
                                     } %>
