@@ -535,7 +535,7 @@ on en crée une vide sous forme d'array avant la suite */
      connection.query("SELECT idQuest, experience, gold, name, summary, duree, reward FROM quest where idQuest ="+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err, rows, fields){
 	if (!err){
 	   var quest = rows;
-	    connection.query("SELECT name, idSquad FROM squad where idQuest is null", function(err, rows, fields){
+	    connection.query("SELECT name, idSquad FROM squad where idQuest is null and idUser="+req.session.user['id'], function(err, rows, fields){
 		if (!err){
 		  var squad = rows;
 		  res.render('queteCommencer.ejs', {quest:quest, squad:squad, user:req.session.user});
@@ -556,13 +556,14 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* commencer quete validation*/
 .get('/guildmaster/quete/commencer/validation/:idQuest/:nameQuest/:idSquad/:nameSquad', function(req, res) {
-     connection.query("SELECT duree, difficulty FROM quest where idQuest ="+ req.params['idQuest'] +" and name = '"+ req.params['nameQuest'] +"'", function(err, rows, fields){
+     connection.query("SELECT procEnd, procStr, procDex, procInt, procLuk, duree, difficulty FROM quest where idQuest ="+ req.params['idQuest'] +" and name = '"+ req.params['nameQuest'] +"'", function(err, rows, fields){
 	if (!err){
 	   var quest = rows[0]; 
 	    connection.query("select sum(coalesce(a.str + b.bonusStr, a.str)) as str, sum(coalesce(a.end + b.bonusEnd, a.end)) as end, sum(coalesce(a.intel + b.bonusInt, a.intel)) as intel, sum(coalesce(a.luk + b.bonusLuk, a.luk)) as luk, sum(coalesce(a.dex + b.bonusDex, a.dex)) as dex from (SELECT str, dex, luk, end, intel, idCrew FROM heroes where idSquad = "+ req.params['idSquad'] +") as a left join (select sum(bonusStr) as bonusStr, sum(bonusDex) as bonusDex, sum(bonusLuk) as bonusLuk, sum(bonusEnd) as bonusEnd, sum(bonusInt) as bonusInt, heroes.idCrew as idCrew from equipment,inventory,heroes where inventory.idCrew = heroes.idCrew and idSquad = "+ req.params['idSquad'] +" and equipment.idEquipment = inventory.idEquipment) as b on b.idCrew = a.idCrew", function(err, rows, fields){
 		if (!err){
 		  var squad = rows[0];
-		  var stats = squad['str'] + squad['end'] + squad['intel'] + squad['luk'] + squad['dex'];
+		  var stats = squad['str']*quest['procStr'] + squad['end']*quest['procEnd'] + squad['intel']*quest['procInt'] + squad['luk']*quest['procLuk'] + squad['dex']*quest['procDex'];
+		  console.log(stats);
 		  var reussiteChance = Math.floor((Math.random() * quest['difficulty']) + 1);
 		  var reussite = 0;
 		  if (stats >= reussiteChance){ reussite = 1 }
@@ -676,9 +677,6 @@ on en crée une vide sous forme d'array avant la suite */
 })
 
 
-
-
-
 /* deconnexion */
 .get('/guildmaster/deconnexion', function(req, res) {
     req.session = null;
@@ -747,7 +745,7 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* gestion quete */
 .get('/guildmaster/gestion/quete', function(req, res) { 
-     connection.query("SELECT idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
+     connection.query("SELECT procEnd, procStr, procInt, procLuk, procDex, idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
 	if (!err){
 	   //console.log(rows);
 	    res.render('gestionQuete.ejs', {data:rows, user:req.session.user});
@@ -763,7 +761,7 @@ on en crée une vide sous forme d'array avant la suite */
 /* modifier quete validation*/
 .post('/guildmaster/gestion/quete/modifier/validation', urlencodedParser, function(req, res) { 
         //console.log(req.body);
-        connection.query("UPDATE quest SET name = '"+ req.body['name'] +"',difficulty = "+ req.body['difficulty'] +",experience = "+ req.body['experience'] +",gold = "+ req.body['gold'] +",summary = '"+ req.body['summary'] +"',duree = "+ req.body['duree'] +" WHERE idQuest ="+ req.body['id'], function(err){
+        connection.query("UPDATE quest SET name = '"+ req.body['name'] +"',procLuk = "+req.body['procLuk'] +",procDex = "+req.body['procDex'] +",procInt = "+req.body['procInt'] +",procStr = "+req.body['procStr'] +",procEnd = "+req.body['procEnd'] +",difficulty = "+ req.body['difficulty'] +",experience = "+ req.body['experience'] +",gold = "+ req.body['gold'] +",summary = '"+ req.body['summary'] +"',duree = "+ req.body['duree'] +" WHERE idQuest ="+ req.body['id'], function(err){
                 if(err){
                  // console.log(err.message);
                 }else{
@@ -799,6 +797,11 @@ on en crée une vide sous forme d'array avant la suite */
 		  summary:req.body.summary,
                   experience:req.body.experience,
                   duree:req.body.duree,
+		  procLuk:req.body.procLuk,
+                  procDex:req.body.procDex,
+		  procStr:req.body.procStr,
+                  procEnd:req.body.procEnd,
+                  procInt:req.body.procInt,
                   gold:req.body.gold};
         connection.query("INSERT INTO quest set ?", post, function(err){
                 if(err){

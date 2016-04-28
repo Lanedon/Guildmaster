@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Jeu 21 Avril 2016 à 15:41
+-- Généré le: Jeu 28 Avril 2016 à 16:08
 -- Version du serveur: 5.5.47-0ubuntu0.14.04.1
 -- Version de PHP: 5.6.20-1+deb.sury.org~trusty+1
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `crew` (
   `talent` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idCrew`),
   KEY `fk_crew_user1_idx` (`idUser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
 
 --
 -- Contenu de la table `crew`
@@ -67,7 +67,8 @@ INSERT INTO `crew` (`idCrew`, `name`, `surname`, `fee`, `idUser`, `talent`) VALU
 (2, 'paul', 'jacques', 100, NULL, 'none'),
 (27, 'paul', 'jacques', 100, 6, 'none'),
 (28, 'jean', 'eugene', 100, 6, 'none'),
-(29, 'jean', 'eugene', 100, 6, 'none');
+(29, 'jean', 'eugene', 100, 6, 'none'),
+(64, 'jean', 'eugene', 100, 6, 'none');
 
 -- --------------------------------------------------------
 
@@ -123,7 +124,8 @@ CREATE TABLE IF NOT EXISTS `guild` (
 
 INSERT INTO `guild` (`name`, `rank`, `prestige`, `gold`, `idUser`) VALUES
 ('rootGuild', 1, 1, 100, 1),
-('test', 6, 0, 810, 6);
+('test', 6, 0, 18170, 6),
+('azeaze', 7, 0, 1000, 7);
 
 -- --------------------------------------------------------
 
@@ -154,8 +156,9 @@ CREATE TABLE IF NOT EXISTS `heroes` (
 
 INSERT INTO `heroes` (`classe`, `experience`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `niveau`, `attrPoints`) VALUES
 ('aventurier', 0, 1, 5, 5, 5, 5, 5, 1, NULL, 1, 0),
-('aventurier', 250, 1, 5, 5, 5, 5, 5, 28, 7, 5, 0),
-('aventurier', 250, 1, 5, 5, 5, 5, 5, 29, 7, 5, 0);
+('aventurier', 915, 1, 5, 5, 5, 5, 5, 28, 7, 10, 0),
+('aventurier', 915, 1, 5, 5, 5, 5, 5, 29, 7, 10, 0),
+('aventurier', 0, 1, 5, 5, 5, 5, 5, 64, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -193,23 +196,28 @@ INSERT INTO `inventory` (`idInventory`, `idEquipment`, `idUser`, `idCrew`, `slot
 CREATE TABLE IF NOT EXISTS `quest` (
   `idQuest` int(11) NOT NULL AUTO_INCREMENT,
   `summary` text,
-  `difficulty` int(11) NOT NULL,
+  `difficulty` int(11) DEFAULT NULL,
   `reward` int(11) DEFAULT NULL,
   `duree` int(11) DEFAULT NULL,
-  `name` varchar(45) NOT NULL,
-  `experience` int(11) NOT NULL,
-  `gold` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `experience` int(11) DEFAULT NULL,
+  `gold` int(11) DEFAULT NULL,
+  `procStr` float NOT NULL DEFAULT '1',
+  `procInt` float NOT NULL DEFAULT '1',
+  `procDex` float NOT NULL DEFAULT '1',
+  `procLuk` float NOT NULL DEFAULT '1',
+  `procEnd` float NOT NULL DEFAULT '1',
   PRIMARY KEY (`idQuest`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `quest`
 --
 
-INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`, `gold`) VALUES
-(2, 'blablabla', 50, NULL, 1, 'wololo', 1000, 10),
-(3, 'blabla', 1500, NULL, 20, 'plop', 200, 100),
-(5, 'test1', 500, NULL, 200, 'test1', 500, 500);
+INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`, `gold`, `procStr`, `procInt`, `procDex`, `procLuk`, `procEnd`) VALUES
+(1, 'azee', 1, NULL, 1, 'test facile', 100, 100, 1, 1, 1, 1, 1),
+(2, 'test', 150000, NULL, 10, 'test impossible', 1000, 10000, 1, 1, 1, 1, 1),
+(3, 'erere', 75, NULL, 5, 'test proc', 10, 10, 2, 1.5, 1.5, 1.5, 2);
 
 -- --------------------------------------------------------
 
@@ -227,14 +235,14 @@ CREATE TABLE IF NOT EXISTS `squad` (
   PRIMARY KEY (`idSquad`),
   KEY `fk_squad_user1_idx` (`idUser`),
   KEY `fk_squad_quest1_idx` (`idQuest`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Contenu de la table `squad`
 --
 
 INSERT INTO `squad` (`idSquad`, `name`, `reussiteQuete`, `idUser`, `idQuest`, `dateFinQuete`) VALUES
-(7, 'squad 1', NULL, 6, NULL, NULL);
+(7, 'squad 1', 1, 6, 3, '2016-04-28 16:08:03');
 
 -- --------------------------------------------------------
 
@@ -249,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `pass` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idUser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Contenu de la table `user`
@@ -257,7 +265,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`idUser`, `role`, `login`, `pass`, `email`) VALUES
 (1, 'admin', 'root', 'root', 'root@root.root'),
-(6, 'user', 'test', 'test', 'test@test.cpù');
+(6, 'user', 'test', 'test', 'test@test.cpù'),
+(7, 'user', 'azeaze', 'azeaze', 'azezaeaez@æzee.err');
 
 -- --------------------------------------------------------
 

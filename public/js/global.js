@@ -45,6 +45,11 @@ $(".buttonModifQuete").on('click', function() {
 	$("#idModifQuete").val($(".idQuest[data-id="+id+"]").html());
 	$("#nameModif").val($(".name[data-id="+id+"]").html());
 	$("#summaryModif").val($(".summary[data-id="+id+"]").html());
+	$("#procDexModif").val($(".procDex[data-id="+id+"]").html());
+	$("#procStrModif").val($(".procStr[data-id="+id+"]").html());
+	$("#procEndModif").val($(".procEnd[data-id="+id+"]").html());
+	$("#procLukModif").val($(".procLuk[data-id="+id+"]").html());
+	$("#procIntModif").val($(".procInt[data-id="+id+"]").html());
 	$("#experienceModif").val($(".experience[data-id="+id+"]").html());
 	$("#dureeModif").val($(".duree[data-id="+id+"]").html());
 	$("#difficultyModif").val($(".difficulty[data-id="+id+"]").html());

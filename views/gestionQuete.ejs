@@ -23,6 +23,11 @@
                                       <th>nom</th>
                                       <th>résumé</th>
                                       <th>dur&eacutee</th>
+				      <th>proc Force</th>
+				      <th>proc Endurance</th>
+				      <th>proc Intelligence</th>
+				      <th>proc Chance</th>
+				      <th>proc Dexterite</th>
 				      <th>difficulte</th>
                                       <th>récompence</th>
 	                              <th>experience</th>
@@ -39,6 +44,11 @@
 					 <td class="name"       data-id="<%=i%>"><%= data[i].name%></td>
 					 <td class="summary"    data-id="<%=i%>"><%= data[i].summary%></td>
 					 <td><%= duree.getHours()-1 +" H "+ duree.getMinutes() +" min "+ duree.getSeconds() + "sec"%></td>
+					 <td class="procStr" data-id="<%=i%>"><%= data[i].procStr%></td>
+					 <td class="procEnd" data-id="<%=i%>"><%= data[i].procEnd%></td>
+					 <td class="procInt" data-id="<%=i%>"><%= data[i].procInt%></td>
+					 <td class="procLuk" data-id="<%=i%>"><%= data[i].procLuk%></td>
+					 <td class="procDex" data-id="<%=i%>"><%= data[i].procDex%></td>
 					 <td class="difficulty" data-id="<%=i%>"><%= data[i].difficulty%></td>
 					 <td class="reward"     data-id="<%=i%>"><%= data[i].reward%></td>
 					 <td class="experience" data-id="<%=i%>"><%= data[i].experience%></td>
