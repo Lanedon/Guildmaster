@@ -247,11 +247,11 @@ $('.fleche-equip').on('click', function() {
             } else if (data == "OK") {
             	alert('Changements enregistrés !');
             }
-            //location.reload();
+            location.reload();
         },
         error: function (xhr, status, error) {
-            //alert('Erreur !');
-            // location.reload();
+            alert('Erreur !');
+            location.reload();
         },
     });
 });

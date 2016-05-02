@@ -1159,17 +1159,17 @@ on en crée une vide sous forme d'array avant la suite */
           if (rows[0]['slot'] == 'hands') { //C'est une arme à deux mains
             connection.query(quer1);
             connection.query(quer2);
-            console.log('Cas 1');
+            //console.log('Cas 1');
             res.send('OK');
           } else { //Sinon on regarde il est sur quelle main
             if (rows[0]['handSpecial'] != req.body.slot) {
               connection.query(quer2);
-              console.log('Cas 2');
+              //console.log('Cas 2');
               res.send('OK');
             } else {
               connection.query(quer1);
               connection.query(quer2);
-              console.log('Cas 3');
+              //console.log('Cas 3');
               res.send('OK');
             }
           }
@@ -1177,7 +1177,7 @@ on en crée une vide sous forme d'array avant la suite */
           connection.query(quer1, function(err){});
           connection.query("UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = NULL WHERE idEquipment = " + req.body.idEquip + 
             " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1", function(err){});
-          console.log('Cas 4');
+          //console.log('Cas 4');
           res.send('OK');
         }
       } else {
@@ -1188,14 +1188,14 @@ on en crée une vide sous forme d'array avant la suite */
         } else {
           connection.query("UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = NULL WHERE idEquipment = " + req.body.idEquip + 
           " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1", function(err){});
-          console.log('Cas 6');
+          //console.log('Cas 6');
           res.send('OK');
         }
         
       }
     }
     else {
-      console.log(err);
+      //console.log(err);
       res.send('Fail');
     }
   })
