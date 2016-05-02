@@ -7,7 +7,7 @@ var util = require('util');
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
-  password : "sio",
+  password : "",
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -178,7 +178,11 @@ on en crée une vide sous forme d'array avant la suite */
 			  }
 			  if (equipWeapon) {
 			    for (var i = 0;i<equipWeapon.length;i++) {
-			      rows[0][equipWeapon[i]['slot']] = equipWeapon[i];
+            if (equipWeapon[i]['slot'] == 'hand' && (equipWeapon[i]['handSpecial'] == 'handLeft' || (equipWeapon[i]['handSpecial'] == 'handRight'))) {
+              rows[0][equipWeapon[i]['handSpecial']] = equipWeapon[i];
+            } else {
+              rows[0][equipWeapon[i]['handRight']] = equipWeapon[i];
+            }
 			    }
 			  }
 			  //console.log(inventoryArmor);
@@ -828,7 +832,6 @@ on en crée une vide sous forme d'array avant la suite */
       } else {
         var total = parseInt(req.body.nbFor - forMin) + parseInt(req.body.nbDex - dexMin) + parseInt(req.body.nbEnd - endMin) + 
         parseInt(req.body.nbInt - intMin) + parseInt(req.body.nbLuk - lukMin);
-        console.log('Total : ' + total);
         if (total == 0) {
           res.send('Same');
         } else if (total < 0) {
@@ -844,8 +847,7 @@ on en crée une vide sous forme d'array avant la suite */
                   res.send('OK');
                 else
                   res.send('Fail');
-                console.log(err);
-              })
+            })
           } else {
             res.send('Erreur');
           }
@@ -853,6 +855,73 @@ on en crée une vide sous forme d'array avant la suite */
       }
     }
     else {
+      res.send('Fail');
+    }
+  })
+})
+
+.post('/guildmaster/equipItem',urlencodedParser, function(req, res) {
+  var finalSlot = "";
+  if (req.body.slot == "handLeft" || req.body.slot == "handRight")
+    finalSlot = "hand' OR slot = 'hands";
+  else
+    finalSlot = req.body.slot;
+  var query = "select * from inventory INNER JOIN equipment ON inventory.idEquipment = equipment.idEquipment WHERE idUser = " + 
+    req.session.user['id'] + " AND idCrew = " + req.body.idCrew +" AND slot = '" + finalSlot + "'";
+
+
+  //Check si il y a un item equipe au slot
+  connection.query(query, function(err, rows, fields){
+    
+    if (!err){
+      
+      if (rows.length > 0) { //Swap les items
+
+        var quer1 = "UPDATE inventory SET idCrew = NULL, handSpecial = NULL WHERE idInventory = " + rows[0]['idInventory'];
+        var quer2 = "UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = '" + req.body.slot + "' WHERE idEquipment = " 
+        + req.body.idEquip + " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1";
+
+        if (finalSlot == "hand' OR slot = 'hands") { //Si c'est une arme
+          if (rows[0]['slot'] == 'hands') { //C'est une arme à deux mains
+            connection.query(quer1);
+            connection.query(quer2);
+            console.log('Cas 1');
+            res.send('OK');
+          } else { //Sinon on regarde il est sur quelle main
+            if (rows[0]['handSpecial'] != req.body.slot) {
+              connection.query(quer2);
+              console.log('Cas 2');
+              res.send('OK');
+            } else {
+              connection.query(quer1);
+              connection.query(quer2);
+              console.log('Cas 3');
+              res.send('OK');
+            }
+          }
+        } else { //Sinon on UPDATE juste
+          connection.query(quer1, function(err){});
+          connection.query("UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = NULL WHERE idEquipment = " + req.body.idEquip + 
+            " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1", function(err){});
+          console.log('Cas 4');
+          res.send('OK');
+        }
+      } else {
+        if (finalSlot == "hand' OR slot = 'hands") {
+          connection.query("UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = '" + req.body.slot + "' WHERE idEquipment = " 
+          + req.body.idEquip + " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1", function(err){});
+          res.send('OK');
+        } else {
+          connection.query("UPDATE inventory SET idCrew = " + req.body.idCrew + ", handSpecial = NULL WHERE idEquipment = " + req.body.idEquip + 
+          " AND idUser = " + req.session.user['id'] + " AND idCrew IS NULL LIMIT 1", function(err){});
+          console.log('Cas 6');
+          res.send('OK');
+        }
+        
+      }
+    }
+    else {
+      console.log(err);
       res.send('Fail');
     }
   })

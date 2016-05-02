@@ -5,9 +5,6 @@
         <% include ./styles.ejs %>
       	<% include ./scripts.ejs %>
         <title>Détail</title>
-
-      <% include ./styles.ejs %>
-      <% include ./scripts.ejs %>
   </head>
   <body>
      <% include ./header.ejs %>
@@ -31,13 +28,13 @@
                           <div class="row">
                             <div class="col-sm-10 col-sm-offset-1">
                               <div class="progress">
-                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <%=Math.round((crew.xp/(data.niveau*data.niveau/0.04))*100)%>%; min-width: 10em;">
+                                <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: <%=Math.round((data.experience/(data.niveau*data.niveau/0.04))*100)%>%; min-width: 10em;">
                                   <%=data.experience %> / <%=(data.niveau*data.niveau/0.04) %>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div class="row">
+                          <div class="row hidden">
                             <div class="col-sm-4 text-center">
                               <button class="btn btn-primary btn-lg btn-icone">&#xf132</button>
                             </div>
@@ -155,6 +152,8 @@
                                     <div class="col-sm-offset-1 col-sm-10">
                                       <div class="description-item">
                                         Protection : <%=inventoryArmor[i].protection%>
+                                        <span class="slot hidden"><%=inventoryArmor[i].slot%></span>
+                                        <span class="idEquipement hidden"><%=inventoryArmor[i].idEquipment%></span>
                                         <span style="float: right;">
                                             <button class="btn btn-success btn-icone placer-item" style="padding: 1px 4px;">&#xf061</button>
                                         </span>
@@ -184,7 +183,8 @@
                                           <%="Mêlée"%>
                                         <% } else { %>
                                           <%="À distance" %>
-                                        <% } %>
+                                        <% } %> <span class="slot hidden"><%=inventoryWeapon[i].slot%></span>
+                                        <span class="idEquipement hidden"><%=inventoryWeapon[i].idEquipment%></span>
                                         <span style="float: right;">
                                             <button class="btn btn-success btn-icone placer-item" style="padding: 1px 4px;">&#xf061</button>
                                         </span>
@@ -208,9 +208,10 @@
                         </div>
                         <div class="panel-body" style="font-size: 1.2em">
                           
-                          <div id="mainDroite" class="color-row">
+                          <div id="handRight" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Main Droite :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.handRight == null || data.handRight == "") { %>
@@ -235,7 +236,7 @@
                                   <% }} %>
                                   <span style="float: right;">
                                     <% if (!(data.handRight == null || data.handRight == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>
@@ -243,9 +244,10 @@
                             </div>
                           </div>
 
-                          <div id="mainGauche" class="color-row">
+                          <div id="handLeft" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Main Gauche :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.handLeft == null || data.handLeft == "") { %>
@@ -270,7 +272,7 @@
                                   <% }} %>
                                   <span style="float: right;">
                                     <% if (!(data.handLeft == null || data.handLeft == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>
@@ -278,9 +280,10 @@
                             </div>
                           </div>
 
-                          <div id="tete" class="color-row">
+                          <div id="head" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Tete :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.head == null || data.head == "") { %>
@@ -300,7 +303,7 @@
                                   <% } %>
                                   <span style="float: right;">
                                     <% if (!(data.head == null || data.head == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>
@@ -308,9 +311,10 @@
                             </div>
                           </div>
                           
-                          <div id="torse" class="color-row">
+                          <div id="torso" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Torse :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.torso == null || data.torso == "") { %>
@@ -330,7 +334,7 @@
                                   <% } %>
                                   <span style="float: right;">
                                     <% if (!(data.torso == null || data.torso == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>
@@ -338,9 +342,10 @@
                             </div>
                           </div>
 
-                          <div id="jambes" class="color-row">
+                          <div id="legs" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Jambes :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.legs == null || data.legs == "") { %>
@@ -360,7 +365,7 @@
                                   <% } %>
                                   <span style="float: right;">
                                     <% if (!(data.legs == null || data.legs == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>
@@ -368,9 +373,10 @@
                             </div>
                           </div>
 
-                          <div id="pieds" class="color-row">
+                          <div id="feet" class="color-row-equipement">
                             <div class="row">
-                              <div class="col-sm-offset-1 col-sm-10">
+                              <div class="col-sm-1"><span class="icone fleche-equip" style="color: darkgreen">&#xf00c</span></div>
+                              <div class="col-sm-10">
                                 <span style="float: left;"><strong>Pieds :</strong></span>
                                 <span style="float: right;">
                                   <% if (data.feet == null || data.feet == "") { %>
@@ -390,7 +396,7 @@
                                   <% } %>
                                   <span style="float: right;">
                                     <% if (!(data.feet == null || data.feet == "")) { %>
-                                      <button class="btn btn-danger btn-icone-small details-item" style="padding: 1px 4px;">&#xf067</button>
+                                      <button class="btn btn-danger btn-icone-small details-item hidden" style="padding: 1px 4px;">&#xf067</button>
                                     <% } %>
                                   </span>
                                 </div>

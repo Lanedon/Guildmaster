@@ -146,4 +146,53 @@ $('.enregistrer-attributs').on('click', function () {
     });
 });
 
+$('.placer-item').on('click', function() {
+	$('.itemChoisi').removeClass('itemChoisi');
+	$('.color-row-equipement').removeClass('green-row');
+	$('.color-row-equipement').find('.fleche-equip').hide();
+	$(this).parent().parent().parent().parent().parent().addClass('itemChoisi');
+
+	var slot = $(this).parent().parent().find('.slot').text();
+	if (slot == 'hand' || slot == 'hands') {
+		$('#handLeft').addClass('green-row');
+		$('#handRight').addClass('green-row');
+	} else {
+		$('#' + slot).addClass('green-row');
+	}
+	
+	$('.green-row').find('.fleche-equip').show();
+
+});
+
+$('.fleche-equip').on('click', function() {
+	var idEquip = $('.itemChoisi').find('.idEquipement').text();
+	var slotItem = $('.itemChoisi').find('.slot').text();
+	var slot = $(this).parent().parent().parent().attr('id');
+	var data = {};
+	data.idCrew = $('#idCrew').val();
+	data.slot = slot;
+	data.slotItem = slotItem;
+	data.idEquip = idEquip;
+	console.log(data);
+	$.ajax({
+        url: '/guildmaster/equipItem',
+        type: 'POST',
+		data: data,
+        success: function (data) {
+            if (data == "Erreur") {
+            	alert('Vous avez commis une erreur, veuillez réessayer !');
+            } else if (data == "Fail") {
+            	alert('La connection à la base de données est impossible, veuillez réesayer plus tard !')
+            } else if (data == "OK") {
+            	alert('Changements enregistrés !');
+            }
+            //location.reload();
+        },
+        error: function (xhr, status, error) {
+            //alert('Erreur !');
+            // location.reload();
+        },
+    });
+});
+
 });
