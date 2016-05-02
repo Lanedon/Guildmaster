@@ -1,0 +1,88 @@
+<div id="popupModifArmure" class="popup-wrapper">
+    <div class="popup-absolute">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            modifier armure
+                            <div class="close-popup">&#xf00d</div>
+                        </div>
+                        <div class="panel-body">  
+                            <form action="/guildmaster/gestion/magasin/modifier/validation" method="post">
+                                <input type="number" name="id" id="idModifArmure" hidden>
+			        <div class="col-sm-12 input-popup">
+                                    <label for="name">Nom :</label>
+                                    <input type="text" name="name" id="nameModif" class="form-control" autofocus required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="slot">Emplacement :</label>
+                                    <input type="text" name="slot" id="slotModif" class="form-control" autofocus required>
+                                </div>
+				 <div class="col-sm-12 input-popup">
+                                    <label for="price">Prix :</label>
+                                    <input type="number" name="price" id="priceModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="rarity">Rarete:</label>
+                                    <input type="number" name="rarity" id="rarityModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="minStr">Force requise:</label>
+                                    <input type="number" name="minStr" id="minStrModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="minInt">Intelligence requise:</label>
+                                    <input type="number" name="minInt" id="minIntModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="minEnd">Endurance requise:</label>
+                                    <input type="number" name="minEnd" id="minEndModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="minLuk">Chance requise:</label>
+                                    <input type="number" name="minLuk" id="minLukModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="minDex">Dexterite requise:</label>
+                                    <input type="number" name="minDex" id="minDexModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="bonusStr">Force bonus:</label>
+                                    <input type="number" name="bonusStr" id="bonusStrModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="bonusInt">Intelligence bonus:</label>
+                                    <input type="number" name="bonusInt" id="bonusIntModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="bonusEnd">Endurance bonus:</label>
+                                    <input type="number" name="bonusEnd" id="bonusEndModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="bonusLuk">Chance bonus:</label>
+                                    <input type="number" name="bonusLuk" id="bonusLukModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="bonusDex">Dexterite bonus:</label>
+                                    <input type="number" name="bonusDex" id="bonusDexModif" class="form-control" required>
+                                </div>
+				<div class="col-sm-12 input-popup">
+                                    <label for="protection">protection:</label>
+                                    <input type="number" name="protection" id="protectionModif" class="form-control" required>
+                                </div>  
+				<div class="col-sm-12 input-popup">
+                                    <label for="buyable">buyable:</label>
+                                    <input type="number" name="buyable" id="buyableModif" class="form-control" required>
+                                </div>  
+                                <div class="col-sm-12 text-center btn-popup">
+                                    <button class="btn btn-lg btn-default" type="submit">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

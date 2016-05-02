@@ -226,6 +226,54 @@ on en crée une vide sous forme d'array avant la suite */
 	res.redirect('/guildmaster/personnel');
 })
 
+
+/* magasin d'armures*/
+.get('/guildmaster/magasin', function(req, res) { 
+    connection.query("select * from equipment NATURAL JOIN armor where buyable = 1", function(err, Armor, fields){
+	res.render('magasin.ejs', {data: Armor, user:req.session.user});
+    });
+})
+
+
+/* magasin d'armes*/
+.get('/guildmaster/magasin/armes', function(req, res) { 
+      connection.query("select * from equipment NATURAL JOIN weapon where buyable =1", function(err, Weapon, fields){
+	res.render('magasinArme.ejs', {data: Weapon, user:req.session.user});
+      });
+})
+
+
+/* achat armes/armures */
+.get('/guildmaster/magasin/achat/:id/:name', function(req, res) { 
+      connection.query("select gold, equipment.name, equipment.idEquipment, slot, price from equipment, armor,guild where equipment.idEquipment= "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = armor.idEquipment group by equipment.idEquipment UNION select gold, equipment.name, equipment.idEquipment,null as slot, price from equipment, weapon,guild where equipment.idEquipment = "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = weapon.idEquipment group by equipment.idEquipment", function(err, rows, fields){
+	var gold = rows['0']['gold'];
+	var inventory={idEquipment:rows[0]['idEquipment'],
+		      idUser:req.session.user['id'],
+		      slot:rows[0]['slot']};
+	  if (gold-rows['0']['price']>=0) {
+	    gold = gold - rows['0']['price'];
+	    connection.query("UPDATE guild SET gold = "+gold+" WHERE idUser ="+req.session.user['id'], function(err, rows, fields){
+            if (!err){
+	      req.session.user['gold'] = gold;
+	      // console.log(req.session.user);
+	      connection.query("INSERT INTO inventory set ?", inventory, function(err){ 
+		if(err){
+		  // console.log(err.message);
+		  res.redirect('/guildmaster/magasin');	
+	        }
+		else{
+		   res.redirect('/guildmaster/inventaire');	
+		}
+	      });
+	    }
+	    });
+          }
+	  else {
+	    res.redirect('/guildmaster/magasin');	
+	  }
+      });
+})
+
 /* recruter personnel */
 .get('/guildmaster/recruter', function(req, res) { 
      connection.query("SELECT crew.idCrew, name, surname,null as niveau, talent, fee, job, 0 as hero FROM worker, crew WHERE idUser is null and worker.idCrew = crew.idCrew UNION SELECT crew.idCrew, name, surname,niveau, talent, fee, classe, 1 as hero FROM heroes, crew WHERE idUser is null and heroes.idCrew = crew.idCrew" , function(err, rows, fields){
@@ -706,6 +754,7 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
+
 /* modifier utilisateur validation*/
 .post('/guildmaster/gestion/modifier/utilisateur/validation', urlencodedParser, function(req, res) { 
        // console.log(req.body);
@@ -744,16 +793,241 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
-/* gestion quete */
-.get('/guildmaster/gestion/quete', function(req, res) { 
-     connection.query("SELECT procEnd, procStr, procInt, procLuk, procDex, idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
+
+/* gestion magasin arme */
+.get('/guildmaster/gestion/magasin/arme', function(req, res) { 
+      connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser", function(err, rows, fields){
 	if (!err){
-	   //console.log(rows);
-	    res.render('gestionQuete.ejs', {data:rows, user:req.session.user});
-	   //console.log(data);
-      }
+	  var admin = 0;
+	  for (var i = 0;i<rows.length;i++) {
+	    if (rows[i]['role']== "admin") {
+	      // console.log(rows[i]);
+	      // console.log(req.session.user);
+	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
+	              connection.query("select * from equipment NATURAL JOIN weapon", function(err, Armor, fields){
+			  res.render('gestionArme.ejs', {data: Armor, user:req.session.user});
+		      });
+	       }
+	    }
+	  }
+	}
 	else{
-         res.render('gestionQuete.ejs', {user:req.session.user});
+         res.render('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+/* ajout d'une arme*/
+.post('/guildmaster/gestion/magasin/arme/ajout/validation', urlencodedParser, function(req, res) { 
+	//console.log(req.body);
+        var equipment={name:req.body.name,
+		      price:req.body.price,
+		      rarity:req.body.rarity,
+		      minStr:req.body.minStr,
+		      minEnd:req.body.minEnd,
+		      minInt:req.body.minInt,
+		      minLuk:req.body.minLuk,
+		      minDex:req.body.minDex,
+		      bonusStr:req.body.bonusStr,
+		      bonusEnd:req.body.bonusEnd,
+		      bonusInt:req.body.bonusInt,
+		      bonusLuk:req.body.bonusLuk,
+		      bonusDex:req.body.bonusDex,
+		      buyable:req.body.buyable};
+	//console.log(equipment);
+        connection.query("INSERT INTO equipment set ?", equipment, function(err){
+	  if(err){
+	   // console.log(err.message);
+	  }else{
+	   // console.log('success');
+	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment" , function(err, rows, fields){
+	    if(err){
+	      // console.log(err.message);
+	     }else{
+	      // console.log('success');
+	       var weapon = {distance:req.body.distance,
+			    idEquipment:rows[0]['idEquipment'],
+			    minDamage:req.body.minDamage,
+			    maxDamage:req.body.maxDamage};
+	       //console.log(weapon);
+	       connection.query("INSERT INTO weapon set ?", weapon, function(err){
+		if(err){
+		 // console.log(err.message);
+		}else{
+		 // console.log('success');
+		  res.redirect('/guildmaster/gestion/magasin/arme');
+		}
+	       })
+	     }
+	   })
+	  }
+        })
+})
+
+
+
+/* modification d'une arme*/
+.post('/guildmaster/gestion/magasin/arme/modifier/validation', urlencodedParser, function(req, res) { 
+	//console.log(req.body);
+	//console.log(req.body);
+        connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+",rarity = "+req.body.rarity+",minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
+	  if(err){
+	  //  console.log(err.message);
+	  }else{
+	   // console.log('success');
+	    connection.query("UPDATE weapon SET distance = "+req.body.distance+", minDamage= "+req.body.minDamage+",  maxDamage= "+req.body.maxDamage+"   WHERE idEquipment = "+req.body.id, function(err){
+	     if(err){
+	      // console.log(err.message);
+	     }else{
+	      // console.log('success');
+	       res.redirect('/guildmaster/gestion/magasin/arme');
+	     }
+	    })
+	  }
+        })
+})
+
+
+/* gestion magasin armure */
+.get('/guildmaster/gestion/magasin', function(req, res) { 
+      connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser", function(err, rows, fields){
+	if (!err){
+	  var admin = 0;
+	  for (var i = 0;i<rows.length;i++) {
+	    if (rows[i]['role']== "admin") {
+	      // console.log(rows[i]);
+	      // console.log(req.session.user);
+	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
+	              connection.query("select * from equipment NATURAL JOIN armor", function(err, Armor, fields){
+			  res.render('gestionArmure.ejs', {data: Armor, user:req.session.user});
+		      });
+	       }
+	    }
+	  }
+	}
+	else{
+         res.render('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+
+/*supprimer armure/arme */
+.get('/guildmaster/gestion/magasin/supprimer/:id/:name', urlencodedParser, function(req, res) {
+  connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
+	if (!err){
+	 //console.log(req.params);
+	  if (req.session.user['id']==rows[0]['idUser'] && req.session.user['name']==rows[0]['login'] && req.session.user['role']==rows[0]['role']) {
+	       connection.query("DELETE FROM equipment WHERE idEquipment = "+ req.params['id'] +" and name = '"+ req.params['name'] +"'", function(err){})
+	       res.redirect('/guildmaster/gestion/magasin');
+	  }
+	}
+	else{
+         res.render('accueil.ejs', {user:req.session.user});
+	 // console.log(err.message);
+        }
+    })
+})
+
+
+
+
+/* ajout d'une armure*/
+.post('/guildmaster/gestion/magasin/ajout/validation', urlencodedParser, function(req, res) { 
+	//console.log(req.body);
+        var equipment={name:req.body.name,
+		      price:req.body.price,
+		      rarity:req.body.rarity,
+		      minStr:req.body.minStr,
+		      minEnd:req.body.minEnd,
+		      minInt:req.body.minInt,
+		      minLuk:req.body.minLuk,
+		      minDex:req.body.minDex,
+		      bonusStr:req.body.bonusStr,
+		      bonusEnd:req.body.bonusEnd,
+		      bonusInt:req.body.bonusInt,
+		      bonusLuk:req.body.bonusLuk,
+		      bonusDex:req.body.bonusDex,
+		      buyable:req.body.buyable};
+	//console.log(equipment);
+        connection.query("INSERT INTO equipment set ?", equipment, function(err){
+	  if(err){
+	   // console.log(err.message);
+	  }else{
+	   // console.log('success');
+	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment" , function(err, rows, fields){
+	    if(err){
+	      // console.log(err.message);
+	     }else{
+	      // console.log('success');
+	       var armor = {slot:req.body.slot,
+			    idEquipment:rows[0]['idEquipment'],
+			    protection:req.body.protection};
+	      // console.log(armor);
+	       connection.query("INSERT INTO armor set ?", armor, function(err){
+		if(err){
+		 // console.log(err.message);
+		}else{
+		 // console.log('success');
+		  res.redirect('/guildmaster/gestion/magasin');
+		}
+	       })
+	     }
+	   })
+	  }
+        })
+})
+
+
+
+/* modification d'une armure*/
+.post('/guildmaster/gestion/magasin/modifier/validation', urlencodedParser, function(req, res) { 
+	//console.log(req.body);
+	//console.log(req.body);
+        connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+",rarity = "+req.body.rarity+",minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
+	  if(err){
+	  //  console.log(err.message);
+	  }else{
+	   // console.log('success');
+	    connection.query("UPDATE armor SET protection = "+req.body.protection+", slot= '"+req.body.slot+"'  WHERE idEquipment = "+req.body.id, function(err){
+	     if(err){
+	      // console.log(err.message);
+	     }else{
+	      // console.log('success');
+	       res.redirect('/guildmaster/gestion/magasin');
+	     }
+	    })
+	  }
+        })
+})
+
+
+/* gestion quete */
+.get('/guildmaster/gestion/quete', function(req, res) {
+  connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser", function(err, rows, fields){
+	if (!err){
+	  var admin = 0;
+	  for (var i = 0;i<rows.length;i++) {
+	    if (rows[i]['role']== "admin") {
+	      // console.log(rows[i]);
+	      // console.log(req.session.user);
+	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
+		connection.query("SELECT procEnd, procStr, procInt, procLuk, procDex, idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
+		   if (!err){
+		      //console.log(rows);
+		       res.render('gestionQuete.ejs', {data:rows, user:req.session.user});
+		      //console.log(data);
+		 }
+
+	       })
+	      }
+	    }
+	  }
+	}
+	else{
+         res.render('accueil.ejs', {user:req.session.user});
 	 // console.log(err.message);
         }
     })

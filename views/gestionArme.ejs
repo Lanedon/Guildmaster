@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+<% if(user['role']=='admin'){ %>
+    <head>
+	<% include ./styles.ejs %>
+      	<% include ./scripts.ejs %>
+        <title>Recrutement</title>
+     <% include ./header.ejs %>
+    <% include ./modifierArme.ejs %>
+    <% include ./ajouterArme.ejs %>
+	<div class="container-fluid">
+	    <a href="/guildmaster/gestion/quete">Quêtes</a>
+	    <a href="/guildmaster/gestion/">Utilisateurs</a>
+	    <a href="/guildmaster/gestion/magasin/arme">Armes</a><br>
+	    <a class="buttonAjoutArme" class="texte-header">ajout d'une arme</a>
+	    <div class="row">
+		    <div class="col-sm-10 col-sm-offset-1">
+			    <div class="table-responsive">
+				<table class="table table-condensed table-stripped table-hover">
+				  <tr class="thead">
+				    <th>id</th>
+				    <th>nom</th>
+				    <th>prix</th>
+				    <th>rarete</th>
+				    <th>force requise</th>
+				    <th>endurance requise</th>
+				    <th>intelligence requise</th>
+				    <th>chance requise</th>
+				    <th>dexterite requise</th>
+				    <th>force bonus</th>
+				    <th>endurance bonus</th>
+				    <th>intelligence bonus</th>
+				    <th>chance bonus</th>
+				    <th>dexterite bonus</th>
+				    <th>portee</th>
+				    <th>degats</th>
+				    <th>vendable</th>
+				    <th>modifier</th>
+				    <th>supprimer</th>
+				  </tr>
+				  <% if(data.length){ 
+				  for(var i = 0;i < data.length;i++) { %>
+				  <tr class="tbody text-center">
+				   <td  class="idEquipment"    data-id="<%=i%>"><%= data[i].idEquipment%></td>
+				   <td  class="name"           data-id="<%=i%>"><%=data[i].name%></td>
+				   <td  class="price"          data-id="<%=i%>"><%=data[i].price%></td>
+				   <td  class="rarity"         data-id="<%=i%>"><%=data[i].rarity%></td>
+				   <td  class="minStr"         data-id="<%=i%>"><%=data[i].minStr%></td>
+				   <td  class="minEnd"         data-id="<%=i%>"><%=data[i].minEnd%></td>
+				   <td  class="minInt"         data-id="<%=i%>"><%=data[i].minInt%></td>
+				   <td  class="minLuk"         data-id="<%=i%>"><%=data[i].minLuk%></td>
+				   <td  class="minDex"         data-id="<%=i%>"><%=data[i].minDex%></td>
+				   <td  class="bonusStr"       data-id="<%=i%>"><%=data[i].bonusStr%></td>
+				   <td  class="bonusEnd"       data-id="<%=i%>"><%=data[i].bonusEnd%></td>
+				   <td  class="bonusInt"       data-id="<%=i%>"><%=data[i].bonusInt%></td>
+				   <td  class="bonusLuk"       data-id="<%=i%>"><%=data[i].bonusLuk%></td>
+				   <td  class="bonusDex"       data-id="<%=i%>"><%=data[i].bonusDex%></td>
+				   <td  class="distance"       data-id="<%=i%>"><%=data[i].distance%></td>
+				   <td  class="minDamage"  hidden     data-id="<%=i%>"><%=data[i].minDamage%></td>
+				   <td  class="maxDamage"  hidden     data-id="<%=i%>"><%=data[i].maxDamage%></td>
+				   <td  class="degats"         data-id="<%=i%>"><%=data[i].minDamage%> - <%=data[i].maxDamage%></td>
+				   <td  class="buyable"        data-id="<%=i%>"><%=data[i].buyable%></td>
+				   <td><a class="buttonModifArme" data-id="<%=i%>" class="texte-header">modifier</a></td>
+				   <td><a href="/guildmaster/gestion/magasin/supprimer/<%=data[i].idEquipment%>/<%=data[i].name%>">supprimer</a></td>
+				   </tr>
+				  <% }
+				  } %>
+				  </table>
+			   </div>
+		    </div>
+	    </div>
+	</div>
+    </body>
+<%  } else{ %>
+<meta http-equiv="refresh" content="0; url=/guildmaster" />
+<%  } %>
+</html>

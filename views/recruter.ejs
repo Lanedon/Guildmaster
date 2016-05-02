@@ -11,8 +11,7 @@
 		    <div class="col-sm-10 col-sm-offset-1">
 			    <div class="table-responsive">
 				<table class="table table-condensed table-stripped table-hover">
-					<tr class="thead">
-				    <th width="50px">id</th>
+				 <tr class="thead">
 				    <th>nom</th>
 				    <th>niveau</th>
 				    <th>talent</th>
@@ -24,7 +23,6 @@
 				  <% if(data.length){ 
 				  for(var i = 0;i < data.length;i++) { %>
 				  <tr class="tbody text-center">
-				   <td><%=(i+1)%></td>
 				   <td><%=data[i].name%> <%=data[i].surname%></td>
 				   <% if (data[i].niveau) { %>
 				     <td><%=data[i].niveau%></td>
@@ -34,9 +32,9 @@
 				   <td><%=data[i].talent%></td>
 				   <td><%=data[i].fee%></td>
 				   <td><%=data[i].job%></td>
-				   <td><a href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
+				   <td><a onclick="verifAction()" href="/guildmaster/recruter/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">recruter</a></td>
 				   <% if(data[i].hero == 1){ %>
-				   <td><a onclick="verifAction()" href="/guildmaster/recruter/detail/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">detail</a></td>
+				   <td><a href="/guildmaster/recruter/detail/<%=data[i].idCrew%>/<%=data[i].name%>/<%=data[i].surname%>">detail</a></td>
 				   <% } %>
 				   </tr>
 				  <% }
