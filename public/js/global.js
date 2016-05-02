@@ -58,8 +58,69 @@ $(".buttonModifQuete").on('click', function() {
 });
 
 
-$(".buttonAjoutQuete").on('click', function() {
+$(".buttonModifArmure").on('click', function() {
 	var id = $(this).data('id');
+	$("#popupModifArmure").show();
+	$("#popup-background").show();
+	$("#idModifArmure").val($(".idEquipment[data-id="+id+"]").html());
+	$("#nameModif").val($(".name[data-id="+id+"]").html());
+	$("#slotModif").val($(".slot[data-id="+id+"]").html());
+	$("#buyableModif").val($(".buyable[data-id="+id+"]").html());
+	$("#rarityModif").val($(".rarity[data-id="+id+"]").html());
+	$("#priceModif").val($(".price[data-id="+id+"]").html());
+	$("#minDexModif").val($(".minDex[data-id="+id+"]").html());
+	$("#minStrModif").val($(".minStr[data-id="+id+"]").html());
+	$("#minEndModif").val($(".minEnd[data-id="+id+"]").html());
+	$("#minLukModif").val($(".minLuk[data-id="+id+"]").html());
+	$("#minIntModif").val($(".minInt[data-id="+id+"]").html());
+	$("#bonusDexModif").val($(".bonusDex[data-id="+id+"]").html());
+	$("#bonusStrModif").val($(".bonusStr[data-id="+id+"]").html());
+	$("#bonusEndModif").val($(".bonusEnd[data-id="+id+"]").html());
+	$("#bonusLukModif").val($(".bonusLuk[data-id="+id+"]").html());
+	$("#bonusIntModif").val($(".bonusInt[data-id="+id+"]").html());
+	$("#protectionModif").val($(".protection[data-id="+id+"]").html());
+	$("input:first").focus();
+});
+
+$(".buttonAjoutArmure").on('click', function() {
+	$("#popupAjoutArmure").show();
+	$("#popup-background").show();
+	$("input:first").focus();
+});
+
+$(".buttonModifArme").on('click', function() {
+	var id = $(this).data('id');
+	$("#popupModifArme").show();
+	$("#popup-background").show();
+	$("#idModifArme").val($(".idEquipment[data-id="+id+"]").html());
+	$("#nameModif").val($(".name[data-id="+id+"]").html());
+	$("#distanceModif").val($(".distance[data-id="+id+"]").html());
+	$("#buyableModif").val($(".buyable[data-id="+id+"]").html());
+	$("#rarityModif").val($(".rarity[data-id="+id+"]").html());
+	$("#priceModif").val($(".price[data-id="+id+"]").html());
+	$("#minDexModif").val($(".minDex[data-id="+id+"]").html());
+	$("#minStrModif").val($(".minStr[data-id="+id+"]").html());
+	$("#minEndModif").val($(".minEnd[data-id="+id+"]").html());
+	$("#minLukModif").val($(".minLuk[data-id="+id+"]").html());
+	$("#minIntModif").val($(".minInt[data-id="+id+"]").html());
+	$("#bonusDexModif").val($(".bonusDex[data-id="+id+"]").html());
+	$("#bonusStrModif").val($(".bonusStr[data-id="+id+"]").html());
+	$("#bonusEndModif").val($(".bonusEnd[data-id="+id+"]").html());
+	$("#bonusLukModif").val($(".bonusLuk[data-id="+id+"]").html());
+	$("#bonusIntModif").val($(".bonusInt[data-id="+id+"]").html());
+	$("#minDamageModif").val($(".minDamage[data-id="+id+"]").html());
+	$("#maxDamageModif").val($(".maxDamage[data-id="+id+"]").html());
+	$("input:first").focus();
+});
+
+$(".buttonAjoutArme").on('click', function() {
+	$("#popupAjoutArmure").show();
+	$("#popup-background").show();
+	$("input:first").focus();
+});
+
+
+$(".buttonAjoutQuete").on('click', function() {
 	$("#popupAjoutQuete").show();
 	$("#popup-background").show();
 	$("input:first").focus();
