@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
--- Client :  127.0.0.1
--- Généré le :  Lun 02 Mai 2016 à 20:27
--- Version du serveur :  5.6.17
--- Version de PHP :  5.5.12
+-- Host: localhost
+-- Generation Time: May 03, 2016 at 05:13 PM
+-- Server version: 5.5.49-0ubuntu0.14.04.1
+-- PHP Version: 5.6.20-1+deb.sury.org~trusty+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,35 +17,35 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de données :  `guildmaster`
+-- Database: `guildmaster`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `armor`
+-- Table structure for table `armor`
 --
 
 CREATE TABLE IF NOT EXISTS `armor` (
   `protection` int(11) NOT NULL,
   `idEquipment` int(11) NOT NULL,
-  `slotArmor` varchar(45) NOT NULL,
   PRIMARY KEY (`idEquipment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `armor`
+-- Dumping data for table `armor`
 --
 
-INSERT INTO `armor` (`protection`, `idEquipment`, `slotArmor`) VALUES
-(5, 1, 'torso'),
-(2, 2, 'head'),
-(5, 5, 'head');
+INSERT INTO `armor` (`protection`, `idEquipment`) VALUES
+(5, 1),
+(2, 2),
+(5, 5),
+(5, 10);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `crew`
+-- Table structure for table `crew`
 --
 
 CREATE TABLE IF NOT EXISTS `crew` (
@@ -57,32 +57,26 @@ CREATE TABLE IF NOT EXISTS `crew` (
   `talent` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idCrew`),
   KEY `fk_crew_user1_idx` (`idUser`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
 --
--- Contenu de la table `crew`
+-- Dumping data for table `crew`
 --
 
 INSERT INTO `crew` (`idCrew`, `name`, `surname`, `fee`, `idUser`, `talent`) VALUES
 (1, 'jean', 'eugene', 100, NULL, 'none'),
 (2, 'paul', 'jacques', 100, NULL, 'none'),
 (3, 'paul', 'jacques', 100, 2, 'none'),
-(16, 'jean', 'eugene', 100, 2, 'none'),
-(17, 'jean', 'eugene', 100, 2, 'none'),
-(18, 'John', 'Louis', 100, 2, 'none'),
-(19, 'jean', 'eugene', 100, 2, 'none'),
-(20, 'jean', 'eugene', 100, 2, 'none'),
-(21, 'jean', 'eugene', 100, 2, 'none'),
-(22, 'jean', 'eugene', 100, 2, 'none'),
-(23, 'jean', 'eugene', 100, 2, 'none'),
-(24, 'jean', 'eugene', 100, 2, 'none'),
-(25, 'jean', 'eugene', 100, 2, 'none'),
-(26, 'paul', 'jacques', 100, 2, 'none');
+(26, 'paul', 'jacques', 100, 2, 'none'),
+(27, 'jean', 'eugene', 100, 2, 'none'),
+(28, 'jean', 'eugene', 100, 2, 'none'),
+(29, 'jean', 'eugene', 100, 2, 'none'),
+(30, 'jean', 'eugene', 100, 2, 'none');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `equipment`
+-- Table structure for table `equipment`
 --
 
 CREATE TABLE IF NOT EXISTS `equipment` (
@@ -104,22 +98,24 @@ CREATE TABLE IF NOT EXISTS `equipment` (
   `slot` varchar(255) NOT NULL,
   `buyable` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idEquipment`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
--- Contenu de la table `equipment`
+-- Dumping data for table `equipment`
 --
 
 INSERT INTO `equipment` (`idEquipment`, `name`, `price`, `rarity`, `minStr`, `minDex`, `minInt`, `minLuk`, `minEnd`, `bonusStr`, `bonusDex`, `bonusInt`, `bonusEnd`, `bonusLuk`, `description`, `slot`, `buyable`) VALUES
 (1, 'Armure de cuir', '50', 'Commun', 1, 1, 1, 1, 1, 0, 2, 0, 1, 1, 'aze', 'torso', 1),
 (2, 'Casque en cuir', '20', 'Commun', 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 'aze', 'head', 1),
 (4, 'Hache de fer', '0', 'Commun', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 'hand', 1),
-(5, 'Casque viking', '0', 'Commun', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 'head', 1);
+(5, 'Casque viking', '0', 'commun', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 'head', 1),
+(10, 'jambiere de viking', '35', 'commun', 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'legs', 1),
+(11, 'epee courte', '45', 'commun', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '', 'hand', 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `guild`
+-- Table structure for table `guild`
 --
 
 CREATE TABLE IF NOT EXISTS `guild` (
@@ -132,18 +128,17 @@ CREATE TABLE IF NOT EXISTS `guild` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `guild`
+-- Dumping data for table `guild`
 --
 
 INSERT INTO `guild` (`name`, `rank`, `prestige`, `gold`, `idUser`) VALUES
 ('rootGuild', 1, 1, 100, 1),
-('test', 2, 0, 730, 2),
-('squalala', 3, 0, 100, 3);
+('test', 2, 0, 10340, 2);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `heroes`
+-- Table structure for table `heroes`
 --
 
 CREATE TABLE IF NOT EXISTS `heroes` (
@@ -164,26 +159,20 @@ CREATE TABLE IF NOT EXISTS `heroes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `heroes`
+-- Dumping data for table `heroes`
 --
 
 INSERT INTO `heroes` (`classe`, `experience`, `prestige`, `str`, `dex`, `end`, `intel`, `luk`, `idCrew`, `idSquad`, `niveau`, `attrPoints`) VALUES
 ('aventurier', 0, 1, 5, 5, 5, 5, 5, 1, NULL, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 16, 5, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 17, 6, 1, 0),
-('aventurier', 350, 1, 14, 6, 5, 5, 5, 18, 4, 4, 0),
-('aventurier', 275, 1, 5, 5, 5, 5, 5, 19, 4, 4, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 20, 5, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 21, 5, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 22, 6, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 23, NULL, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 24, NULL, 1, 0),
-('aventurier', 0, 1, 5, 5, 5, 5, 5, 25, NULL, 1, 0);
+('aventurier', 625, 1, 5, 5, 10, 5, 5, 27, 7, 6, 5),
+('aventurier', 625, 1, 5, 5, 5, 5, 5, 28, 7, 6, 10),
+('aventurier', 625, 1, 5, 5, 5, 5, 5, 29, 7, 6, 10),
+('aventurier', 625, 1, 5, 5, 5, 5, 5, 30, 7, 6, 10);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `inventory`
+-- Table structure for table `inventory`
 --
 
 CREATE TABLE IF NOT EXISTS `inventory` (
@@ -199,23 +188,23 @@ CREATE TABLE IF NOT EXISTS `inventory` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
--- Contenu de la table `inventory`
+-- Dumping data for table `inventory`
 --
 
 INSERT INTO `inventory` (`idInventory`, `idEquipment`, `idUser`, `idCrew`, `handSpecial`) VALUES
-(1, 1, 2, 18, NULL),
-(2, 2, 2, NULL, NULL),
-(3, 1, 2, 16, NULL),
-(4, 2, 2, 16, NULL),
+(1, 1, 2, 27, NULL),
+(2, 2, 2, 27, NULL),
+(3, 1, 2, NULL, NULL),
+(4, 2, 2, NULL, NULL),
 (5, 2, 2, NULL, NULL),
-(6, 4, 2, 18, 'handLeft'),
-(7, 5, 2, 18, NULL),
-(8, 4, 2, 18, 'handRight');
+(6, 4, 2, 27, 'handLeft'),
+(7, 5, 2, NULL, NULL),
+(8, 4, 2, 27, 'handRight');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `quest`
+-- Table structure for table `quest`
 --
 
 CREATE TABLE IF NOT EXISTS `quest` (
@@ -227,21 +216,27 @@ CREATE TABLE IF NOT EXISTS `quest` (
   `name` varchar(45) NOT NULL,
   `experience` int(11) NOT NULL,
   `gold` int(11) NOT NULL,
+  `procStr` float NOT NULL DEFAULT '1',
+  `procEnd` float NOT NULL DEFAULT '1',
+  `procDex` float NOT NULL DEFAULT '1',
+  `procLuk` float NOT NULL DEFAULT '1',
+  `procInt` float NOT NULL DEFAULT '1',
   PRIMARY KEY (`idQuest`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
--- Contenu de la table `quest`
+-- Dumping data for table `quest`
 --
 
-INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`, `gold`) VALUES
-(2, 'blablabla', 50, NULL, 1, 'wololo', 1000, 10),
-(3, 'blabla', 15000, NULL, 20, 'plop', 200, 100);
+INSERT INTO `quest` (`idQuest`, `summary`, `difficulty`, `reward`, `duree`, `name`, `experience`, `gold`, `procStr`, `procEnd`, `procDex`, `procLuk`, `procInt`) VALUES
+(5, 'quete facile meme seul', 50, NULL, 15, 'quete facile', 40, 50, 1.5, 1.5, 1.5, 1.5, 1.5),
+(6, 'quete impossible meme en groupe', 500000, NULL, 10, 'quete impossible', 50000, 100000, 0.5, 0.5, 0.5, 0.5, 0.5),
+(7, 'demande une grande force pour gagner le tournoi', 150, NULL, 60, 'bras de fer', 20, 150, 5, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `squad`
+-- Table structure for table `squad`
 --
 
 CREATE TABLE IF NOT EXISTS `squad` (
@@ -254,21 +249,19 @@ CREATE TABLE IF NOT EXISTS `squad` (
   PRIMARY KEY (`idSquad`),
   KEY `fk_squad_user1_idx` (`idUser`),
   KEY `fk_squad_quest1_idx` (`idQuest`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
--- Contenu de la table `squad`
+-- Dumping data for table `squad`
 --
 
 INSERT INTO `squad` (`idSquad`, `name`, `reussiteQuete`, `idUser`, `idQuest`, `dateFinQuete`) VALUES
-(4, 'test', NULL, 2, NULL, NULL),
-(5, 'test 2', NULL, 2, NULL, NULL),
-(6, 'testsquad', NULL, 2, NULL, NULL);
+(7, 'test squad', NULL, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -281,18 +274,17 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
--- Contenu de la table `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`idUser`, `role`, `login`, `pass`, `email`) VALUES
 (1, 'admin', 'root', 'root', 'root@root.root'),
-(2, 'user', 'test', 'test', 'testazeze@qsdd.dfdf'),
-(3, 'user', 'test3', 'test', 'test@test.cpù');
+(2, 'user', 'test', 'test', 'testazeze@qsdd.dfdf');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `weapon`
+-- Table structure for table `weapon`
 --
 
 CREATE TABLE IF NOT EXISTS `weapon` (
@@ -304,16 +296,17 @@ CREATE TABLE IF NOT EXISTS `weapon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `weapon`
+-- Dumping data for table `weapon`
 --
 
 INSERT INTO `weapon` (`minDamage`, `maxDamage`, `distance`, `idEquipment`) VALUES
-(5, '20', 0, 4);
+(5, '20', 0, 4),
+(1, '2', 1, 11);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `worker`
+-- Table structure for table `worker`
 --
 
 CREATE TABLE IF NOT EXISTS `worker` (
@@ -323,7 +316,7 @@ CREATE TABLE IF NOT EXISTS `worker` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `worker`
+-- Dumping data for table `worker`
 --
 
 INSERT INTO `worker` (`job`, `idCrew`) VALUES
@@ -332,36 +325,36 @@ INSERT INTO `worker` (`job`, `idCrew`) VALUES
 ('mineur', 26);
 
 --
--- Contraintes pour les tables exportées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `armor`
+-- Constraints for table `armor`
 --
 ALTER TABLE `armor`
   ADD CONSTRAINT `fk_armor_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `crew`
+-- Constraints for table `crew`
 --
 ALTER TABLE `crew`
   ADD CONSTRAINT `fk_crew_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `guild`
+-- Constraints for table `guild`
 --
 ALTER TABLE `guild`
-  ADD CONSTRAINT `fk_guild_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_guild_user` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `heroes`
+-- Constraints for table `heroes`
 --
 ALTER TABLE `heroes`
   ADD CONSTRAINT `fk_heroes_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_heroes_squad1` FOREIGN KEY (`idSquad`) REFERENCES `squad` (`idSquad`) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `inventory`
+-- Constraints for table `inventory`
 --
 ALTER TABLE `inventory`
   ADD CONSTRAINT `fk_inventory_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE SET NULL ON UPDATE NO ACTION,
@@ -369,20 +362,20 @@ ALTER TABLE `inventory`
   ADD CONSTRAINT `fk_inventory_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `squad`
+-- Constraints for table `squad`
 --
 ALTER TABLE `squad`
   ADD CONSTRAINT `fk_squad_quest1` FOREIGN KEY (`idQuest`) REFERENCES `quest` (`idQuest`) ON DELETE SET NULL ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_squad_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `weapon`
+-- Constraints for table `weapon`
 --
 ALTER TABLE `weapon`
   ADD CONSTRAINT `fk_weapon_equipment1` FOREIGN KEY (`idEquipment`) REFERENCES `equipment` (`idEquipment`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `worker`
+-- Constraints for table `worker`
 --
 ALTER TABLE `worker`
   ADD CONSTRAINT `fk_worker_crew1` FOREIGN KEY (`idCrew`) REFERENCES `crew` (`idCrew`) ON DELETE NO ACTION ON UPDATE NO ACTION;
