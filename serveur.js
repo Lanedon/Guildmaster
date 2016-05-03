@@ -17,9 +17,9 @@ app.use(express.static(__dirname + '/public'));
 /*
 connection.connect(function(err){
   if(!err) {
-      console.log("Database is connected ... \n\n");  
+      //console.log("Database is connected ... \n\n");  
   } else {
-      console.log("Error connecting database ... \n\n" + err);  
+      //console.log("Error connecting database ... \n\n" + err);  
   }
 }); 
 */
@@ -68,9 +68,9 @@ on en crée une vide sous forme d'array avant la suite */
                   role:'en attente'};
         connection.query("INSERT INTO user set ?", post, function(err){
                 if(err){
-                 // console.log(err.message);
+                 // //console.log(err.message);
                 }else{
-                 // console.log('success');
+                 // //console.log('success');
                   res.redirect('/guildmaster');
                 }
         })
@@ -125,7 +125,7 @@ on en crée une vide sous forme d'array avant la suite */
 		    if(err){
 		      //console.log(err.message);
 		    }else{
-		     // console.log('success');
+		     // //console.log('success');
 		     req.session.user = {id:req.session.user['id'], role:'user', gold:'1000'};
 		     res.redirect('/guildmaster');
 		    }
@@ -143,7 +143,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
          res.render('personnel.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -196,14 +196,14 @@ on en crée une vide sous forme d'array avant la suite */
               }
               else{
                res.redirect('/guildmaster/personnel');
-               // console.log(err.message);
+               // //console.log(err.message);
               }
              }) 
           }
       }
       else{
         res.render('personnel.ejs', {user:req.session.user});
-        // console.log(err.message);
+        // //console.log(err.message);
       }
     })
 	//console.log(req.session.user);	
@@ -213,14 +213,14 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/personnel/supprimer/:id/:name/:surname', urlencodedParser, function(req, res) {
         connection.query("DELETE FROM crew WHERE idCrew = "+ req.params['id'] +" and name = '"+ req.params['name'] +"' and surname = '"+ req.params['surname'] +"' and idUser="+req.session.user['id'], function(err){
 	    if(err){
-	     // console.log(err.message);
+	     // //console.log(err.message);
 	    }else{
 	    connection.query(" select idSquad from squad where idUser = "+req.session.user['id']+" and idSquad not in(select idSquad from crew,heroes where idSquad is not null and idUser = "+req.session.user['id']+" group by idSquad);",  function(err, rows, fields){
 		if(err){
-		 // console.log(err.message);
+		 // //console.log(err.message);
 		}else{
 		  if (rows !== undefined && rows[0] !== undefined ){
-		    console.log(rows);
+		    //console.log(rows);
 		    connection.query("DELETE FROM squad WHERE idSquad = "+ rows[0]['idSquad'] +" and idUser="+req.session.user['id'], function(err){})
 		  }
 	        }
@@ -249,20 +249,19 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* achat armes/armures */
 .get('/guildmaster/magasin/achat/:id/:name', function(req, res) { 
-      connection.query("select gold, equipment.name, equipment.idEquipment, slot, price from equipment, armor,guild where equipment.idEquipment= "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = armor.idEquipment group by equipment.idEquipment UNION select gold, equipment.name, equipment.idEquipment,null as slot, price from equipment, weapon,guild where equipment.idEquipment = "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = weapon.idEquipment group by equipment.idEquipment", function(err, rows, fields){
+      connection.query("select gold, equipment.name, equipment.idEquipment, price from equipment, armor,guild where equipment.idEquipment= "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = armor.idEquipment group by equipment.idEquipment UNION select gold, equipment.name, equipment.idEquipment, price from equipment, weapon,guild where equipment.idEquipment = "+req.params['id']+" and equipment.name = '"+req.params['name']+"' and guild.idUser = "+req.session.user['id']+" and equipment.idEquipment = weapon.idEquipment group by equipment.idEquipment", function(err, rows, fields){
 	var gold = rows['0']['gold'];
 	var inventory={idEquipment:rows[0]['idEquipment'],
-		      idUser:req.session.user['id'],
-		      slot:rows[0]['slot']};
+		      idUser:req.session.user['id']};
 	  if (gold-rows['0']['price']>=0) {
 	    gold = gold - rows['0']['price'];
 	    connection.query("UPDATE guild SET gold = "+gold+" WHERE idUser ="+req.session.user['id'], function(err, rows, fields){
             if (!err){
 	      req.session.user['gold'] = gold;
-	      // console.log(req.session.user);
+	      // //console.log(req.session.user);
 	      connection.query("INSERT INTO inventory set ?", inventory, function(err){ 
 		if(err){
-		  // console.log(err.message);
+		  // //console.log(err.message);
 		  res.redirect('/guildmaster/magasin');	
 	        }
 		else{
@@ -308,7 +307,7 @@ on en crée une vide sous forme d'array avant la suite */
               }
               else{
                res.redirect('/guildmaster/recruter');
-               // console.log(err.message);
+               // //console.log(err.message);
               }
              })
           }
@@ -334,10 +333,10 @@ on en crée une vide sous forme d'array avant la suite */
 	    connection.query("UPDATE guild SET gold = "+gold+" WHERE idUser ="+req.session.user['id'], function(err, rows, fields){
               if (!err){
 	       req.session.user['gold'] = gold;
-	      // console.log(req.session.user);
+	      // //console.log(req.session.user);
 	       connection.query("INSERT INTO crew set ?", perso, function(err){
 		  if(err){
-		   // console.log(err.message);
+		   // //console.log(err.message);
 		   res.redirect('/guildmaster/recruter');	
 		  }else{
 		  connection.query("select MAX(idCrew) FROM crew" , function(err, rows, fields){
@@ -349,10 +348,10 @@ on en crée une vide sous forme d'array avant la suite */
 		       if (hero['hero']==0) {
 			 connection.query("INSERT INTO worker set ?", detail, function(err){
 			     if(err){
-			      // console.log(err.message);
+			      // //console.log(err.message);
 			      res.redirect('/guildmaster/recruter');	
 			     }else{
-			      // console.log('success');
+			      // //console.log('success');
 			      res.redirect('/guildmaster/personnel');
 			     }
 			 })
@@ -373,10 +372,10 @@ on en crée une vide sous forme d'array avant la suite */
 					     idCrew:detail['idCrew']};
 			    connection.query("INSERT INTO heroes set ?", detailPers, function(err){
 			      if(err){
-			      //  console.log(err.message);
+			      //  //console.log(err.message);
 			       res.redirect('/guildmaster/recruter');	
 			      }else{
-			       // console.log('success');
+			       // //console.log('success');
 			       res.redirect('/guildmaster/personnel');
 			      }
 			    })
@@ -394,7 +393,7 @@ on en crée une vide sous forme d'array avant la suite */
               }
               else{
                res.redirect('/guildmaster/recruter');
-               // console.log(err.message);
+               // //console.log(err.message);
               }
              })
        }
@@ -415,7 +414,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
          res.render('escouades.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -436,14 +435,14 @@ on en crée une vide sous forme d'array avant la suite */
               }
               else{
                res.redirect('/guildmaster/personnel');
-               // console.log(err.message);
+               // //console.log(err.message);
               }
              }) 
           }
       }
       else{
         res.render('personnel.ejs', {user:req.session.user});
-        // console.log(err.message);
+        // //console.log(err.message);
       }
     })
 	//console.log(req.session.user);	
@@ -459,7 +458,7 @@ on en crée une vide sous forme d'array avant la suite */
               }
               else{
                res.redirect('/guildmaster/personnel');
-               // console.log(err.message);
+               // //console.log(err.message);
               }
              }) 
     } else
@@ -477,7 +476,7 @@ on en crée une vide sous forme d'array avant la suite */
 	   if (typeof req.body.membres === 'string' ) {
 	    connection.query("INSERT INTO squad set ?", squad, function(err){
 		   if(err){
-		    // console.log(err.message);
+		    // //console.log(err.message);
 		    res.redirect('/guildmaster/escouades');
 		   }else{
 		     connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
@@ -487,7 +486,7 @@ on en crée une vide sous forme d'array avant la suite */
 			       connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
 			       res.redirect('/guildmaster/');
 			     }else{
-			      // console.log('success');
+			      // //console.log('success');
 			     }
 			   })
 			 res.redirect('/guildmaster/escouades/detail/'+idSquad+'/'+squad['name']);
@@ -498,7 +497,7 @@ on en crée une vide sous forme d'array avant la suite */
 	   else{
 	    connection.query("INSERT INTO squad set ?", squad, function(err){
 		  if(err){
-		   // console.log(err.message);
+		   // //console.log(err.message);
 		   res.redirect('/guildmaster/escouades');
 		  }else{
 		    connection.query("select MAX(idSquad) FROM squad" , function(err, rows, fields){
@@ -509,7 +508,7 @@ on en crée une vide sous forme d'array avant la suite */
 			      connection.query("DELETE FROM squad WHERE idSquad = "+ idSquad , function(err){});
 			      res.redirect('/guildmaster/');
 			    }else{
-			     // console.log('success');
+			     // //console.log('success');
 			    }
 			  })
 			}
@@ -545,7 +544,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -562,7 +561,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
          res.render('inventaire.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -577,7 +576,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
          res.render('quete.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -595,14 +594,14 @@ on en crée une vide sous forme d'array avant la suite */
 	      }
 		else{
 		// res.redirect('accueil.ejs', {user:req.session.user});
-		 // console.log(err.message);
+		 // //console.log(err.message);
 		}
 	    })
 	   //console.log(data);
       }
 	else{
        //  res.redirect('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -616,7 +615,7 @@ on en crée une vide sous forme d'array avant la suite */
 		if (!err){
 		  var squad = rows[0];
 		  var stats = squad['str']*quest['procStr'] + squad['end']*quest['procEnd'] + squad['intel']*quest['procInt'] + squad['luk']*quest['procLuk'] + squad['dex']*quest['procDex'];
-		  console.log(stats);
+		  //console.log(stats);
 		  var reussiteChance = Math.floor((Math.random() * quest['difficulty']) + 1);
 		  var reussite = 0;
 		  if (stats >= reussiteChance){ reussite = 1 }
@@ -634,14 +633,14 @@ on en crée une vide sous forme d'array avant la suite */
 		}
 		else{
 		 res.redirect('/guildmaster/quete/commencer/'+req.params['idQuest']+'/'+req.params['nameQuest']);
-		 // console.log(err.message);
+		 // //console.log(err.message);
 		}
 	    })
 	   //console.log(data);
       }
 	else{
         res.redirect('/guildmaster/quete/commencer/'+req.params['idQuest']+'/'+req.params['nameQuest']);
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -664,7 +663,7 @@ on en crée une vide sous forme d'array avant la suite */
        } 
 	else{
          res.render('quete.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -728,7 +727,7 @@ on en crée une vide sous forme d'array avant la suite */
       }
 	else{
         res.redirect('/guildmaster/quete/enCours');
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -747,8 +746,8 @@ on en crée une vide sous forme d'array avant la suite */
 	  var admin = 0;
 	  for (var i = 0;i<rows.length;i++) {
 	    if (rows[i]['role']== "admin") {
-	      // console.log(rows[i]);
-	      // console.log(req.session.user);
+	      // //console.log(rows[i]);
+	      // //console.log(req.session.user);
 	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
 	          res.render('gestion.ejs', {data:rows, user:req.session.user});
 	       }
@@ -757,7 +756,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -765,16 +764,16 @@ on en crée une vide sous forme d'array avant la suite */
 
 /* modifier utilisateur validation*/
 .post('/guildmaster/gestion/modifier/utilisateur/validation', urlencodedParser, function(req, res) { 
-       // console.log(req.body);
+       // //console.log(req.body);
         connection.query("UPDATE user SET login = '"+ req.body['pseudo'] +"',email = '"+ req.body['email'] +"',role = '"+ req.body['role'] +"' WHERE idUser ="+ req.body['id'], function(err){
                 if(err){
-                 // console.log(err.message);
+                 // //console.log(err.message);
                 }else{
                   connection.query("UPDATE guild SET name = '"+ req.body['guild'] +"',prestige = "+ req.body['prestige'] +",gold = "+ req.body['gold'] +" WHERE idUser ="+ req.body['id'], function(err){
 			  if(err){
-			   // console.log(err.message);
+			   // //console.log(err.message);
 			  }else{
-			   // console.log('success');
+			   // //console.log('success');
 			    res.redirect('/guildmaster/gestion/');
 			  }
 		  })
@@ -787,7 +786,7 @@ on en crée une vide sous forme d'array avant la suite */
 .get('/guildmaster/gestion/supprimer/utilisateur/:id/:userName/:email', urlencodedParser, function(req, res) {
   connection.query("SELECT user.idUser, login, role FROM user, guild where user.idUser = guild.idUser and user.idUser="+req.session.user['id'], function(err, rows, fields){
 	if (!err){
-	// console.log(req.params);
+	// //console.log(req.params);
 	  if (req.session.user['id']==rows[0]['idUser'] && req.session.user['name']==rows[0]['login'] && req.session.user['role']==rows[0]['role']) {
 	    //console.log(rows);
 	       connection.query("DELETE FROM user WHERE idUser = "+ req.params['id'] +" and login = '"+ req.params['userName'] +"' and email = '"+ req.params['email']+"'", function(err){})
@@ -796,7 +795,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -809,8 +808,8 @@ on en crée une vide sous forme d'array avant la suite */
 	  var admin = 0;
 	  for (var i = 0;i<rows.length;i++) {
 	    if (rows[i]['role']== "admin") {
-	      // console.log(rows[i]);
-	      // console.log(req.session.user);
+	      // //console.log(rows[i]);
+	      // //console.log(req.session.user);
 	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
 	              connection.query("select * from equipment NATURAL JOIN weapon", function(err, Armor, fields){
 			  res.render('gestionArme.ejs', {data: Armor, user:req.session.user});
@@ -821,7 +820,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -847,14 +846,14 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(equipment);
         connection.query("INSERT INTO equipment set ?", equipment, function(err){
 	  if(err){
-	   // console.log(err.message);
+	   // //console.log(err.message);
 	  }else{
-	   // console.log('success');
+	   // //console.log('success');
 	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment" , function(err, rows, fields){
 	    if(err){
-	      // console.log(err.message);
+	      // //console.log(err.message);
 	     }else{
-	      // console.log('success');
+	      // //console.log('success');
 	       var weapon = {distance:req.body.distance,
 			    idEquipment:rows[0]['idEquipment'],
 			    minDamage:req.body.minDamage,
@@ -862,9 +861,9 @@ on en crée une vide sous forme d'array avant la suite */
 	       //console.log(weapon);
 	       connection.query("INSERT INTO weapon set ?", weapon, function(err){
 		if(err){
-		 // console.log(err.message);
+		 // //console.log(err.message);
 		}else{
-		 // console.log('success');
+		 // //console.log('success');
 		  res.redirect('/guildmaster/gestion/magasin/arme');
 		}
 	       })
@@ -881,14 +880,14 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(req.body);
         connection.query("UPDATE equipment SET name = '"+req.body.name+"', slot='hand', price = "+req.body.price+",rarity = '"+req.body.rarity+"',minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
 	  if(err){
-	  //  console.log(err.message);
+	  //  //console.log(err.message);
 	  }else{
-	   // console.log('success');
+	   // //console.log('success');
 	    connection.query("UPDATE weapon SET distance = "+req.body.distance+", minDamage= "+req.body.minDamage+",  maxDamage= "+req.body.maxDamage+"   WHERE idEquipment = "+req.body.id, function(err){
 	     if(err){
-	      // console.log(err.message);
+	      // //console.log(err.message);
 	     }else{
-	      // console.log('success');
+	      // //console.log('success');
 	       res.redirect('/guildmaster/gestion/magasin/arme');
 	     }
 	    })
@@ -904,8 +903,8 @@ on en crée une vide sous forme d'array avant la suite */
 	  var admin = 0;
 	  for (var i = 0;i<rows.length;i++) {
 	    if (rows[i]['role']== "admin") {
-	      // console.log(rows[i]);
-	      // console.log(req.session.user);
+	      // //console.log(rows[i]);
+	      // //console.log(req.session.user);
 	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
 	              connection.query("select * from equipment NATURAL JOIN armor", function(err, Armor, fields){
 			  res.render('gestionArmure.ejs', {data: Armor, user:req.session.user});
@@ -916,7 +915,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -934,7 +933,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -965,20 +964,20 @@ on en crée une vide sous forme d'array avant la suite */
 	  if(err){
 	    //console.log(err.message);
 	  }else{
-	   // console.log('success');
+	   // //console.log('success');
 	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment", function(err, rows, fields){
 	    if(err){
 	       //console.log(err.message);
 	     }else{
-	      // console.log('success');
+	      // //console.log('success');
 	       var armor = {idEquipment:rows[0]['idEquipment'],
 			    protection:req.body.protection};
 	      //console.log(armor);
 	       connection.query("INSERT INTO armor set ?", armor, function(err){
 		if(err){
-		 // console.log(err.message);
+		 // //console.log(err.message);
 		}else{
-		 // console.log('success');
+		 // //console.log('success');
 		  res.redirect('/guildmaster/gestion/magasin');
 		}
 	       })
@@ -995,14 +994,14 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(req.body);
         connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+", slot= '"+req.body.slot+"',rarity = '"+req.body.rarity+"',minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
 	  if(err){
-	   // console.log(err.message);
+	   // //console.log(err.message);
 	  }else{
-	   // console.log('success');
+	   // //console.log('success');
 	    connection.query("UPDATE armor SET protection = "+req.body.protection+" WHERE idEquipment = "+req.body.id, function(err){
 	     if(err){
 	       //console.log(err.message);
 	     }else{
-	      // console.log('success');
+	      // //console.log('success');
 	       res.redirect('/guildmaster/gestion/magasin');
 	     }
 	    })
@@ -1018,8 +1017,8 @@ on en crée une vide sous forme d'array avant la suite */
 	  var admin = 0;
 	  for (var i = 0;i<rows.length;i++) {
 	    if (rows[i]['role']== "admin") {
-	      // console.log(rows[i]);
-	      // console.log(req.session.user);
+	      // //console.log(rows[i]);
+	      // //console.log(req.session.user);
 	       if (req.session.user['id']==rows[i]['idUser'] && req.session.user['name']==rows[i]['login'] && req.session.user['role']==rows[i]['role']) {
 		connection.query("SELECT procEnd, procStr, procInt, procLuk, procDex, idQuest, gold, difficulty, experience, name, summary, duree, reward FROM quest", function(err, rows, fields){
 		   if (!err){
@@ -1035,7 +1034,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -1045,7 +1044,7 @@ on en crée une vide sous forme d'array avant la suite */
         //console.log(req.body);
         connection.query("UPDATE quest SET name = '"+ req.body['name'] +"',procLuk = "+req.body['procLuk'] +",procDex = "+req.body['procDex'] +",procInt = "+req.body['procInt'] +",procStr = "+req.body['procStr'] +",procEnd = "+req.body['procEnd'] +",difficulty = "+ req.body['difficulty'] +",experience = "+ req.body['experience'] +",gold = "+ req.body['gold'] +",summary = '"+ req.body['summary'] +"',duree = "+ req.body['duree'] +" WHERE idQuest ="+ req.body['id'], function(err){
                 if(err){
-                 // console.log(err.message);
+                 // //console.log(err.message);
                 }else{
 		  res.redirect('/guildmaster/gestion/quete');
                 }
@@ -1065,7 +1064,7 @@ on en crée une vide sous forme d'array avant la suite */
 	}
 	else{
          res.render('accueil.ejs', {user:req.session.user});
-	 // console.log(err.message);
+	 // //console.log(err.message);
         }
     })
 })
@@ -1087,9 +1086,9 @@ on en crée une vide sous forme d'array avant la suite */
                   gold:req.body.gold};
         connection.query("INSERT INTO quest set ?", post, function(err){
                 if(err){
-                 // console.log(err.message);
+                 // //console.log(err.message);
                 }else{
-                 // console.log('success');
+                 // //console.log('success');
                   res.redirect('/guildmaster/gestion/quete');
                 }
         })

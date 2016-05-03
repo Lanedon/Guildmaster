@@ -256,4 +256,26 @@ $('.fleche-equip').on('click', function() {
     });
 });
 
+
+ $('[data-countdown]').each(function() {
+	       var $this = $(this), finalDate = $this.data('countdown'), idQuest = $this.data('idquest'), exp = $this.data('exp'), gold = $this.data('gold'), reward = $this.data('reward'), idSquad = $this.data('idsquad'), nameSquad = $this.data('squadname'), nameQuest = $this.data('questname'), reussiteQuete = $this.data('reussitequete');
+	       var fin = "";
+	       var recompense = "gain exp: "+exp+", gain or: "+gold;
+	       if (reward) {
+		recompense = recompense+", bonus: "+reward;
+	       }
+	       if (reussiteQuete!=1) {
+		fin = "<a href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad+"'> Echec de la mission</a>";
+	       }
+	       else{
+		fin = "<a onclick=\"alert('"+recompense+"')\" href='/guildmaster/quete/terminer/"+idQuest+"/"+nameQuest+"/"+idSquad+"/"+nameSquad+"'>Reussite de la mission</a>";
+	       }
+	       $this.countdown(finalDate, {elapse: true}).on('update.countdown', function(event) {
+		if (event.elapsed) {
+		    $this.html(fin);
+		} else {
+		    $this.html(event.strftime('%Djours %Hh %Mmin %Ssec'));
+		}
+	       })
+	    });
 });
