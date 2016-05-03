@@ -7,7 +7,7 @@ var util = require('util');
 var connection = mysql.createConnection({
   host     : "localhost",
   user     : "root",
-  password : "",
+  password : "sio",
   database : "guildmaster"
 });
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -682,24 +682,28 @@ on en crée une vide sous forme d'array avant la suite */
 		if(err){
 		}else{
 		  if (quest['reussiteQuete']==1) {
-		    connection.query("select idCrew, experience,niveau from heroes where idSquad ="+ req.params['idSquad'], function(err, rows, fields){
+		    connection.query("select idCrew,attrPoints, experience,niveau from heroes where idSquad ="+ req.params['idSquad'], function(err, rows, fields){
 		      if(err){
 		      }else{
+			//console.log(rows);
 			var exp = 0;
 			var lvl = 0;
+			var attrP = 0;
 			var lvlUp = 0;
 			for (i=0; i<rows.length; i++) {
 			  exp = rows[i]['experience']+quest['experience'];
 			  lvl = rows[i]['niveau'];
+			  attrP = rows[i]['attrPoints'];
 			  while (exp > lvlUp) {
 			    lvlUp = ((lvl)*(lvl))*25;
 			    if (exp >= lvlUp) {
 			      lvl++;
 			      exp = exp-lvlUp;
+			      attrP =  attrP + 2;
 			    }
 			  }
 			  lvlUp = 0;
-			  connection.query("UPDATE heroes SET experience ="+ exp +",niveau = "+lvl+"  WHERE idCrew ="+ rows[i]['idCrew'], function(err){
+			  connection.query("UPDATE heroes SET attrPoints = "+attrP+",experience ="+ exp +",niveau = "+lvl+"  WHERE idCrew ="+ rows[i]['idCrew'], function(err){
 			   if(err){
 			    }else{
 			    }
@@ -833,6 +837,7 @@ on en crée une vide sous forme d'array avant la suite */
 		      minInt:req.body.minInt,
 		      minLuk:req.body.minLuk,
 		      minDex:req.body.minDex,
+		      slot:'hand',
 		      bonusStr:req.body.bonusStr,
 		      bonusEnd:req.body.bonusEnd,
 		      bonusInt:req.body.bonusInt,
@@ -874,8 +879,7 @@ on en crée une vide sous forme d'array avant la suite */
 /* modification d'une arme*/
 .post('/guildmaster/gestion/magasin/arme/modifier/validation', urlencodedParser, function(req, res) { 
 	//console.log(req.body);
-	//console.log(req.body);
-        connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+",rarity = "+req.body.rarity+",minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
+        connection.query("UPDATE equipment SET name = '"+req.body.name+"', slot='hand', price = "+req.body.price+",rarity = '"+req.body.rarity+"',minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
 	  if(err){
 	  //  console.log(err.message);
 	  }else{
@@ -949,6 +953,7 @@ on en crée une vide sous forme d'array avant la suite */
 		      minInt:req.body.minInt,
 		      minLuk:req.body.minLuk,
 		      minDex:req.body.minDex,
+		      slot:req.body.slot,
 		      bonusStr:req.body.bonusStr,
 		      bonusEnd:req.body.bonusEnd,
 		      bonusInt:req.body.bonusInt,
@@ -958,18 +963,17 @@ on en crée une vide sous forme d'array avant la suite */
 	//console.log(equipment);
         connection.query("INSERT INTO equipment set ?", equipment, function(err){
 	  if(err){
-	   // console.log(err.message);
+	    //console.log(err.message);
 	  }else{
 	   // console.log('success');
-	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment" , function(err, rows, fields){
+	   connection.query("select MAX(idEquipment) as idEquipment FROM equipment", function(err, rows, fields){
 	    if(err){
-	      // console.log(err.message);
+	       //console.log(err.message);
 	     }else{
 	      // console.log('success');
-	       var armor = {slot:req.body.slot,
-			    idEquipment:rows[0]['idEquipment'],
+	       var armor = {idEquipment:rows[0]['idEquipment'],
 			    protection:req.body.protection};
-	      // console.log(armor);
+	      //console.log(armor);
 	       connection.query("INSERT INTO armor set ?", armor, function(err){
 		if(err){
 		 // console.log(err.message);
@@ -989,15 +993,14 @@ on en crée une vide sous forme d'array avant la suite */
 /* modification d'une armure*/
 .post('/guildmaster/gestion/magasin/modifier/validation', urlencodedParser, function(req, res) { 
 	//console.log(req.body);
-	//console.log(req.body);
-        connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+",rarity = "+req.body.rarity+",minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
+        connection.query("UPDATE equipment SET name = '"+req.body.name+"',price = "+req.body.price+", slot= '"+req.body.slot+"',rarity = '"+req.body.rarity+"',minStr = "+req.body.minStr+",minDex = "+req.body.minDex+",minInt = "+req.body.minInt+",minLuk = "+req.body.minLuk+",minEnd = "+req.body.minEnd+",bonusStr = "+req.body.bonusStr+",bonusDex = "+req.body.bonusDex+",bonusInt = "+req.body.bonusInt+",bonusEnd = "+req.body.bonusEnd+",bonusLuk = "+req.body.bonusLuk+",buyable = "+req.body.buyable+" WHERE idEquipment ="+req.body.id, function(err){
 	  if(err){
-	  //  console.log(err.message);
+	   // console.log(err.message);
 	  }else{
 	   // console.log('success');
-	    connection.query("UPDATE armor SET protection = "+req.body.protection+", slot= '"+req.body.slot+"'  WHERE idEquipment = "+req.body.id, function(err){
+	    connection.query("UPDATE armor SET protection = "+req.body.protection+" WHERE idEquipment = "+req.body.id, function(err){
 	     if(err){
-	      // console.log(err.message);
+	       //console.log(err.message);
 	     }else{
 	      // console.log('success');
 	       res.redirect('/guildmaster/gestion/magasin');
