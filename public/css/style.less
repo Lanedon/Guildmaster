@@ -5,6 +5,8 @@ body, html {
 	min-height: 1080px;
 	margin: 0; 
 	padding: 0;
+	background: url('../img/bg.jpg') repeat-y top left fixed;
+	background-size: 100%;
 }
 
 #panelAccueil {
@@ -197,8 +199,8 @@ body, html {
 table {
 	th {
 		border-collapse: collapse;
-		border: 1px orange solid;
-		background-color: orange;
+		border: 1px #B7B390 solid;
+		background-color: #B7B390;
 		color: white;
 	}
 	td {
@@ -207,6 +209,7 @@ table {
 		border-right: 1px @couleurTableBorder solid;
 		border-top: 1px transparent solid;
 		border-bottom: 1px transparent solid;
+		background-color: white;
 	}
 	tr:last-child td{
 		border-bottom: 1px @couleurTableBorder solid;
@@ -274,8 +277,24 @@ table {
 .icone {
 	font-family: 'FontAwesome';
 	cursor: pointer;
+	&.icone-inline {
+		display: inline;
+		margin-right: 20px;
+	}
 }
 
 .fleche-equip {
 	display: none;
+}
+
+.panel {
+	border: 5px #C5C5C5 solid;
+}
+
+.a-color {
+	color: black;
+}
+
+a.a-color:hover, a.a-color:active  {
+	color: black;
 }

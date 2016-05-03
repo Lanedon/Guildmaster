@@ -8,24 +8,31 @@
 
      <% include ./header.ejs %>
         <div class="container-fluid">
-	    <a href="/guildmaster/quete/EnCours">quêtes en cours</a>
-                <div class="row">
-                        <div class="col-sm-10 col-sm-offset-1">
-                                <div class="table-responsive">
-				    <%for(var i = 0;i < data.length;i++) { %>
-				     <a style="font-size:2em;" href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>"><%=data[i].name%></a>
-                                     <p style="font-size:1.3em;">resume: <%=data[i].summary%></h3>
-				     <% data[i].duree = new Date(data[i].duree*1000)%>
-				     <p>durée: <%= data[i].duree.getHours()-1 +" H "+ data[i].duree.getMinutes() +" min "+ data[i].duree.getSeconds() + "sec"%></p>
-				     <% if(data[i].reward != null){ %>
-                                     <p>récompenses: <%=data[i].reward%>, <%=data[i].experience%> XP et <%=data[i].gold%> or</p>
-				     <% } else { %>
-				     <p>récompenses: <%=data[i].experience%> XP et  <%=data[i].gold%> or</p> 
-				     <% }
-				    } %>
-                               </div>
-                        </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <h1 style="font-size: 1.5em; color: #337ab7;">
+                        <h3><div class="icone icone-inline">&#xf132</div><a class="a-color" href="/guildmaster/quete/EnCours">Quêtes en cours</a></h3>
+                    </h1>
                 </div>
+                <div class="col-sm-10" style="border-left: solid lightgrey 3px">
+				    <%for(var i = 0;i < data.length;i++) { %>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+        				     <a style="font-size:2em;" href="/guildmaster/quete/commencer/<%=data[i].idQuest%>/<%=data[i].name%>"><%=data[i].name%></a>
+                                             <p style="font-size:1.3em;">resume: <%=data[i].summary%></h3>
+        				     <% data[i].duree = new Date(data[i].duree*1000)%>
+        				     <p>durée: <%= data[i].duree.getHours()-1 +" H "+ data[i].duree.getMinutes() +" min "+ data[i].duree.getSeconds() + "sec"%></p>
+        				     <% if(data[i].reward != null){ %>
+                                             <p>récompenses: <%=data[i].reward%>, <%=data[i].experience%> XP et <%=data[i].gold%> or</p>
+        				     <% } else { %>
+        				     <p>récompenses: <%=data[i].experience%> XP et  <%=data[i].gold%> or</p> 
+        				     <% } %>
+        				    
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
         </div> 
     </body>
 </html>
